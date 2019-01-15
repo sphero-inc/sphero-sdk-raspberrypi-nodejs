@@ -1,4 +1,7 @@
-import {defaultLogger as logger} from '../modules/logger';
+// import {createLogger, ILogger} from '../modules/logger';
+
+
+// let logger: ILogger = createLogger('utilities');
 
 
 export function padWithZeros(value: any, padCount: number, padValue?: string): string {

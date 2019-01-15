@@ -64,7 +64,7 @@ export class SystemInfoRouter extends DeviceRouterBase {
             }
         };
 
-        response.status(200).json(responseJson);
+        response.status(200).json(responseJson.data);
     }
 
     public getBootloaderVersion(request: Request, response: Response, next: NextFunction): void {
@@ -95,7 +95,7 @@ export class SystemInfoRouter extends DeviceRouterBase {
             }
         };
 
-        response.status(200).json(responseJson);
+        response.status(200).json(responseJson.data);
     }
 
     public getBoardReversion(request: Request, response: Response, next: NextFunction): void {
@@ -124,6 +124,6 @@ export class SystemInfoRouter extends DeviceRouterBase {
             }
         };
 
-        response.status(200).json(responseJson);
+        response.status(200).json(responseJson.data);
     }
 }

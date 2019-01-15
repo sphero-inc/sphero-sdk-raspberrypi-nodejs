@@ -6,7 +6,8 @@
   "types": "./dist/index.ts",
   "scripts": {
     "test": "mocha --recursive",
-    "build": "tsc"
+    "build": "tsc",
+    "start": "node dist/server.js"
   },
   "dependencies": {
     "body-parser": "^1.18.2",

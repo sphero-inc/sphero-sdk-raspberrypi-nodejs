@@ -18,13 +18,13 @@ export class DrivingRouter extends DeviceRouterBase {
 
     protected initializeRoutes(): void {
         this.logRouteInfo('Initializing', 'Initializing Driving-RawMotors route');
-        this.router.route('/driving/rawMotors')
+        this.router.route('/drive/rawMotors/:target')
             .put((request: Request, response: Response, next: NextFunction) =>
                 this.rawMotors(request, response, next));
         this.registerCommand(0x00, 'Raw Motors');
 
         this.logRouteInfo('Initializing', 'Initializing Driving-DriveWithHeading route');
-        this.router.route('/driving/driveWithHeading')
+        this.router.route('/drive/driveWithHeading/:target')
             .put((request: Request, response: Response, next: NextFunction) =>
                 this.driveWithHeading(request, response, next));
         this.registerCommand(0x07, 'Drive With Heading');
@@ -51,7 +51,7 @@ export class DrivingRouter extends DeviceRouterBase {
             'data': null
         };
 
-        response.status(200).json(responseJson);
+        response.status(200).json(responseJson.data);
     }
 
     public driveWithHeading(request: Request, response: Response, next: NextFunction): void {
@@ -75,6 +75,6 @@ export class DrivingRouter extends DeviceRouterBase {
             'data': null
         };
 
-        response.status(200).json(responseJson);
+        response.status(200).json(responseJson.data);
     }
 }

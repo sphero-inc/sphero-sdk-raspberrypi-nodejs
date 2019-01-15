@@ -2,7 +2,7 @@
 import {Application} from 'express';
 
 // internal imports
-import {defaultLogger as logger} from '../../modules/logger';
+import {createLogger, ILogger} from '../../modules/logger';
 import {IConfiguration} from '../../configuration';
 
 // route imports
@@ -12,8 +12,11 @@ import {RouterBase} from '../router-base';
 // TODO: this is autogen'd
 
 
+let logger: ILogger = createLogger('api index v1');
+
+
 export function initializeRoutes(app: Application, configuration: IConfiguration): void {
-    logger.info('Initializing v1 routes');
+    logger.info('Initializing API v1 routes');
 
     // TODO: this is autogen'd
     initializeRoute(app, new SystemInfoRouter());
@@ -22,5 +25,5 @@ export function initializeRoutes(app: Application, configuration: IConfiguration
 
 function initializeRoute(app: Application, router: RouterBase) {
     router.initialize();
-    app.use('/api/v1/', router.router);
+    app.use('/api/v1/rv/', router.router);
 }

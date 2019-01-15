@@ -3,9 +3,12 @@ import * as http from 'http';
 import * as ip from 'ip';
 
 // internal imports
-import {defaultLogger as logger} from './modules/logger';
+import {createLogger, ILogger} from './modules/logger';
 import {App} from './modules/app';
 import configuration = require('./configuration');
+
+
+let logger: ILogger = createLogger('server');
 
 
 logger.info('SDK API server is starting');

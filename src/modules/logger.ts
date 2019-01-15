@@ -1,8 +1,14 @@
 // external imports
 import * as winston from 'winston';
 
+// internal imports
+import {IGenericKeyValuePair} from '../models/model-interfaces';
+import {isStringNullOrWhitespace} from '../utilities/string-utilities';
+
 
 export interface ILogger {
+    readonly name: string;
+
     log(level: string, message: string): void;
     debug(message: string): void;
     info(message: string): void;
@@ -25,8 +31,18 @@ let logger = new (winston.Logger)({
 
 
 class WinstonLogger implements ILogger {
-    constructor() {
+    private readonly _name: string;
+    private readonly _separator: string = ' >> ';
+
+    public get name(): string {
+        return this._name;
+    }
+
+    constructor(name: string) {
+        this._name = name;
+
         logger.level = 'debug';
+
         //if (process.env == 'development') {
         //    logger.level = 'debug';
         //} else {
@@ -59,32 +75,62 @@ class WinstonLogger implements ILogger {
     }
 
     debug(message: string): void {
-        logger.debug(message);
+        logger.debug(this.name + this._separator + message);
     }
 
     info(message: string): void {
-        logger.info(message);
+        logger.info(this.name + this._separator + message);
     }
 
     warn(message: string): void {
-        logger.warn(message);
+        logger.warn(this.name + this._separator + message);
     }
 
     warning(message: string): void {
-        this.warn(message);
+        this.warn(this.name + this._separator + message);
     }
 
     error(message: string): void {
-        logger.error(message);
+        logger.error(this.name + this._separator + message);
     }
 
     exception(error: Error, message: string): void {
         if (!error) {
-            this.error(message);
+            this.error(this.name + this._separator + message);
         } else {
-            this.error(message + ' >> ' + error.stack);
+            this.error(this.name + this._separator + message + this._separator + error.stack);
         }
     }
 }
 
-export let defaultLogger: ILogger = new WinstonLogger();
+let _loggers: Array<IGenericKeyValuePair<string, ILogger>> = [];
+
+let defaultLogger: ILogger = new WinstonLogger('default');
+_loggers.push({key: defaultLogger.name, value: defaultLogger});
+
+export function createLogger(name: string): ILogger {
+    if (isStringNullOrWhitespace(name)) {
+        name = 'default';
+    } else {
+        name = name.toUpperCase().trim();
+    }
+
+    let logger: ILogger | null = getLoggerByName(name);
+    if (!logger) {
+        logger = new WinstonLogger(name);
+    }
+
+    return logger;
+}
+
+function getLoggerByName(name: string): ILogger | null {
+    for (let i = 0; i < _loggers.length; i++) {
+        let loggerKeyValuePair: IGenericKeyValuePair<string, ILogger> = _loggers[i];
+
+        if (loggerKeyValuePair.key == name) {
+            return loggerKeyValuePair.value;
+        }
+    }
+
+    return null;
+}

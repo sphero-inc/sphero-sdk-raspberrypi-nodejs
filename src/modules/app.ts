@@ -10,8 +10,11 @@ const swaggerDocument = require('../../swagger.json');
 // internal imports
 import apiRouter = require('../api/');
 import {IConfiguration} from '../configuration';
-import {defaultLogger as logger} from './logger';
+import {createLogger, ILogger} from './logger';
 import dateTimeUtilities = require('../utilities/date-time-utilities');
+
+
+let logger: ILogger = createLogger('app');
 
 
 export class App {

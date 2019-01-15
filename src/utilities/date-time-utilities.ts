@@ -1,6 +1,9 @@
 // internal imports
 import {padWithZeros} from './string-utilities'
-import {defaultLogger as logger} from '../modules/logger';
+import {createLogger, ILogger} from '../modules/logger';
+
+
+let logger: ILogger = createLogger('utilities');
 
 
 export function getDateAsString(dt: Date): string {
