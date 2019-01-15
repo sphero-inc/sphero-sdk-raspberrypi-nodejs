@@ -1,0 +1,43 @@
+{
+  "name": "sdk-v4-platform-raspberry-pi-node-js",
+  "description": "Sphero SDK - Raspberry Pi Node.js",
+  "version": "0.0.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.ts",
+  "scripts": {
+    "test": "mocha --recursive",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "compression": "^1.7.1",
+    "express": "^4.16.2",
+    "ip": "^1.1.5",
+    "swagger-ui-express": "^2.0.13",
+    "winston": "^2.4.0"
+  },
+  "devDependencies": {
+    "@types/body-parser": "^1.16.8",
+    "@types/chai": "^4.0.10",
+    "@types/compression": "0.0.35",
+    "@types/express": "^4.11.0",
+    "@types/ip": "0.0.30",
+    "@types/mocha": "^2.2.45",
+    "@types/node": "^8.5.2",
+    "@types/rewire": "^2.5.28",
+    "@types/sinon": "^4.1.2",
+    "@types/winston": "^2.3.7",
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1",
+    "rewire": "^3.0.2",
+    "sinon": "^4.1.3",
+    "ts-node": "^4.1.0",
+    "typescript": "^2.6.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.orbxdev.com/sdk/v4/platform/uart/raspberry-pi-node-js"
+  },
+  "author": "Sphero CE SDK and Software Tools",
+  "license": "Sphero"
+}
