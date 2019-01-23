@@ -2,7 +2,7 @@
 import * as winston from 'winston';
 
 // internal imports
-import {IGenericKeyValuePair} from '../models/model-interfaces';
+import {IGenericKeyValuePair} from '../models/key-value-pair';
 import {isStringNullOrWhitespace} from '../utilities/string-utilities';
 
 
@@ -111,9 +111,9 @@ _loggers.push({key: defaultLogger.name, value: defaultLogger});
 export function createLogger(name: string): ILogger {
     if (isStringNullOrWhitespace(name)) {
         name = 'default';
-    } else {
-        name = name.toUpperCase().trim();
     }
+
+    name = name.toUpperCase().trim();
 
     let logger: ILogger | null = getLoggerByName(name);
     if (!logger) {

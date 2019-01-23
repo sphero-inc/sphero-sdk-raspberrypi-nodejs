@@ -71,6 +71,7 @@ export class App {
                 + ' | IsSecure: ' + request.secure;
 
             // TODO: add query and params
+            // TODO: can the response be logged here or where can that happen?
 
             logger.info(message);
 
@@ -101,6 +102,8 @@ export class App {
 
     private finalizeInitialization(): void {
         this.expressApp.all('*', function (request: express.Request, response: express.Response) {
+            logger.error('Unknown route!');
+
             response.sendStatus(404);
         });
     }

@@ -7,7 +7,7 @@ import {IConfiguration} from '../../configuration';
 
 // route imports
 import {SystemInfoRouter} from './system-info-router';
-import {DrivingRouter} from './driving-router';
+import {DriveRouter} from './drive-router';
 import {RouterBase} from '../router-base';
 // TODO: this is autogen'd
 
@@ -19,11 +19,11 @@ export function initializeRoutes(app: Application, configuration: IConfiguration
     logger.info('Initializing API v1 routes');
 
     // TODO: this is autogen'd
-    initializeRoute(app, new SystemInfoRouter());
-    initializeRoute(app, new DrivingRouter());
+    initializeRoute(app, new SystemInfoRouter(configuration));
+    initializeRoute(app, new DriveRouter(configuration));
 }
 
 function initializeRoute(app: Application, router: RouterBase) {
     router.initialize();
-    app.use('/api/v1/rv/', router.router);
+    app.use('/api/v1/:toyPrefix/', router.router);
 }

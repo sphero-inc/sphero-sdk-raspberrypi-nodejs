@@ -4,12 +4,20 @@ import {Router} from 'express';
 // internal imports
 import {IRouter} from './router-interfaces'
 import {createLogger, ILogger} from '../modules/logger';
+import {IConfiguration} from '../configuration';
+import {IApiDal} from '../modules/api-dal-interface';
 
 
 export abstract class RouterBase implements IRouter {
     private readonly _name: string;
     private readonly _router: Router;
-    private readonly _logger: ILogger;
+    private readonly _configuration: IConfiguration;
+
+    protected get _apiDal(): IApiDal {
+        return this._configuration.apiDal;
+    }
+
+    protected readonly _logger: ILogger;
 
     public get name(): string {
         return this._name;
@@ -19,14 +27,17 @@ export abstract class RouterBase implements IRouter {
         return this._router;
     }
 
-    protected constructor(name: string) {
+    protected constructor(name: string, configuration: IConfiguration) {
         this._name = name;
-        this._router = Router();
+        this._router = Router({mergeParams: true});
+        this._configuration = configuration;
 
         this._logger = createLogger(name);
     }
 
     public initialize(): void {
+        this._logger.info('Initializing routes...');
+
         this.initializeRoutes();
     }
 

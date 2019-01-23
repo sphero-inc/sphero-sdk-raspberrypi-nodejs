@@ -1,3 +1,4 @@
+
 export class ByteConversionUtilities {
     public static int32ToByteArray(value: number): Array<number> {
         let bytes: Array<number> = [0, 0, 0, 0];
@@ -129,5 +130,15 @@ export class ByteConversionUtilities {
         }
 
         return '0x' + hexValue.toUpperCase();
+    }
+
+    public static convertNumbersToHexCsvString(values: Array<number>): string {
+        let hexValues: Array<string> = [];
+
+        for (let i: number = 0; i < values.length; i++) {
+            hexValues.push(this.convertNumberToHexString(values[i]));
+        }
+
+        return hexValues.join(', ');
     }
 }
