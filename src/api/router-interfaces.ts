@@ -9,6 +9,6 @@ export interface IRouter {
     initialize(): void;
 }
 
-export interface IDeviceRouter {
+export interface IDeviceRouter extends IRouter{
     readonly deviceId: number;
 }
