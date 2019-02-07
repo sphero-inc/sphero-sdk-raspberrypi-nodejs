@@ -1,10 +1,10 @@
 // ************************************************************
 // This file was automatically generated!
-// Device ID (DID):              0x1F
-// Device Name:                  factory_test
-// Device Description:           
-// Command Count:                1
-// Source File:                  0x1F-factory_testing.json
+// Device ID (DID):         0x1F
+// Device Name:             factory_test
+// Device Description:      
+// Command Count:           1
+// Source File:             0x1F-factory_testing.json
 // ************************************************************
 
 // external imports

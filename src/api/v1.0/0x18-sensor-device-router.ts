@@ -1,10 +1,10 @@
 // ************************************************************
 // This file was automatically generated!
-// Device ID (DID):              0x18
-// Device Name:                  sensor
-// Device Description:           
-// Command Count:                16
-// Source File:                  0x18-sensors.json
+// Device ID (DID):         0x18
+// Device Name:             sensor
+// Device Description:      
+// Command Count:           16
+// Source File:             0x18-sensors.json
 // ************************************************************
 
 // external imports

@@ -1,10 +1,10 @@
 // ************************************************************
 // This file was automatically generated!
-// Device ID (DID):              0x19
-// Device Name:                  connection
-// Device Description:           
-// Command Count:                2
-// Source File:                  0x19-peer_connection.json
+// Device ID (DID):         0x19
+// Device Name:             connection
+// Device Description:      
+// Command Count:           2
+// Source File:             0x19-peer_connection.json
 // ************************************************************
 
 // external imports

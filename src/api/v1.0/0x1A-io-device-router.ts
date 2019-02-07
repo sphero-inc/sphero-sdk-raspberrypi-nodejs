@@ -1,10 +1,10 @@
 // ************************************************************
 // This file was automatically generated!
-// Device ID (DID):              0x1A
-// Device Name:                  io
-// Device Description:           
-// Command Count:                4
-// Source File:                  0x1A-user_io.json
+// Device ID (DID):         0x1A
+// Device Name:             io
+// Device Description:      
+// Command Count:           4
+// Source File:             0x1A-user_io.json
 // ************************************************************
 
 // external imports

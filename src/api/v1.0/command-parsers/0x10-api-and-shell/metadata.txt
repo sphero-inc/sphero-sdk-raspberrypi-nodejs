@@ -1,0 +1,10 @@
+// ************************************************************
+// The contents in this directory were automatically generated!
+// Device ID (DID):         0x10
+// Device Name:             api_and_shell
+// Device Description:      
+// Command Count:           3
+// Source File:             0x10-api_and_shell.json
+// Timestamp:               02/07/2019 @ 01:57:47.299406 (UTC)
+// ************************************************************
+

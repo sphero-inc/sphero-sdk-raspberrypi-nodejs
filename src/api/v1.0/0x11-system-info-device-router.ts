@@ -1,10 +1,10 @@
 // ************************************************************
 // This file was automatically generated!
-// Device ID (DID):              0x11
-// Device Name:                  system_info
-// Device Description:           
-// Command Count:                7
-// Source File:                  0x11-system_info.json
+// Device ID (DID):         0x11
+// Device Name:             system_info
+// Device Description:      
+// Command Count:           7
+// Source File:             0x11-system_info.json
 // ************************************************************
 
 // external imports

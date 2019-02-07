@@ -1,10 +1,10 @@
 // ************************************************************
 // This file was automatically generated!
-// Device ID (DID):              0x13
-// Device Name:                  power
-// Device Description:           
-// Command Count:                10
-// Source File:                  0x13-power.json
+// Device ID (DID):         0x13
+// Device Name:             power
+// Device Description:      
+// Command Count:           10
+// Source File:             0x13-power.json
 // ************************************************************
 
 // external imports

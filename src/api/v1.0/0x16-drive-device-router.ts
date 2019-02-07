@@ -1,10 +1,10 @@
 // ************************************************************
 // This file was automatically generated!
-// Device ID (DID):              0x16
-// Device Name:                  drive
-// Device Description:           
-// Command Count:                4
-// Source File:                  0x16-driving.json
+// Device ID (DID):         0x16
+// Device Name:             drive
+// Device Description:      
+// Command Count:           4
+// Source File:             0x16-driving.json
 // ************************************************************
 
 // external imports

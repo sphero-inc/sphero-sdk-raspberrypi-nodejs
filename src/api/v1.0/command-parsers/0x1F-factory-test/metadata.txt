@@ -1,0 +1,10 @@
+// ************************************************************
+// The contents in this directory were automatically generated!
+// Device ID (DID):         0x1F
+// Device Name:             factory_test
+// Device Description:      
+// Command Count:           1
+// Source File:             0x1F-factory_testing.json
+// Timestamp:               02/07/2019 @ 01:57:47.299555 (UTC)
+// ************************************************************
+

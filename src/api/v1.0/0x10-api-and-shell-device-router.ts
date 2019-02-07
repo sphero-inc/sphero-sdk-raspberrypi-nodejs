@@ -1,10 +1,10 @@
 // ************************************************************
 // This file was automatically generated!
-// Device ID (DID):              0x10
-// Device Name:                  api_and_shell
-// Device Description:           
-// Command Count:                3
-// Source File:                  0x10-api_and_shell.json
+// Device ID (DID):         0x10
+// Device Name:             api_and_shell
+// Device Description:      
+// Command Count:           3
+// Source File:             0x10-api_and_shell.json
 // ************************************************************
 
 // external imports
