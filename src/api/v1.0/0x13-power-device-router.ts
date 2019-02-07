@@ -48,37 +48,37 @@ export class PowerDeviceRouter extends DeviceRouterBase {
 	}
 	
 	protected initializeRoutes(): void {
-		this.router.route('/power/enterDeepSleep')
+		this.router.route('/power/enterDeepSleep/:targetId')
 			.put((request: Request, response: Response) =>
 				this.enterDeepSleep(request, response));
 		this.registerCommand(0x00, 'EnterDeepSleep');
 		
-		this.router.route('/power/sleep')
+		this.router.route('/power/sleep/:targetId')
 			.put((request: Request, response: Response) =>
 				this.sleep(request, response));
 		this.registerCommand(0x01, 'Sleep');
 		
-		this.router.route('/power/forceBatteryRefresh')
+		this.router.route('/power/forceBatteryRefresh/:targetId')
 			.put((request: Request, response: Response) =>
 				this.forceBatteryRefresh(request, response));
 		this.registerCommand(0x0C, 'ForceBatteryRefresh');
 		
-		this.router.route('/power/wake')
+		this.router.route('/power/wake/:targetId')
 			.put((request: Request, response: Response) =>
 				this.wake(request, response));
 		this.registerCommand(0x0D, 'Wake');
 		
-		this.router.route('/power/getBatteryPercentage')
+		this.router.route('/power/getBatteryPercentage/:targetId')
 			.get((request: Request, response: Response) =>
 				this.getBatteryPercentage(request, response));
 		this.registerCommand(0x10, 'GetBatteryPercentage');
 		
-		this.router.route('/power/getBatteryVoltageState')
+		this.router.route('/power/getBatteryVoltageState/:targetId')
 			.get((request: Request, response: Response) =>
 				this.getBatteryVoltageState(request, response));
 		this.registerCommand(0x17, 'GetBatteryVoltageState');
 		
-		this.router.route('/power/enableBatteryVoltageStateChangeNotify')
+		this.router.route('/power/enableBatteryVoltageStateChangeNotify/:targetId')
 			.put((request: Request, response: Response) =>
 				this.enableBatteryVoltageStateChangeNotify(request, response));
 		this.registerCommand(0x1B, 'EnableBatteryVoltageStateChangeNotify');

@@ -73,12 +73,12 @@ export class SystemInfoDeviceRouter extends DeviceRouterBase {
 				this.getBoardRevision(request, response));
 		this.registerCommand(0x03, 'GetBoardRevision');
 		
-		this.router.route('/systemInfo/getMacAddress')
+		this.router.route('/systemInfo/getMacAddress/:targetId')
 			.get((request: Request, response: Response) =>
 				this.getMacAddress(request, response));
 		this.registerCommand(0x06, 'GetMacAddress');
 		
-		this.router.route('/systemInfo/getNordicTemperature')
+		this.router.route('/systemInfo/getNordicTemperature/:targetId')
 			.get((request: Request, response: Response) =>
 				this.getNordicTemperature(request, response));
 		this.registerCommand(0x0E, 'GetNordicTemperature');

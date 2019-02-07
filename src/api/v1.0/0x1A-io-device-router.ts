@@ -42,22 +42,22 @@ export class IoDeviceRouter extends DeviceRouterBase {
 	}
 	
 	protected initializeRoutes(): void {
-		this.router.route('/io/setAllLeds')
+		this.router.route('/io/setAllLeds/:targetId')
 			.put((request: Request, response: Response) =>
 				this.setAllLeds(request, response));
 		this.registerCommand(0x0E, 'SetAllLeds');
 		
-		this.router.route('/io/setAllLedsWith32BitMask')
+		this.router.route('/io/setAllLedsWith32BitMask/:targetId')
 			.put((request: Request, response: Response) =>
 				this.setAllLedsWith32BitMask(request, response));
 		this.registerCommand(0x1A, 'SetAllLedsWith32BitMask');
 		
-		this.router.route('/io/setAllLedsWith64BitMask')
+		this.router.route('/io/setAllLedsWith64BitMask/:targetId')
 			.put((request: Request, response: Response) =>
 				this.setAllLedsWith64BitMask(request, response));
 		this.registerCommand(0x1B, 'SetAllLedsWith64BitMask');
 		
-		this.router.route('/io/setAllLedsWith8BitMask')
+		this.router.route('/io/setAllLedsWith8BitMask/:targetId')
 			.put((request: Request, response: Response) =>
 				this.setAllLedsWith8BitMask(request, response));
 		this.registerCommand(0x1C, 'SetAllLedsWith8BitMask');

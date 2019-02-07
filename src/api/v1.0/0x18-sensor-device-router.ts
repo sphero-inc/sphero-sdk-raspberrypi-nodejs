@@ -79,62 +79,62 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 	}
 	
 	protected initializeRoutes(): void {
-		this.router.route('/sensor/setSensorStreamingMask')
+		this.router.route('/sensor/setSensorStreamingMask/:targetId')
 			.put((request: Request, response: Response) =>
 				this.setSensorStreamingMask(request, response));
 		this.registerCommand(0x00, 'SetSensorStreamingMask');
 		
-		this.router.route('/sensor/getSensorStreamingMask')
+		this.router.route('/sensor/getSensorStreamingMask/:targetId')
 			.get((request: Request, response: Response) =>
 				this.getSensorStreamingMask(request, response));
 		this.registerCommand(0x01, 'GetSensorStreamingMask');
 		
-		this.router.route('/sensor/setExtendedSensorStreamingMask')
+		this.router.route('/sensor/setExtendedSensorStreamingMask/:targetId')
 			.put((request: Request, response: Response) =>
 				this.setExtendedSensorStreamingMask(request, response));
 		this.registerCommand(0x0C, 'SetExtendedSensorStreamingMask');
 		
-		this.router.route('/sensor/getExtendedSensorStreamingMask')
+		this.router.route('/sensor/getExtendedSensorStreamingMask/:targetId')
 			.get((request: Request, response: Response) =>
 				this.getExtendedSensorStreamingMask(request, response));
 		this.registerCommand(0x0D, 'GetExtendedSensorStreamingMask');
 		
-		this.router.route('/sensor/enableGyroMaxNotify')
+		this.router.route('/sensor/enableGyroMaxNotify/:targetId')
 			.put((request: Request, response: Response) =>
 				this.enableGyroMaxNotify(request, response));
 		this.registerCommand(0x0F, 'EnableGyroMaxNotify');
 		
-		this.router.route('/sensor/getBotToBotInfraredReadings')
+		this.router.route('/sensor/getBotToBotInfraredReadings/:targetId')
 			.get((request: Request, response: Response) =>
 				this.getBotToBotInfraredReadings(request, response));
 		this.registerCommand(0x22, 'GetBotToBotInfraredReadings');
 		
-		this.router.route('/sensor/magnetometerCalibrateToNorth')
+		this.router.route('/sensor/magnetometerCalibrateToNorth/:targetId')
 			.put((request: Request, response: Response) =>
 				this.magnetometerCalibrateToNorth(request, response));
 		this.registerCommand(0x25, 'MagnetometerCalibrateToNorth');
 		
-		this.router.route('/sensor/startRobotToRobotInfraredBroadcasting')
+		this.router.route('/sensor/startRobotToRobotInfraredBroadcasting/:targetId')
 			.put((request: Request, response: Response) =>
 				this.startRobotToRobotInfraredBroadcasting(request, response));
 		this.registerCommand(0x27, 'StartRobotToRobotInfraredBroadcasting');
 		
-		this.router.route('/sensor/startRobotToRobotInfraredFollowing')
+		this.router.route('/sensor/startRobotToRobotInfraredFollowing/:targetId')
 			.put((request: Request, response: Response) =>
 				this.startRobotToRobotInfraredFollowing(request, response));
 		this.registerCommand(0x28, 'StartRobotToRobotInfraredFollowing');
 		
-		this.router.route('/sensor/stopRobotToRobotInfraredBroadcasting')
+		this.router.route('/sensor/stopRobotToRobotInfraredBroadcasting/:targetId')
 			.put((request: Request, response: Response) =>
 				this.stopRobotToRobotInfraredBroadcasting(request, response));
 		this.registerCommand(0x29, 'StopRobotToRobotInfraredBroadcasting');
 		
-		this.router.route('/sensor/sendRobotToRobotInfraredMessage')
+		this.router.route('/sensor/sendRobotToRobotInfraredMessage/:targetId')
 			.put((request: Request, response: Response) =>
 				this.sendRobotToRobotInfraredMessage(request, response));
 		this.registerCommand(0x2A, 'SendRobotToRobotInfraredMessage');
 		
-		this.router.route('/sensor/listenForRobotToRobotInfraredMessage')
+		this.router.route('/sensor/listenForRobotToRobotInfraredMessage/:targetId')
 			.put((request: Request, response: Response) =>
 				this.listenForRobotToRobotInfraredMessage(request, response));
 		this.registerCommand(0x2B, 'ListenForRobotToRobotInfraredMessage');

@@ -39,22 +39,22 @@ export class DriveDeviceRouter extends DeviceRouterBase {
 	}
 	
 	protected initializeRoutes(): void {
-		this.router.route('/drive/setRawMotors')
+		this.router.route('/drive/setRawMotors/:targetId')
 			.put((request: Request, response: Response) =>
 				this.setRawMotors(request, response));
 		this.registerCommand(0x01, 'SetRawMotors');
 		
-		this.router.route('/drive/resetYaw')
+		this.router.route('/drive/resetYaw/:targetId')
 			.put((request: Request, response: Response) =>
 				this.resetYaw(request, response));
 		this.registerCommand(0x06, 'ResetYaw');
 		
-		this.router.route('/drive/driveWithHeading')
+		this.router.route('/drive/driveWithHeading/:targetId')
 			.put((request: Request, response: Response) =>
 				this.driveWithHeading(request, response));
 		this.registerCommand(0x07, 'DriveWithHeading');
 		
-		this.router.route('/drive/setStabilization')
+		this.router.route('/drive/setStabilization/:targetId')
 			.put((request: Request, response: Response) =>
 				this.setStabilization(request, response));
 		this.registerCommand(0x0C, 'SetStabilization');
