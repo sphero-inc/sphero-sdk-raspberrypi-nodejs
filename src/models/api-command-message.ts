@@ -1,22 +1,12 @@
 // internal imports
 import {IApiMessage, ApiBaseMessage} from './api-message';
-import {ApiFlags, ApiTargetsAndSources} from '../constants';
+import {ApiFlags} from '../constants';
 
 
 export interface IApiCommandMessage extends IApiMessage {
-    readonly commandRawBytes: Array<number>;
 }
 
 class ApiCommandMessage extends ApiBaseMessage implements IApiCommandMessage {
-    public get messageRawBytes(): Array<number> {
-        return this._commandRawBytes;
-    }
-
-    private _commandRawBytes: Array<number> = [];
-    public get commandRawBytes(): Array<number> {
-        return this._commandRawBytes;
-    }
-
     constructor(flags: number, sequenceNumber: number,
                 targetId: number, sourceId: number,
                 deviceId: number, deviceName: string,
@@ -30,10 +20,6 @@ class ApiCommandMessage extends ApiBaseMessage implements IApiCommandMessage {
             commandId, commandName,
             dataRawBytes
         );
-    }
-
-    protected generateMessageRawBytesInternal(): void {
-
     }
 }
 

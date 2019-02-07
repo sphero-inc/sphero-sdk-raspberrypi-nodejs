@@ -4,19 +4,9 @@ import {ApiFlags} from '../constants';
 
 
 export interface IApiResponseMessage extends IApiMessage {
-    readonly responseRawBytes: Array<number>;
 }
 
 class ApiResponseMessage extends ApiBaseMessage implements IApiResponseMessage {
-    public get messageRawBytes(): Array<number> {
-        return this._responseRawBytes;
-    }
-
-    private _responseRawBytes: Array<number> = [];
-    public get responseRawBytes(): Array<number> {
-        return this._responseRawBytes;
-    }
-
     constructor(flags: number, sequenceNumber: number,
                 targetId: number, sourceId: number,
                 deviceId: number, deviceName: string,
@@ -30,10 +20,6 @@ class ApiResponseMessage extends ApiBaseMessage implements IApiResponseMessage {
             commandId, commandName,
             dataRawBytes
         );
-    }
-
-    protected generateMessageRawBytesInternal(): void {
-
     }
 }
 

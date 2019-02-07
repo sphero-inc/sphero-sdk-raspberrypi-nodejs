@@ -1,4 +1,5 @@
 import {ApiFlags} from '../constants';
+import {ApiParserFactory} from '../modules/api-parser';
 
 export interface IApiMessage {
     readonly flags: number;
@@ -17,8 +18,8 @@ export interface IApiMessage {
     readonly commandId: number;
     readonly commandName: string;
 
-    readonly dataRawBytes: Array<number>;
-    readonly messageRawBytes: Array<number>;
+    readonly dataRawBytes: Array<number>;   // Payload raw bytes
+    readonly messageRawBytes: Array<number>;    // Full message raw bytes
 
     readonly data: object | null;
 
@@ -91,7 +92,10 @@ export abstract class ApiBaseMessage implements IApiMessage {
         return this._dataRawBytes;
     }
 
-    public abstract get messageRawBytes(): Array<number>;
+    protected _messageRawBytes: Array<number> = [];
+    public get messageRawBytes(): Array<number> {
+        return this._messageRawBytes;
+    }
 
     protected _data: object | null = null;
     public get data(): object | null {
@@ -136,11 +140,10 @@ export abstract class ApiBaseMessage implements IApiMessage {
         }
     }
 
+    // TODO: rename to serialize
     public generateMessageRawBytes(): void {
-        this.generateMessageRawBytesInternal();
+        this._messageRawBytes = ApiParserFactory.getApiParser().generateRawBytesForApiMessage(this);
     }
-
-    protected abstract generateMessageRawBytesInternal(): void;
 
     public associateError(errorCode: number, errorMessage: string): void {
         this._errorCode = errorCode;
@@ -149,6 +152,6 @@ export abstract class ApiBaseMessage implements IApiMessage {
     }
 
     public prettyPrint(): string {
-        return '';
+        return '';  // TODO: implement this
     }
 }
