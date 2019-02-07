@@ -255,7 +255,7 @@ class ApiParser implements IApiParser {
             apiMessage.associateError(errorCode, errorMessage);
         }
 
-        logger.debug(`Generated API message ${apiMessage.prettyPrint()}`);
+        logger.debug(`Generated API message: ${apiMessage.prettyPrint()}`);
 
         return apiMessage;
     }
