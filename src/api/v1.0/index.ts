@@ -36,5 +36,5 @@ export function initializeRoutes(app: Application, apiDal: IApiDal, configuratio
 
 function initializeRoute(app: Application, deviceRouter: DeviceRouterBase) {
 	deviceRouter.initialize();
-	app.use('/api/v1.0/:toyPrefix/', deviceRouter.router);
+	app.use('/api/v1.0/', deviceRouter.router);
 }

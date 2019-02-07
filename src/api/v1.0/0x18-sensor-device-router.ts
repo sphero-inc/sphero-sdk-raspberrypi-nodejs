@@ -147,19 +147,6 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		let commandId: number = 0x00;
 		let commandName: string = this.getCommandName(commandId);
 		
-		if (!request.params.toyPrefix) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'toyPrefix is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		let toyPrefix: string = request.params.toyPrefix;
-		
 		if (!request.params.targetId) {
 			let errorCode: number = 400;
 			let errorDetail: string = 'targetId is required!';
@@ -187,7 +174,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		let targetId: number = parseInt(request.params.targetId);
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
-		this.logRequest(request.path, request.method, toyPrefix,
+		this.logRequest(request.path, request.method,
 			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
 			commandId, commandName,
 			sourceId, targetId,
@@ -205,7 +192,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
 			// No outputs...
 			
-			this.logResponse(request.path, request.method, toyPrefix,
+			this.logResponse(request.path, request.method,
 				SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
 				commandId, commandName,
 				sourceId, targetId,
@@ -229,19 +216,6 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		let commandId: number = 0x01;
 		let commandName: string = this.getCommandName(commandId);
 		
-		if (!request.params.toyPrefix) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'toyPrefix is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		let toyPrefix: string = request.params.toyPrefix;
-		
 		if (!request.params.targetId) {
 			let errorCode: number = 400;
 			let errorDetail: string = 'targetId is required!';
@@ -258,7 +232,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		let targetId: number = parseInt(request.params.targetId);
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
-		this.logRequest(request.path, request.method, toyPrefix,
+		this.logRequest(request.path, request.method,
 			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
 			commandId, commandName,
 			sourceId, targetId,
@@ -276,7 +250,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
 			let responsePayload: IGetSensorStreamingMaskResponse = parseGetSensorStreamingMaskResponse(apiResponseMessage.dataRawBytes);
 			
-			this.logResponse(request.path, request.method, toyPrefix,
+			this.logResponse(request.path, request.method,
 				SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
 				commandId, commandName,
 				sourceId, targetId,
@@ -299,19 +273,6 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		
 		let commandId: number = 0x0C;
 		let commandName: string = this.getCommandName(commandId);
-		
-		if (!request.params.toyPrefix) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'toyPrefix is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		let toyPrefix: string = request.params.toyPrefix;
 		
 		if (!request.params.targetId) {
 			let errorCode: number = 400;
@@ -340,7 +301,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		let targetId: number = parseInt(request.params.targetId);
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
-		this.logRequest(request.path, request.method, toyPrefix,
+		this.logRequest(request.path, request.method,
 			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
 			commandId, commandName,
 			sourceId, targetId,
@@ -358,7 +319,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
 			// No outputs...
 			
-			this.logResponse(request.path, request.method, toyPrefix,
+			this.logResponse(request.path, request.method,
 				SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
 				commandId, commandName,
 				sourceId, targetId,
@@ -382,19 +343,6 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		let commandId: number = 0x0D;
 		let commandName: string = this.getCommandName(commandId);
 		
-		if (!request.params.toyPrefix) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'toyPrefix is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		let toyPrefix: string = request.params.toyPrefix;
-		
 		if (!request.params.targetId) {
 			let errorCode: number = 400;
 			let errorDetail: string = 'targetId is required!';
@@ -411,7 +359,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		let targetId: number = parseInt(request.params.targetId);
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
-		this.logRequest(request.path, request.method, toyPrefix,
+		this.logRequest(request.path, request.method,
 			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
 			commandId, commandName,
 			sourceId, targetId,
@@ -429,7 +377,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
 			let responsePayload: IGetExtendedSensorStreamingMaskResponse = parseGetExtendedSensorStreamingMaskResponse(apiResponseMessage.dataRawBytes);
 			
-			this.logResponse(request.path, request.method, toyPrefix,
+			this.logResponse(request.path, request.method,
 				SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
 				commandId, commandName,
 				sourceId, targetId,
@@ -452,19 +400,6 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		
 		let commandId: number = 0x0F;
 		let commandName: string = this.getCommandName(commandId);
-		
-		if (!request.params.toyPrefix) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'toyPrefix is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		let toyPrefix: string = request.params.toyPrefix;
 		
 		if (!request.params.targetId) {
 			let errorCode: number = 400;
@@ -493,7 +428,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		let targetId: number = parseInt(request.params.targetId);
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
-		this.logRequest(request.path, request.method, toyPrefix,
+		this.logRequest(request.path, request.method,
 			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
 			commandId, commandName,
 			sourceId, targetId,
@@ -511,7 +446,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
 			// No outputs...
 			
-			this.logResponse(request.path, request.method, toyPrefix,
+			this.logResponse(request.path, request.method,
 				SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
 				commandId, commandName,
 				sourceId, targetId,
@@ -535,19 +470,6 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		let commandId: number = 0x22;
 		let commandName: string = this.getCommandName(commandId);
 		
-		if (!request.params.toyPrefix) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'toyPrefix is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		let toyPrefix: string = request.params.toyPrefix;
-		
 		if (!request.params.targetId) {
 			let errorCode: number = 400;
 			let errorDetail: string = 'targetId is required!';
@@ -564,7 +486,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		let targetId: number = parseInt(request.params.targetId);
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
-		this.logRequest(request.path, request.method, toyPrefix,
+		this.logRequest(request.path, request.method,
 			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
 			commandId, commandName,
 			sourceId, targetId,
@@ -582,7 +504,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
 			let responsePayload: IGetBotToBotInfraredReadingsResponse = parseGetBotToBotInfraredReadingsResponse(apiResponseMessage.dataRawBytes);
 			
-			this.logResponse(request.path, request.method, toyPrefix,
+			this.logResponse(request.path, request.method,
 				SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
 				commandId, commandName,
 				sourceId, targetId,
@@ -606,19 +528,6 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		let commandId: number = 0x25;
 		let commandName: string = this.getCommandName(commandId);
 		
-		if (!request.params.toyPrefix) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'toyPrefix is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		let toyPrefix: string = request.params.toyPrefix;
-		
 		if (!request.params.targetId) {
 			let errorCode: number = 400;
 			let errorDetail: string = 'targetId is required!';
@@ -635,7 +544,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		let targetId: number = parseInt(request.params.targetId);
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
-		this.logRequest(request.path, request.method, toyPrefix,
+		this.logRequest(request.path, request.method,
 			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
 			commandId, commandName,
 			sourceId, targetId,
@@ -653,7 +562,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
 			// No outputs...
 			
-			this.logResponse(request.path, request.method, toyPrefix,
+			this.logResponse(request.path, request.method,
 				SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
 				commandId, commandName,
 				sourceId, targetId,
@@ -676,19 +585,6 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		
 		let commandId: number = 0x27;
 		let commandName: string = this.getCommandName(commandId);
-		
-		if (!request.params.toyPrefix) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'toyPrefix is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		let toyPrefix: string = request.params.toyPrefix;
 		
 		if (!request.params.targetId) {
 			let errorCode: number = 400;
@@ -717,7 +613,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		let targetId: number = parseInt(request.params.targetId);
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
-		this.logRequest(request.path, request.method, toyPrefix,
+		this.logRequest(request.path, request.method,
 			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
 			commandId, commandName,
 			sourceId, targetId,
@@ -735,7 +631,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
 			// No outputs...
 			
-			this.logResponse(request.path, request.method, toyPrefix,
+			this.logResponse(request.path, request.method,
 				SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
 				commandId, commandName,
 				sourceId, targetId,
@@ -758,19 +654,6 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		
 		let commandId: number = 0x28;
 		let commandName: string = this.getCommandName(commandId);
-		
-		if (!request.params.toyPrefix) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'toyPrefix is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		let toyPrefix: string = request.params.toyPrefix;
 		
 		if (!request.params.targetId) {
 			let errorCode: number = 400;
@@ -799,7 +682,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		let targetId: number = parseInt(request.params.targetId);
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
-		this.logRequest(request.path, request.method, toyPrefix,
+		this.logRequest(request.path, request.method,
 			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
 			commandId, commandName,
 			sourceId, targetId,
@@ -817,7 +700,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
 			// No outputs...
 			
-			this.logResponse(request.path, request.method, toyPrefix,
+			this.logResponse(request.path, request.method,
 				SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
 				commandId, commandName,
 				sourceId, targetId,
@@ -841,19 +724,6 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		let commandId: number = 0x29;
 		let commandName: string = this.getCommandName(commandId);
 		
-		if (!request.params.toyPrefix) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'toyPrefix is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		let toyPrefix: string = request.params.toyPrefix;
-		
 		if (!request.params.targetId) {
 			let errorCode: number = 400;
 			let errorDetail: string = 'targetId is required!';
@@ -870,7 +740,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		let targetId: number = parseInt(request.params.targetId);
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
-		this.logRequest(request.path, request.method, toyPrefix,
+		this.logRequest(request.path, request.method,
 			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
 			commandId, commandName,
 			sourceId, targetId,
@@ -888,7 +758,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
 			// No outputs...
 			
-			this.logResponse(request.path, request.method, toyPrefix,
+			this.logResponse(request.path, request.method,
 				SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
 				commandId, commandName,
 				sourceId, targetId,
@@ -911,19 +781,6 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		
 		let commandId: number = 0x2A;
 		let commandName: string = this.getCommandName(commandId);
-		
-		if (!request.params.toyPrefix) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'toyPrefix is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		let toyPrefix: string = request.params.toyPrefix;
 		
 		if (!request.params.targetId) {
 			let errorCode: number = 400;
@@ -952,7 +809,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		let targetId: number = parseInt(request.params.targetId);
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
-		this.logRequest(request.path, request.method, toyPrefix,
+		this.logRequest(request.path, request.method,
 			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
 			commandId, commandName,
 			sourceId, targetId,
@@ -970,7 +827,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
 			// No outputs...
 			
-			this.logResponse(request.path, request.method, toyPrefix,
+			this.logResponse(request.path, request.method,
 				SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
 				commandId, commandName,
 				sourceId, targetId,
@@ -993,19 +850,6 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		
 		let commandId: number = 0x2B;
 		let commandName: string = this.getCommandName(commandId);
-		
-		if (!request.params.toyPrefix) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'toyPrefix is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		let toyPrefix: string = request.params.toyPrefix;
 		
 		if (!request.params.targetId) {
 			let errorCode: number = 400;
@@ -1034,7 +878,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		let targetId: number = parseInt(request.params.targetId);
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
-		this.logRequest(request.path, request.method, toyPrefix,
+		this.logRequest(request.path, request.method,
 			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
 			commandId, commandName,
 			sourceId, targetId,
@@ -1052,7 +896,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
 			// No outputs...
 			
-			this.logResponse(request.path, request.method, toyPrefix,
+			this.logResponse(request.path, request.method,
 				SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
 				commandId, commandName,
 				sourceId, targetId,

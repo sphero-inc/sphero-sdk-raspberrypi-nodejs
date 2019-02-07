@@ -46,19 +46,6 @@ export class FactoryTestDeviceRouter extends DeviceRouterBase {
 		let commandId: number = 0x27;
 		let commandName: string = this.getCommandName(commandId);
 		
-		if (!request.params.toyPrefix) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'toyPrefix is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		let toyPrefix: string = request.params.toyPrefix;
-		
 		if (!request.params.targetId) {
 			let errorCode: number = 400;
 			let errorDetail: string = 'targetId is required!';
@@ -75,7 +62,7 @@ export class FactoryTestDeviceRouter extends DeviceRouterBase {
 		let targetId: number = parseInt(request.params.targetId);
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
-		this.logRequest(request.path, request.method, toyPrefix,
+		this.logRequest(request.path, request.method,
 			FactoryTestDeviceRouter._deviceId, FactoryTestDeviceRouter._deviceName,
 			commandId, commandName,
 			sourceId, targetId,
@@ -93,7 +80,7 @@ export class FactoryTestDeviceRouter extends DeviceRouterBase {
 		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
 			let responsePayload: IGetChassisIdResponse = parseGetChassisIdResponse(apiResponseMessage.dataRawBytes);
 			
-			this.logResponse(request.path, request.method, toyPrefix,
+			this.logResponse(request.path, request.method,
 				FactoryTestDeviceRouter._deviceId, FactoryTestDeviceRouter._deviceName,
 				commandId, commandName,
 				sourceId, targetId,

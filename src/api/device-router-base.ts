@@ -62,25 +62,25 @@ export abstract class DeviceRouterBase extends RouterBase implements IDeviceRout
         throw new Error('Command name was not found!');
     }
 
-    protected logRequest(route: string, method: string, toyPrefix: string, deviceId: number, deviceName: string, commandId: number, commandName: string, sourceId: number, targetId: number, requestJsonPayload: string = '') {
+    protected logRequest(route: string, method: string, deviceId: number, deviceName: string, commandId: number, commandName: string, sourceId: number, targetId: number, requestJsonPayload: string = '') {
         this.routeExecuted('Request',
-            route, method, toyPrefix,
+            route, method,
             deviceId, deviceName,
             commandId, commandName,
             sourceId, targetId,
             requestJsonPayload);
     }
-    protected logResponse(route: string, method: string, toyPrefix: string, deviceId: number, deviceName: string, commandId: number, commandName: string, sourceId: number, targetId: number, responseJsonPayload: string = '') {
+    protected logResponse(route: string, method: string, deviceId: number, deviceName: string, commandId: number, commandName: string, sourceId: number, targetId: number, responseJsonPayload: string = '') {
         this.routeExecuted('Response',
-            route, method, toyPrefix,
+            route, method,
             deviceId, deviceName,
             commandId, commandName,
             sourceId, targetId,
             responseJsonPayload);
     }
-    private routeExecuted(messagePrefix: string, route: string, method: string, toyPrefix: string, deviceId: number, deviceName: string, commandId: number, commandName: string, sourceId: number, targetId: number, jsonPayload: string = '') {
+    private routeExecuted(messagePrefix: string, route: string, method: string, deviceId: number, deviceName: string, commandId: number, commandName: string, sourceId: number, targetId: number, jsonPayload: string = '') {
         this._logger.info(`${messagePrefix} -- Route: ${route} | Method: ${method}`);
-        this._logger.debug(`${messagePrefix} -- Route: ${route} | Method: ${method} | ToyPrefix: ${toyPrefix} | Device: ${deviceName} (${deviceId}) | Command: ${commandName} (${commandId}) | SourceId: ${sourceId} | TargetId: ${targetId} | Payload: ${jsonPayload}`);
+        this._logger.debug(`${messagePrefix} -- Route: ${route} | Method: ${method} | Device: ${deviceName} (${deviceId}) | Command: ${commandName} (${commandId}) | SourceId: ${sourceId} | TargetId: ${targetId} | Payload: ${jsonPayload}`);
     }
     protected routeError(route: string, method: string, errorCode: number, errorDetail: string) {
         this._logger.error(`Route Error -- Route: ${route} | Method: ${method} | ErrorCode: ${errorCode} | ErrorDetail: ${errorDetail}`);
