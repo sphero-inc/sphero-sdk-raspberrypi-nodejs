@@ -12,6 +12,7 @@ import apiRouter = require('../api/');
 import {IConfiguration} from '../configuration';
 import {createLogger, ILogger} from './logger';
 import dateTimeUtilities = require('../utilities/date-time-utilities');
+import {IApiDal} from './api-dal-interface';
 
 
 let logger: ILogger = createLogger('app');
@@ -20,6 +21,7 @@ let logger: ILogger = createLogger('app');
 export class App {
     private _isInitialized: boolean = false;
     private _server: HttpServer;
+    private _apiDal: IApiDal;
     private _configuration: IConfiguration;
 
     readonly expressApp: express.Application;
@@ -28,7 +30,7 @@ export class App {
         this.expressApp = express();
     }
 
-    public initialize(server: HttpServer, configuration: IConfiguration): void {
+    public initialize(server: HttpServer, apiDal: IApiDal, configuration: IConfiguration): void {
         if (this._isInitialized) {
             logger.warning('App has already been initialized!');
             return;
@@ -37,6 +39,7 @@ export class App {
         // TODO: validate args
 
         this._server = server;
+        this._apiDal = apiDal;
         this._configuration = configuration;
 
         this.expressApp.locals.title = this._configuration.applicationTitle;
@@ -97,7 +100,7 @@ export class App {
             response.sendFile('index.html');
         });
 
-        apiRouter.initializeRoutes(this.expressApp, this._configuration);
+        apiRouter.initializeRoutes(this.expressApp, this._apiDal, this._configuration);
     }
 
     private finalizeInitialization(): void {

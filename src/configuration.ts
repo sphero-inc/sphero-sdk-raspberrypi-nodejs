@@ -1,8 +1,5 @@
 // internal imports
 import {createLogger, ILogger} from './modules/logger';
-import {ApiDalTypes, IApiDal} from './modules/api-dal-interface';
-import {buildMockApiDal} from './modules/api-dal-mock';
-import {buildUartApiDal} from './modules/api-dal-uart';
 
 
 let logger: ILogger = createLogger('configuration');
@@ -14,8 +11,6 @@ export interface IConfiguration {
     readonly address: string;
     readonly port: number;
     readonly fullAddress: string;
-
-    readonly apiDal: IApiDal;
 
     initialize(address: string, port: number): void;
 }
@@ -43,20 +38,13 @@ class Configuration implements IConfiguration {
         return this._address + ':' + String(this._port);
     }
 
-    private readonly _apiDal: IApiDal;
-    public get apiDal(): IApiDal {
-        return this._apiDal;
-    }
-
-    constructor(apiDalType: ApiDalTypes = ApiDalTypes.Mock) {
+    constructor() {
         this._isInitialized = false;
 
         this._applicationTitle = 'Sphero SDK API';
 
         this._address = '';
         this._port = 0;
-
-        this._apiDal = buildApiDal(apiDalType);
     }
 
     public initialize(address: string, port: number): void {
@@ -79,21 +67,3 @@ class Configuration implements IConfiguration {
 }
 
 export let defaultConfiguration: IConfiguration = new Configuration();
-
-function buildApiDal(type: ApiDalTypes): IApiDal {
-    let apiDal: IApiDal;
-
-    switch (type) {
-        case ApiDalTypes.UART:
-            apiDal = buildUartApiDal();
-            break;
-        case ApiDalTypes.Mock:
-        case ApiDalTypes.USB:
-            apiDal = buildMockApiDal();
-            break;
-        default:
-            apiDal = buildMockApiDal();
-    }
-
-    return apiDal;
-}
