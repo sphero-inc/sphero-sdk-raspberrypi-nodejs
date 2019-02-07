@@ -13,7 +13,7 @@ class ApiDalMock extends ApiDalBase {
         super();
     }
 
-    protected sendApiCommandMessageInternal(apiMessage: IApiCommandMessage): IApiResponseMessage {
+    protected sendApiCommandMessageInternal(apiCommandMessage: IApiCommandMessage): Promise<IApiResponseMessage> {
         // return buildApiResponseMessage();
         throw new Error('');
     }

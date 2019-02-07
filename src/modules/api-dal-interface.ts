@@ -4,34 +4,44 @@ import {IApiResponseMessage} from '../models/api-response-message'
 
 
 export enum ApiDalTypes {
-    UART,
-    USB,
+    Uart,
     Mock
+}
+
+export interface IApiMessageNotificationObserver {
+    apiCommandMessageReceivedNotification(apiCommandMessage: IApiCommandMessage): void; // TODO: eventually this needs to return an IApiResponseMessage
 }
 
 export interface IApiDal {
     readonly type: ApiDalTypes;
 
-    sendApiCommandMessage(apiMessage: IApiCommandMessage): IApiResponseMessage;
-    receivedApiCommandMessageCallback: (apiMessage: IApiCommandMessage) => void; // TODO: do we allow multiple callback handlers?
+    sendApiCommandMessage(apiCommandMessage: IApiCommandMessage): Promise<IApiResponseMessage>;
+
+    registerApiMessageNotificationObserver(apiMessageNotificationObserver: IApiMessageNotificationObserver): void;
 }
 
 export abstract class ApiDalBase implements IApiDal {
+    private readonly _apiMessageNotificationObservers: Array<IApiMessageNotificationObserver> = [];
+
     public abstract get type(): ApiDalTypes;
 
-    public receivedApiCommandMessageCallback: (apiMessage: IApiCommandMessage) => void;
-
-    public sendApiCommandMessage(apiMessage: IApiCommandMessage): IApiResponseMessage {
-        return this.sendApiCommandMessageInternal(apiMessage);
+    protected constructor() {
+        // do nothing...
     }
 
-    protected abstract sendApiCommandMessageInternal(apiMessage: IApiCommandMessage): IApiResponseMessage;
+    public async sendApiCommandMessage(apiMessage: IApiCommandMessage): Promise<IApiResponseMessage> {
+        return await this.sendApiCommandMessageInternal(apiMessage);
+    }
 
-    protected invokeReceivedApiCommandMessageCallback(apiMessage: IApiCommandMessage): void {
-        if (!this.receivedApiCommandMessageCallback) {
-            return;
+    protected abstract sendApiCommandMessageInternal(apiCommandMessage: IApiCommandMessage): Promise<IApiResponseMessage>;
+
+    public registerApiMessageNotificationObserver(apiMessageNotificationObserver: IApiMessageNotificationObserver): void {
+        this._apiMessageNotificationObservers.push(apiMessageNotificationObserver);
+    }
+
+    protected invokeReceivedApiCommandMessageCallback(apiCommandMessage: IApiCommandMessage): void {
+        for (let i = 0; i < this._apiMessageNotificationObservers.length; i++) {
+            this._apiMessageNotificationObservers[i].apiCommandMessageReceivedNotification(apiCommandMessage);
         }
-
-        this.receivedApiCommandMessageCallback(apiMessage);
     }
 }
