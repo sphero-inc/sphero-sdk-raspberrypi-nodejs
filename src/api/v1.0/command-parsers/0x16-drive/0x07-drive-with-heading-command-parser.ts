@@ -12,7 +12,7 @@ export function parseDriveWithHeadingRequest(requestBody: any): Array<number> {
 	
 	// Index: 1 | Name: 'heading' | Type: 'int16_t' | Size: 1
 	let heading: number = requestBody.heading;
-	let headingBytes: Array<number> = ByteConversionUtilities.int16ToByteArray(heading);
+	let headingBytes: Array<number> = ByteConversionUtilities.int16ToByteArray(heading).reverse();
 	dataRawBytes.concat(headingBytes);
 	
 	// Index: 2 | Name: 'flags' | Type: 'uint8_t' (BITMASK) | Size: 1

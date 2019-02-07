@@ -7,7 +7,7 @@ export function parseSetSensorStreamingMaskRequest(requestBody: any): Array<numb
 	
 	// Index: 0 | Name: 'interval' | Type: 'uint16_t' | Size: 1
 	let interval: number = requestBody.interval;
-	let intervalBytes: Array<number> = ByteConversionUtilities.int16ToByteArray(interval);
+	let intervalBytes: Array<number> = ByteConversionUtilities.int16ToByteArray(interval).reverse();
 	dataRawBytes.concat(intervalBytes);
 	
 	// Index: 1 | Name: 'packetCount' | Type: 'uint8_t' | Size: 1
@@ -17,7 +17,7 @@ export function parseSetSensorStreamingMaskRequest(requestBody: any): Array<numb
 	
 	// Index: 2 | Name: 'dataMask' | Type: 'uint32_t' | Size: 1
 	let dataMask: number = requestBody.dataMask;
-	let dataMaskBytes: Array<number> = ByteConversionUtilities.int32ToByteArray(dataMask);
+	let dataMaskBytes: Array<number> = ByteConversionUtilities.int32ToByteArray(dataMask).reverse();
 	dataRawBytes.concat(dataMaskBytes);
 	
 	return dataRawBytes;

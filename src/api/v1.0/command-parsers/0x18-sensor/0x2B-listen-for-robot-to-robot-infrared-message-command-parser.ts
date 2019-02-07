@@ -12,7 +12,7 @@ export function parseListenForRobotToRobotInfraredMessageRequest(requestBody: an
 	
 	// Index: 1 | Name: 'listenDuration' | Type: 'uint32_t' | Size: 1
 	let listenDuration: number = requestBody.listenDuration;
-	let listenDurationBytes: Array<number> = ByteConversionUtilities.int32ToByteArray(listenDuration);
+	let listenDurationBytes: Array<number> = ByteConversionUtilities.int32ToByteArray(listenDuration).reverse();
 	dataRawBytes.concat(listenDurationBytes);
 	
 	return dataRawBytes;

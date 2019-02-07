@@ -7,7 +7,7 @@ export function parseSetAllLedsRequest(requestBody: any): Array<number> {
 	
 	// Index: 0 | Name: 'ledGroup' | Type: 'uint16_t' (BITMASK) | Size: 1
 	let ledGroup: number = requestBody.ledGroup;
-	let ledGroupBytes: Array<number> = ByteConversionUtilities.int16ToByteArray(ledGroup);
+	let ledGroupBytes: Array<number> = ByteConversionUtilities.int16ToByteArray(ledGroup).reverse();
 	dataRawBytes.concat(ledGroupBytes);
 	
 	// Index: 1 | Name: 'ledBrightnessValues' | Type: 'uint8_t' | Size: 16
