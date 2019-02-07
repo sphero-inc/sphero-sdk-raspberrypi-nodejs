@@ -1,9 +1,5 @@
 // internal imports
 import {padWithZeros} from './string-utilities'
-import {createLogger, ILogger} from '../modules/logger';
-
-
-let logger: ILogger = createLogger('utilities');
 
 
 export function getDateAsString(dt: Date): string {
@@ -18,8 +14,6 @@ export function getDateAsString(dt: Date): string {
         + padWithZeros(dt.getMinutes(), 2) + ':'
         + padWithZeros(dt.getSeconds(), 2) + '.'
         + padWithZeros(dt.getMilliseconds(), 3);
-
-    logger.debug('getDateAsString generated: \'' + dtText + '\'');
 
     return dtText;
 }

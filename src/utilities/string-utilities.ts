@@ -1,9 +1,3 @@
-// import {createLogger, ILogger} from '../modules/logger';
-
-
-// let logger: ILogger = createLogger('utilities');
-
-
 export function padWithZeros(value: any, padCount: number, padValue?: string): string {
     return Array(padCount - String(value).length + 1).join(padValue || '0') + value;
 }

@@ -1,5 +1,3 @@
-import {start} from 'repl';
-
 export class ByteConversionUtilities {
     public static numberToByteArray(value: number, size: number) {
         let bytes: Array<number> = [];
