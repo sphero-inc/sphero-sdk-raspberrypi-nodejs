@@ -9,7 +9,8 @@
     "removeComments": false,
     "moduleResolution": "node",
     "declaration": true,
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "resolveJsonModule": true
   },
   "exclude": [
     "node_modules",

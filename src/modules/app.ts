@@ -5,7 +5,7 @@ import * as bodyParser from 'body-parser';
 import {Server as HttpServer} from 'http';
 
 const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('../../swagger.json');
+import swaggerDocument = require('../api/v1.0/swagger.json');
 
 // internal imports
 import apiRouter = require('../api/');

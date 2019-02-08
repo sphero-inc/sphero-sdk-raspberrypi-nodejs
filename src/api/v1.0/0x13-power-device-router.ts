@@ -33,10 +33,6 @@ import {
 import {
 	parseEnableBatteryVoltageStateChangeNotifyRequest
 } from './command-parsers/0x13-power/0x1B-enable-battery-voltage-state-change-notify-command-parser'
-import {
-	parseBatteryVoltageStateChangeNotifyResponse,
-	IBatteryVoltageStateChangeNotifyResponse
-} from './command-parsers/0x13-power/0x1C-battery-voltage-state-change-notify-command-parser'
 
 
 export class PowerDeviceRouter extends DeviceRouterBase {

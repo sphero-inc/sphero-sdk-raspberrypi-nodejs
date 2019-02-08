@@ -27,10 +27,6 @@ import {
 	IGetSensorStreamingMaskResponse
 } from './command-parsers/0x18-sensor/0x01-get-sensor-streaming-mask-command-parser'
 import {
-	parseSensorStreamingDataNotifyResponse,
-	ISensorStreamingDataNotifyResponse
-} from './command-parsers/0x18-sensor/0x02-sensor-streaming-data-notify-command-parser'
-import {
 	parseSetExtendedSensorStreamingMaskRequest
 } from './command-parsers/0x18-sensor/0x0C-set-extended-sensor-streaming-mask-command-parser'
 import {
@@ -41,17 +37,9 @@ import {
 	parseEnableGyroMaxNotifyRequest
 } from './command-parsers/0x18-sensor/0x0F-enable-gyro-max-notify-command-parser'
 import {
-	parseGyroMaxNotifyResponse,
-	IGyroMaxNotifyResponse
-} from './command-parsers/0x18-sensor/0x10-gyro-max-notify-command-parser'
-import {
 	parseGetBotToBotInfraredReadingsResponse,
 	IGetBotToBotInfraredReadingsResponse
 } from './command-parsers/0x18-sensor/0x22-get-bot-to-bot-infrared-readings-command-parser'
-import {
-	parseMagnetometerNorthYawNotifyResponse,
-	IMagnetometerNorthYawNotifyResponse
-} from './command-parsers/0x18-sensor/0x26-magnetometer-north-yaw-notify-command-parser'
 import {
 	parseStartRobotToRobotInfraredBroadcastingRequest
 } from './command-parsers/0x18-sensor/0x27-start-robot-to-robot-infrared-broadcasting-command-parser'
@@ -64,10 +52,6 @@ import {
 import {
 	parseListenForRobotToRobotInfraredMessageRequest
 } from './command-parsers/0x18-sensor/0x2B-listen-for-robot-to-robot-infrared-message-command-parser'
-import {
-	parseRobotToRobotInfraredMessageReceivedNotifyResponse,
-	IRobotToRobotInfraredMessageReceivedNotifyResponse
-} from './command-parsers/0x18-sensor/0x2C-robot-to-robot-infrared-message-received-notify-command-parser'
 
 
 export class SensorDeviceRouter extends DeviceRouterBase {
