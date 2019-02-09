@@ -1,6 +1,7 @@
 ## Included Packages
 * [body-parser](https://github.com/expressjs/body-parser) (MIT)
 * [compression](https://github.com/expressjs/compression) (MIT)
+* [cors](https://github.com/expressjs/cors) (MIT)
 * [express](https://github.com/expressjs/expressjs.com) (Creative Commons Attribution-ShareAlike 3.0)
 * [ip](https://github.com/indutny/node-ip) (MIT)
 * [serialport](https://github.com/node-serialport/node-serialport) (MIT)
