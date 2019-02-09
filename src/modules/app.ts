@@ -1,6 +1,7 @@
 // external imports
 import * as express from 'express';
 import * as compression from 'compression';
+import * as cors from 'cors';
 import * as bodyParser from 'body-parser';
 import {Server as HttpServer} from 'http';
 
@@ -55,6 +56,7 @@ export class App {
         this.expressApp.use(bodyParser.json());
         this.expressApp.use(bodyParser.urlencoded({extended: true}));
         this.expressApp.use(compression());
+        this.expressApp.use(cors());
         // this.expressApp.use(express.static(path.join(path.dirname(__dirname), 'public')));
 
         // more options --> https://github.com/scottie1984/swagger-ui-express
