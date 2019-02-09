@@ -2,7 +2,7 @@
 import {ByteConversionUtilities} from '../../../../utilities/byte-conversion-utilities'
 
 
-export function parseGetBluetoothNameResponse(dataRawBytes: Array<number>): IGetBluetoothNameResponse {
+export function parseGetBluetoothDeviceNameResponse(dataRawBytes: Array<number>): IGetBluetoothDeviceNameResponse {
 	let currentIndex: number = 0;
 	
 	// Index: 0 | Name: 'name' | Type: 'std::string' | Size: 1
@@ -10,13 +10,13 @@ export function parseGetBluetoothNameResponse(dataRawBytes: Array<number>): IGet
 	let name: string = ByteConversionUtilities.byteArrayToString(nameBytes);
 	currentIndex += nameBytes.length;
 	
-	let getBluetoothNameResponse: IGetBluetoothNameResponse = {
+	let getBluetoothDeviceNameResponse: IGetBluetoothDeviceNameResponse = {
 		name: name
 	};
 	
-	return getBluetoothNameResponse;
+	return getBluetoothDeviceNameResponse;
 }
 
-export interface IGetBluetoothNameResponse {
+export interface IGetBluetoothDeviceNameResponse {
 	readonly name: string;
 }

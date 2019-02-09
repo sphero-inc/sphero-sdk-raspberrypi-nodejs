@@ -16,6 +16,7 @@ import {IApiCommandMessage, buildApiCommandMessageWithDefaultFlags} from '../../
 import {IApiResponseMessage} from '../../models/api-response-message';
 import {IConfiguration} from '../../configuration';
 import {IApiDal} from '../../modules/api-dal-interface';
+import {ByteConversionUtilities} from '../../utilities/byte-conversion-utilities'
 import {ApiTargetsAndSources} from '../../constants';
 
 // command parsers
@@ -93,7 +94,7 @@ export class IoDeviceRouter extends DeviceRouterBase {
 		
 		let dataRawBytes: Array<number> = parseSetAllLedsRequest(request.body);
 		
-		let targetId: number = parseInt(request.params.targetId);
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
 		this.logRequest(request.path, request.method,
@@ -121,7 +122,7 @@ export class IoDeviceRouter extends DeviceRouterBase {
 				''
 			);
 			
-			response.status(200);
+			response.sendStatus(200);
 		}).catch(reason => {
 			let errorCode: number = 400;
 			let errorDetail: string = `Error in setAllLeds while sending API Command: ${reason}`;
@@ -162,7 +163,7 @@ export class IoDeviceRouter extends DeviceRouterBase {
 		
 		let dataRawBytes: Array<number> = parseSetAllLedsWith32BitMaskRequest(request.body);
 		
-		let targetId: number = parseInt(request.params.targetId);
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
 		this.logRequest(request.path, request.method,
@@ -190,7 +191,7 @@ export class IoDeviceRouter extends DeviceRouterBase {
 				''
 			);
 			
-			response.status(200);
+			response.sendStatus(200);
 		}).catch(reason => {
 			let errorCode: number = 400;
 			let errorDetail: string = `Error in setAllLedsWith32BitMask while sending API Command: ${reason}`;
@@ -231,7 +232,7 @@ export class IoDeviceRouter extends DeviceRouterBase {
 		
 		let dataRawBytes: Array<number> = parseSetAllLedsWith64BitMaskRequest(request.body);
 		
-		let targetId: number = parseInt(request.params.targetId);
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
 		this.logRequest(request.path, request.method,
@@ -259,7 +260,7 @@ export class IoDeviceRouter extends DeviceRouterBase {
 				''
 			);
 			
-			response.status(200);
+			response.sendStatus(200);
 		}).catch(reason => {
 			let errorCode: number = 400;
 			let errorDetail: string = `Error in setAllLedsWith64BitMask while sending API Command: ${reason}`;
@@ -300,7 +301,7 @@ export class IoDeviceRouter extends DeviceRouterBase {
 		
 		let dataRawBytes: Array<number> = parseSetAllLedsWith8BitMaskRequest(request.body);
 		
-		let targetId: number = parseInt(request.params.targetId);
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
 		this.logRequest(request.path, request.method,
@@ -328,7 +329,7 @@ export class IoDeviceRouter extends DeviceRouterBase {
 				''
 			);
 			
-			response.status(200);
+			response.sendStatus(200);
 		}).catch(reason => {
 			let errorCode: number = 400;
 			let errorDetail: string = `Error in setAllLedsWith8BitMask while sending API Command: ${reason}`;

@@ -3,7 +3,7 @@
 // Device ID (DID):         0x13
 // Device Name:             power
 // Device Description:      
-// Command Count:           10
+// Command Count:           12
 // Source File:             0x13-power.json
 // ************************************************************
 
@@ -16,6 +16,7 @@ import {IApiCommandMessage, buildApiCommandMessageWithDefaultFlags} from '../../
 import {IApiResponseMessage} from '../../models/api-response-message';
 import {IConfiguration} from '../../configuration';
 import {IApiDal} from '../../modules/api-dal-interface';
+import {ByteConversionUtilities} from '../../utilities/byte-conversion-utilities'
 import {ApiTargetsAndSources} from '../../constants';
 
 // command parsers
@@ -49,10 +50,15 @@ export class PowerDeviceRouter extends DeviceRouterBase {
 				this.enterDeepSleep(request, response));
 		this.registerCommand(0x00, 'EnterDeepSleep');
 		
-		this.router.route('/power/sleep/:targetId')
+		this.router.route('/power/enterSoftSleep/:targetId')
 			.put((request: Request, response: Response) =>
-				this.sleep(request, response));
-		this.registerCommand(0x01, 'Sleep');
+				this.enterSoftSleep(request, response));
+		this.registerCommand(0x01, 'EnterSoftSleep');
+		
+		this.router.route('/power/prepareForShutdown/:targetId')
+			.put((request: Request, response: Response) =>
+				this.prepareForShutdown(request, response));
+		this.registerCommand(0x0A, 'PrepareForShutdown');
 		
 		this.router.route('/power/forceBatteryRefresh/:targetId')
 			.put((request: Request, response: Response) =>
@@ -111,7 +117,7 @@ export class PowerDeviceRouter extends DeviceRouterBase {
 		
 		let dataRawBytes: Array<number> = parseEnterDeepSleepRequest(request.body);
 		
-		let targetId: number = parseInt(request.params.targetId);
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
 		this.logRequest(request.path, request.method,
@@ -139,7 +145,7 @@ export class PowerDeviceRouter extends DeviceRouterBase {
 				''
 			);
 			
-			response.status(200);
+			response.sendStatus(200);
 		}).catch(reason => {
 			let errorCode: number = 400;
 			let errorDetail: string = `Error in enterDeepSleep while sending API Command: ${reason}`;
@@ -150,7 +156,7 @@ export class PowerDeviceRouter extends DeviceRouterBase {
 		});
 	}
 	
-	public sleep(request: Request, response: Response) {
+	public enterSoftSleep(request: Request, response: Response) {
 		// DID: 0x13 | CID: 0x01 | TID(s): 1
 		
 		let commandId: number = 0x01;
@@ -169,7 +175,7 @@ export class PowerDeviceRouter extends DeviceRouterBase {
 		
 		// No inputs...
 		
-		let targetId: number = parseInt(request.params.targetId);
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
 		this.logRequest(request.path, request.method,
@@ -197,10 +203,68 @@ export class PowerDeviceRouter extends DeviceRouterBase {
 				''
 			);
 			
-			response.status(200);
+			response.sendStatus(200);
 		}).catch(reason => {
 			let errorCode: number = 400;
-			let errorDetail: string = `Error in sleep while sending API Command: ${reason}`;
+			let errorDetail: string = `Error in enterSoftSleep while sending API Command: ${reason}`;
+			
+			this.routeError(request.path, request.method, errorCode, errorDetail);
+			
+			response.status(errorCode).json({'error': errorDetail});
+		});
+	}
+	
+	public prepareForShutdown(request: Request, response: Response) {
+		// DID: 0x13 | CID: 0x0A | TID(s): 2
+		
+		let commandId: number = 0x0A;
+		let commandName: string = this.getCommandName(commandId);
+		
+		if (!request.params.targetId) {
+			let errorCode: number = 400;
+			let errorDetail: string = 'targetId is required!';
+			
+			this.routeError(request.path, request.method, errorCode, errorDetail);
+			
+			response.status(errorCode).json({'error': errorDetail});
+			
+			return;
+		}
+		
+		// No inputs...
+		
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+		let sourceId: number = ApiTargetsAndSources.serviceSource;
+		
+		this.logRequest(request.path, request.method,
+			PowerDeviceRouter._deviceId, PowerDeviceRouter._deviceName,
+			commandId, commandName,
+			sourceId, targetId,
+			''
+		);
+		
+		let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+			targetId, ApiTargetsAndSources.serviceSource,
+			PowerDeviceRouter._deviceId, PowerDeviceRouter._deviceName,
+			commandId, commandName,
+			null
+		);
+		
+		apiCommandMessage.generateMessageRawBytes();
+		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+			// No outputs...
+			
+			this.logResponse(request.path, request.method,
+				PowerDeviceRouter._deviceId, PowerDeviceRouter._deviceName,
+				commandId, commandName,
+				sourceId, targetId,
+				''
+			);
+			
+			response.sendStatus(200);
+		}).catch(reason => {
+			let errorCode: number = 400;
+			let errorDetail: string = `Error in prepareForShutdown while sending API Command: ${reason}`;
 			
 			this.routeError(request.path, request.method, errorCode, errorDetail);
 			
@@ -227,7 +291,7 @@ export class PowerDeviceRouter extends DeviceRouterBase {
 		
 		// No inputs...
 		
-		let targetId: number = parseInt(request.params.targetId);
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
 		this.logRequest(request.path, request.method,
@@ -255,7 +319,7 @@ export class PowerDeviceRouter extends DeviceRouterBase {
 				''
 			);
 			
-			response.status(200);
+			response.sendStatus(200);
 		}).catch(reason => {
 			let errorCode: number = 400;
 			let errorDetail: string = `Error in forceBatteryRefresh while sending API Command: ${reason}`;
@@ -285,7 +349,7 @@ export class PowerDeviceRouter extends DeviceRouterBase {
 		
 		// No inputs...
 		
-		let targetId: number = parseInt(request.params.targetId);
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
 		this.logRequest(request.path, request.method,
@@ -313,7 +377,7 @@ export class PowerDeviceRouter extends DeviceRouterBase {
 				''
 			);
 			
-			response.status(200);
+			response.sendStatus(200);
 		}).catch(reason => {
 			let errorCode: number = 400;
 			let errorDetail: string = `Error in wake while sending API Command: ${reason}`;
@@ -343,7 +407,7 @@ export class PowerDeviceRouter extends DeviceRouterBase {
 		
 		// No inputs...
 		
-		let targetId: number = parseInt(request.params.targetId);
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
 		this.logRequest(request.path, request.method,
@@ -401,7 +465,7 @@ export class PowerDeviceRouter extends DeviceRouterBase {
 		
 		// No inputs...
 		
-		let targetId: number = parseInt(request.params.targetId);
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
 		this.logRequest(request.path, request.method,
@@ -470,7 +534,7 @@ export class PowerDeviceRouter extends DeviceRouterBase {
 		
 		let dataRawBytes: Array<number> = parseEnableBatteryVoltageStateChangeNotifyRequest(request.body);
 		
-		let targetId: number = parseInt(request.params.targetId);
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
 		this.logRequest(request.path, request.method,
@@ -498,7 +562,7 @@ export class PowerDeviceRouter extends DeviceRouterBase {
 				''
 			);
 			
-			response.status(200);
+			response.sendStatus(200);
 		}).catch(reason => {
 			let errorCode: number = 400;
 			let errorDetail: string = `Error in enableBatteryVoltageStateChangeNotify while sending API Command: ${reason}`;

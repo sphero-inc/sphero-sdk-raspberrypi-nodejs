@@ -3,7 +3,7 @@
 // Device ID (DID):         0x10
 // Device Name:             api_and_shell
 // Device Description:      
-// Command Count:           3
+// Command Count:           6
 // Source File:             0x10-api_and_shell.json
 // ************************************************************
 
@@ -16,14 +16,22 @@ import {IApiCommandMessage, buildApiCommandMessageWithDefaultFlags} from '../../
 import {IApiResponseMessage} from '../../models/api-response-message';
 import {IConfiguration} from '../../configuration';
 import {IApiDal} from '../../modules/api-dal-interface';
+import {ByteConversionUtilities} from '../../utilities/byte-conversion-utilities'
 import {ApiTargetsAndSources} from '../../constants';
 
 // command parsers
 import {
-	parsePingRequest,
-	parsePingResponse,
-	IPingResponse
-} from './command-parsers/0x10-api-and-shell/0x00-ping-command-parser'
+	parseEchoRequest,
+	parseEchoResponse,
+	IEchoResponse
+} from './command-parsers/0x10-api-and-shell/0x00-echo-command-parser'
+import {
+	parseGetApiProtocolVersionResponse,
+	IGetApiProtocolVersionResponse
+} from './command-parsers/0x10-api-and-shell/0x01-get-api-protocol-version-command-parser'
+import {
+	parseSendCommandToShellRequest
+} from './command-parsers/0x10-api-and-shell/0x02-send-command-to-shell-command-parser'
 import {
 	parseGetSupportedDidsResponse,
 	IGetSupportedDidsResponse
@@ -44,10 +52,20 @@ export class ApiAndShellDeviceRouter extends DeviceRouterBase {
 	}
 	
 	protected initializeRoutes(): void {
-		this.router.route('/apiAndShell/ping/:targetId')
+		this.router.route('/apiAndShell/echo/:targetId')
 			.get((request: Request, response: Response) =>
-				this.ping(request, response));
-		this.registerCommand(0x00, 'Ping');
+				this.echo(request, response));
+		this.registerCommand(0x00, 'Echo');
+		
+		this.router.route('/apiAndShell/getApiProtocolVersion/:targetId')
+			.get((request: Request, response: Response) =>
+				this.getApiProtocolVersion(request, response));
+		this.registerCommand(0x01, 'GetApiProtocolVersion');
+		
+		this.router.route('/apiAndShell/sendCommandToShell/:targetId')
+			.put((request: Request, response: Response) =>
+				this.sendCommandToShell(request, response));
+		this.registerCommand(0x02, 'SendCommandToShell');
 		
 		this.router.route('/apiAndShell/getSupportedDids/:targetId')
 			.get((request: Request, response: Response) =>
@@ -60,7 +78,7 @@ export class ApiAndShellDeviceRouter extends DeviceRouterBase {
 		this.registerCommand(0x06, 'GetSupportedCids');
 	}
 	
-	public ping(request: Request, response: Response) {
+	public echo(request: Request, response: Response) {
 		// DID: 0x10 | CID: 0x00 | TID(s): 1, 2
 		
 		let commandId: number = 0x00;
@@ -88,9 +106,9 @@ export class ApiAndShellDeviceRouter extends DeviceRouterBase {
 			return;
 		}
 		
-		let dataRawBytes: Array<number> = parsePingRequest(request.body);
+		let dataRawBytes: Array<number> = parseEchoRequest(request.body);
 		
-		let targetId: number = parseInt(request.params.targetId);
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
 		this.logRequest(request.path, request.method,
@@ -109,7 +127,7 @@ export class ApiAndShellDeviceRouter extends DeviceRouterBase {
 		
 		apiCommandMessage.generateMessageRawBytes();
 		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-			let responsePayload: IPingResponse = parsePingResponse(apiResponseMessage.dataRawBytes);
+			let responsePayload: IEchoResponse = parseEchoResponse(apiResponseMessage.dataRawBytes);
 			
 			this.logResponse(request.path, request.method,
 				ApiAndShellDeviceRouter._deviceId, ApiAndShellDeviceRouter._deviceName,
@@ -121,7 +139,134 @@ export class ApiAndShellDeviceRouter extends DeviceRouterBase {
 			response.status(200).json(responsePayload);
 		}).catch(reason => {
 			let errorCode: number = 400;
-			let errorDetail: string = `Error in ping while sending API Command: ${reason}`;
+			let errorDetail: string = `Error in echo while sending API Command: ${reason}`;
+			
+			this.routeError(request.path, request.method, errorCode, errorDetail);
+			
+			response.status(errorCode).json({'error': errorDetail});
+		});
+	}
+	
+	public getApiProtocolVersion(request: Request, response: Response) {
+		// DID: 0x10 | CID: 0x01 | TID(s): 1, 2
+		
+		let commandId: number = 0x01;
+		let commandName: string = this.getCommandName(commandId);
+		
+		if (!request.params.targetId) {
+			let errorCode: number = 400;
+			let errorDetail: string = 'targetId is required!';
+			
+			this.routeError(request.path, request.method, errorCode, errorDetail);
+			
+			response.status(errorCode).json({'error': errorDetail});
+			
+			return;
+		}
+		
+		// No inputs...
+		
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+		let sourceId: number = ApiTargetsAndSources.serviceSource;
+		
+		this.logRequest(request.path, request.method,
+			ApiAndShellDeviceRouter._deviceId, ApiAndShellDeviceRouter._deviceName,
+			commandId, commandName,
+			sourceId, targetId,
+			''
+		);
+		
+		let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+			targetId, ApiTargetsAndSources.serviceSource,
+			ApiAndShellDeviceRouter._deviceId, ApiAndShellDeviceRouter._deviceName,
+			commandId, commandName,
+			null
+		);
+		
+		apiCommandMessage.generateMessageRawBytes();
+		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+			let responsePayload: IGetApiProtocolVersionResponse = parseGetApiProtocolVersionResponse(apiResponseMessage.dataRawBytes);
+			
+			this.logResponse(request.path, request.method,
+				ApiAndShellDeviceRouter._deviceId, ApiAndShellDeviceRouter._deviceName,
+				commandId, commandName,
+				sourceId, targetId,
+				JSON.stringify(responsePayload)
+			);
+			
+			response.status(200).json(responsePayload);
+		}).catch(reason => {
+			let errorCode: number = 400;
+			let errorDetail: string = `Error in getApiProtocolVersion while sending API Command: ${reason}`;
+			
+			this.routeError(request.path, request.method, errorCode, errorDetail);
+			
+			response.status(errorCode).json({'error': errorDetail});
+		});
+	}
+	
+	public sendCommandToShell(request: Request, response: Response) {
+		// DID: 0x10 | CID: 0x02 | TID(s): 1, 2
+		
+		let commandId: number = 0x02;
+		let commandName: string = this.getCommandName(commandId);
+		
+		if (!request.params.targetId) {
+			let errorCode: number = 400;
+			let errorDetail: string = 'targetId is required!';
+			
+			this.routeError(request.path, request.method, errorCode, errorDetail);
+			
+			response.status(errorCode).json({'error': errorDetail});
+			
+			return;
+		}
+		
+		if (!request.body) {
+			let errorCode: number = 400;
+			let errorDetail: string = 'Payload is required!';
+			
+			this.routeError(request.path, request.method, errorCode, errorDetail);
+			
+			response.status(errorCode).json({'error': errorDetail});
+			
+			return;
+		}
+		
+		let dataRawBytes: Array<number> = parseSendCommandToShellRequest(request.body);
+		
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+		let sourceId: number = ApiTargetsAndSources.serviceSource;
+		
+		this.logRequest(request.path, request.method,
+			ApiAndShellDeviceRouter._deviceId, ApiAndShellDeviceRouter._deviceName,
+			commandId, commandName,
+			sourceId, targetId,
+			JSON.stringify(request.body)
+		);
+		
+		let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+			targetId, ApiTargetsAndSources.serviceSource,
+			ApiAndShellDeviceRouter._deviceId, ApiAndShellDeviceRouter._deviceName,
+			commandId, commandName,
+			dataRawBytes
+		);
+		
+		apiCommandMessage.generateMessageRawBytes();
+		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+			// No outputs...
+			
+			this.logResponse(request.path, request.method,
+				ApiAndShellDeviceRouter._deviceId, ApiAndShellDeviceRouter._deviceName,
+				commandId, commandName,
+				sourceId, targetId,
+				''
+			);
+			
+			response.sendStatus(200);
+		}).catch(reason => {
+			let errorCode: number = 400;
+			let errorDetail: string = `Error in sendCommandToShell while sending API Command: ${reason}`;
 			
 			this.routeError(request.path, request.method, errorCode, errorDetail);
 			
@@ -148,7 +293,7 @@ export class ApiAndShellDeviceRouter extends DeviceRouterBase {
 		
 		// No inputs...
 		
-		let targetId: number = parseInt(request.params.targetId);
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
 		this.logRequest(request.path, request.method,
@@ -217,7 +362,7 @@ export class ApiAndShellDeviceRouter extends DeviceRouterBase {
 		
 		let dataRawBytes: Array<number> = parseGetSupportedCidsRequest(request.body);
 		
-		let targetId: number = parseInt(request.params.targetId);
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
 		this.logRequest(request.path, request.method,

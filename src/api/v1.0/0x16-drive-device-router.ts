@@ -3,7 +3,7 @@
 // Device ID (DID):         0x16
 // Device Name:             drive
 // Device Description:      
-// Command Count:           4
+// Command Count:           6
 // Source File:             0x16-driving.json
 // ************************************************************
 
@@ -16,15 +16,22 @@ import {IApiCommandMessage, buildApiCommandMessageWithDefaultFlags} from '../../
 import {IApiResponseMessage} from '../../models/api-response-message';
 import {IConfiguration} from '../../configuration';
 import {IApiDal} from '../../modules/api-dal-interface';
+import {ByteConversionUtilities} from '../../utilities/byte-conversion-utilities'
 import {ApiTargetsAndSources} from '../../constants';
 
 // command parsers
 import {
-	parseSetRawMotorsRequest
-} from './command-parsers/0x16-drive/0x01-set-raw-motors-command-parser'
+	parseRawMotorsRequest
+} from './command-parsers/0x16-drive/0x01-raw-motors-command-parser'
 import {
 	parseDriveWithHeadingRequest
 } from './command-parsers/0x16-drive/0x07-drive-with-heading-command-parser'
+import {
+	parseTankDriveRequest
+} from './command-parsers/0x16-drive/0x08-tank-drive-command-parser'
+import {
+	parseRcDriveRequest
+} from './command-parsers/0x16-drive/0x09-rc-drive-command-parser'
 import {
 	parseSetStabilizationRequest
 } from './command-parsers/0x16-drive/0x0C-set-stabilization-command-parser'
@@ -39,10 +46,10 @@ export class DriveDeviceRouter extends DeviceRouterBase {
 	}
 	
 	protected initializeRoutes(): void {
-		this.router.route('/drive/setRawMotors/:targetId')
+		this.router.route('/drive/rawMotors/:targetId')
 			.put((request: Request, response: Response) =>
-				this.setRawMotors(request, response));
-		this.registerCommand(0x01, 'SetRawMotors');
+				this.rawMotors(request, response));
+		this.registerCommand(0x01, 'RawMotors');
 		
 		this.router.route('/drive/resetYaw/:targetId')
 			.put((request: Request, response: Response) =>
@@ -54,13 +61,23 @@ export class DriveDeviceRouter extends DeviceRouterBase {
 				this.driveWithHeading(request, response));
 		this.registerCommand(0x07, 'DriveWithHeading');
 		
+		this.router.route('/drive/tankDrive/:targetId')
+			.put((request: Request, response: Response) =>
+				this.tankDrive(request, response));
+		this.registerCommand(0x08, 'TankDrive');
+		
+		this.router.route('/drive/rcDrive/:targetId')
+			.put((request: Request, response: Response) =>
+				this.rcDrive(request, response));
+		this.registerCommand(0x09, 'RcDrive');
+		
 		this.router.route('/drive/setStabilization/:targetId')
 			.put((request: Request, response: Response) =>
 				this.setStabilization(request, response));
 		this.registerCommand(0x0C, 'SetStabilization');
 	}
 	
-	public setRawMotors(request: Request, response: Response) {
+	public rawMotors(request: Request, response: Response) {
 		// DID: 0x16 | CID: 0x01 | TID(s): 2
 		
 		let commandId: number = 0x01;
@@ -88,9 +105,9 @@ export class DriveDeviceRouter extends DeviceRouterBase {
 			return;
 		}
 		
-		let dataRawBytes: Array<number> = parseSetRawMotorsRequest(request.body);
+		let dataRawBytes: Array<number> = parseRawMotorsRequest(request.body);
 		
-		let targetId: number = parseInt(request.params.targetId);
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
 		this.logRequest(request.path, request.method,
@@ -118,10 +135,10 @@ export class DriveDeviceRouter extends DeviceRouterBase {
 				''
 			);
 			
-			response.status(200);
+			response.sendStatus(200);
 		}).catch(reason => {
 			let errorCode: number = 400;
-			let errorDetail: string = `Error in setRawMotors while sending API Command: ${reason}`;
+			let errorDetail: string = `Error in rawMotors while sending API Command: ${reason}`;
 			
 			this.routeError(request.path, request.method, errorCode, errorDetail);
 			
@@ -148,7 +165,7 @@ export class DriveDeviceRouter extends DeviceRouterBase {
 		
 		// No inputs...
 		
-		let targetId: number = parseInt(request.params.targetId);
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
 		this.logRequest(request.path, request.method,
@@ -176,7 +193,7 @@ export class DriveDeviceRouter extends DeviceRouterBase {
 				''
 			);
 			
-			response.status(200);
+			response.sendStatus(200);
 		}).catch(reason => {
 			let errorCode: number = 400;
 			let errorDetail: string = `Error in resetYaw while sending API Command: ${reason}`;
@@ -217,7 +234,7 @@ export class DriveDeviceRouter extends DeviceRouterBase {
 		
 		let dataRawBytes: Array<number> = parseDriveWithHeadingRequest(request.body);
 		
-		let targetId: number = parseInt(request.params.targetId);
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
 		this.logRequest(request.path, request.method,
@@ -245,10 +262,148 @@ export class DriveDeviceRouter extends DeviceRouterBase {
 				''
 			);
 			
-			response.status(200);
+			response.sendStatus(200);
 		}).catch(reason => {
 			let errorCode: number = 400;
 			let errorDetail: string = `Error in driveWithHeading while sending API Command: ${reason}`;
+			
+			this.routeError(request.path, request.method, errorCode, errorDetail);
+			
+			response.status(errorCode).json({'error': errorDetail});
+		});
+	}
+	
+	public tankDrive(request: Request, response: Response) {
+		// DID: 0x16 | CID: 0x08 | TID(s): 2
+		
+		let commandId: number = 0x08;
+		let commandName: string = this.getCommandName(commandId);
+		
+		if (!request.params.targetId) {
+			let errorCode: number = 400;
+			let errorDetail: string = 'targetId is required!';
+			
+			this.routeError(request.path, request.method, errorCode, errorDetail);
+			
+			response.status(errorCode).json({'error': errorDetail});
+			
+			return;
+		}
+		
+		if (!request.body) {
+			let errorCode: number = 400;
+			let errorDetail: string = 'Payload is required!';
+			
+			this.routeError(request.path, request.method, errorCode, errorDetail);
+			
+			response.status(errorCode).json({'error': errorDetail});
+			
+			return;
+		}
+		
+		let dataRawBytes: Array<number> = parseTankDriveRequest(request.body);
+		
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+		let sourceId: number = ApiTargetsAndSources.serviceSource;
+		
+		this.logRequest(request.path, request.method,
+			DriveDeviceRouter._deviceId, DriveDeviceRouter._deviceName,
+			commandId, commandName,
+			sourceId, targetId,
+			JSON.stringify(request.body)
+		);
+		
+		let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+			targetId, ApiTargetsAndSources.serviceSource,
+			DriveDeviceRouter._deviceId, DriveDeviceRouter._deviceName,
+			commandId, commandName,
+			dataRawBytes
+		);
+		
+		apiCommandMessage.generateMessageRawBytes();
+		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+			// No outputs...
+			
+			this.logResponse(request.path, request.method,
+				DriveDeviceRouter._deviceId, DriveDeviceRouter._deviceName,
+				commandId, commandName,
+				sourceId, targetId,
+				''
+			);
+			
+			response.sendStatus(200);
+		}).catch(reason => {
+			let errorCode: number = 400;
+			let errorDetail: string = `Error in tankDrive while sending API Command: ${reason}`;
+			
+			this.routeError(request.path, request.method, errorCode, errorDetail);
+			
+			response.status(errorCode).json({'error': errorDetail});
+		});
+	}
+	
+	public rcDrive(request: Request, response: Response) {
+		// DID: 0x16 | CID: 0x09 | TID(s): 2
+		
+		let commandId: number = 0x09;
+		let commandName: string = this.getCommandName(commandId);
+		
+		if (!request.params.targetId) {
+			let errorCode: number = 400;
+			let errorDetail: string = 'targetId is required!';
+			
+			this.routeError(request.path, request.method, errorCode, errorDetail);
+			
+			response.status(errorCode).json({'error': errorDetail});
+			
+			return;
+		}
+		
+		if (!request.body) {
+			let errorCode: number = 400;
+			let errorDetail: string = 'Payload is required!';
+			
+			this.routeError(request.path, request.method, errorCode, errorDetail);
+			
+			response.status(errorCode).json({'error': errorDetail});
+			
+			return;
+		}
+		
+		let dataRawBytes: Array<number> = parseRcDriveRequest(request.body);
+		
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+		let sourceId: number = ApiTargetsAndSources.serviceSource;
+		
+		this.logRequest(request.path, request.method,
+			DriveDeviceRouter._deviceId, DriveDeviceRouter._deviceName,
+			commandId, commandName,
+			sourceId, targetId,
+			JSON.stringify(request.body)
+		);
+		
+		let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+			targetId, ApiTargetsAndSources.serviceSource,
+			DriveDeviceRouter._deviceId, DriveDeviceRouter._deviceName,
+			commandId, commandName,
+			dataRawBytes
+		);
+		
+		apiCommandMessage.generateMessageRawBytes();
+		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+			// No outputs...
+			
+			this.logResponse(request.path, request.method,
+				DriveDeviceRouter._deviceId, DriveDeviceRouter._deviceName,
+				commandId, commandName,
+				sourceId, targetId,
+				''
+			);
+			
+			response.sendStatus(200);
+		}).catch(reason => {
+			let errorCode: number = 400;
+			let errorDetail: string = `Error in rcDrive while sending API Command: ${reason}`;
 			
 			this.routeError(request.path, request.method, errorCode, errorDetail);
 			
@@ -286,7 +441,7 @@ export class DriveDeviceRouter extends DeviceRouterBase {
 		
 		let dataRawBytes: Array<number> = parseSetStabilizationRequest(request.body);
 		
-		let targetId: number = parseInt(request.params.targetId);
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
 		this.logRequest(request.path, request.method,
@@ -314,7 +469,7 @@ export class DriveDeviceRouter extends DeviceRouterBase {
 				''
 			);
 			
-			response.status(200);
+			response.sendStatus(200);
 		}).catch(reason => {
 			let errorCode: number = 400;
 			let errorDetail: string = `Error in setStabilization while sending API Command: ${reason}`;

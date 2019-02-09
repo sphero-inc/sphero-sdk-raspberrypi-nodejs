@@ -2,7 +2,7 @@
 import {ByteConversionUtilities} from '../../../../utilities/byte-conversion-utilities'
 
 
-export function parsePingRequest(requestBody: any): Array<number> {
+export function parseEchoRequest(requestBody: any): Array<number> {
 	let dataRawBytes: Array<number> = [];
 	
 	// Index: 0 | Name: 'data' | Type: 'uint8_t' | Size: 16 | IS_OPTIONAL
@@ -15,7 +15,7 @@ export function parsePingRequest(requestBody: any): Array<number> {
 	return dataRawBytes;
 }
 
-export function parsePingResponse(dataRawBytes: Array<number>): IPingResponse {
+export function parseEchoResponse(dataRawBytes: Array<number>): IEchoResponse {
 	let currentIndex: number = 0;
 	
 	// Index: 0 | Name: 'data' | Type: 'uint8_t' | Size: 16
@@ -31,13 +31,13 @@ export function parsePingResponse(dataRawBytes: Array<number>): IPingResponse {
 		dataValues.push(data);
 	}
 	
-	let pingResponse: IPingResponse = {
+	let echoResponse: IEchoResponse = {
 		data: dataValues
 	};
 	
-	return pingResponse;
+	return echoResponse;
 }
 
-export interface IPingResponse {
+export interface IEchoResponse {
 	readonly data: Array<number>;
 }

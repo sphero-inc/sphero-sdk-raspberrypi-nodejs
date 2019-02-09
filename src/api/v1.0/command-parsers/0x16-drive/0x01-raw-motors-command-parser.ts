@@ -2,7 +2,7 @@
 import {ByteConversionUtilities} from '../../../../utilities/byte-conversion-utilities'
 
 
-export function parseSetRawMotorsRequest(requestBody: any): Array<number> {
+export function parseRawMotorsRequest(requestBody: any): Array<number> {
 	let dataRawBytes: Array<number> = [];
 	
 	// Index: 0 | Name: 'leftMode' | Type: 'uint8_t' (ENUM) | Size: 1

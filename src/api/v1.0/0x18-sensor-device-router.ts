@@ -3,7 +3,7 @@
 // Device ID (DID):         0x18
 // Device Name:             sensor
 // Device Description:      
-// Command Count:           16
+// Command Count:           23
 // Source File:             0x18-sensors.json
 // ************************************************************
 
@@ -16,6 +16,7 @@ import {IApiCommandMessage, buildApiCommandMessageWithDefaultFlags} from '../../
 import {IApiResponseMessage} from '../../models/api-response-message';
 import {IConfiguration} from '../../configuration';
 import {IApiDal} from '../../modules/api-dal-interface';
+import {ByteConversionUtilities} from '../../utilities/byte-conversion-utilities'
 import {ApiTargetsAndSources} from '../../constants';
 
 // command parsers
@@ -27,12 +28,28 @@ import {
 	IGetSensorStreamingMaskResponse
 } from './command-parsers/0x18-sensor/0x01-get-sensor-streaming-mask-command-parser'
 import {
+	parseGetEncoderCountsResponse,
+	IGetEncoderCountsResponse
+} from './command-parsers/0x18-sensor/0x09-get-encoder-counts-command-parser'
+import {
+	parseGetEulerAnglesResponse,
+	IGetEulerAnglesResponse
+} from './command-parsers/0x18-sensor/0x0A-get-euler-angles-command-parser'
+import {
+	parseGetGyroDegreesPerSecondResponse,
+	IGetGyroDegreesPerSecondResponse
+} from './command-parsers/0x18-sensor/0x0B-get-gyro-degrees-per-second-command-parser'
+import {
 	parseSetExtendedSensorStreamingMaskRequest
 } from './command-parsers/0x18-sensor/0x0C-set-extended-sensor-streaming-mask-command-parser'
 import {
 	parseGetExtendedSensorStreamingMaskResponse,
 	IGetExtendedSensorStreamingMaskResponse
 } from './command-parsers/0x18-sensor/0x0D-get-extended-sensor-streaming-mask-command-parser'
+import {
+	parseGetRightsideupnessResponse,
+	IGetRightsideupnessResponse
+} from './command-parsers/0x18-sensor/0x0E-get-rightsideupness-command-parser'
 import {
 	parseEnableGyroMaxNotifyRequest
 } from './command-parsers/0x18-sensor/0x0F-enable-gyro-max-notify-command-parser'
@@ -52,6 +69,10 @@ import {
 import {
 	parseListenForRobotToRobotInfraredMessageRequest
 } from './command-parsers/0x18-sensor/0x2B-listen-for-robot-to-robot-infrared-message-command-parser'
+import {
+	parseGetMagnetometerChipIdResponse,
+	IGetMagnetometerChipIdResponse
+} from './command-parsers/0x18-sensor/0x2D-get-magnetometer-chip-id-command-parser'
 
 
 export class SensorDeviceRouter extends DeviceRouterBase {
@@ -73,6 +94,21 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 				this.getSensorStreamingMask(request, response));
 		this.registerCommand(0x01, 'GetSensorStreamingMask');
 		
+		this.router.route('/sensor/getEncoderCounts/:targetId')
+			.get((request: Request, response: Response) =>
+				this.getEncoderCounts(request, response));
+		this.registerCommand(0x09, 'GetEncoderCounts');
+		
+		this.router.route('/sensor/getEulerAngles/:targetId')
+			.get((request: Request, response: Response) =>
+				this.getEulerAngles(request, response));
+		this.registerCommand(0x0A, 'GetEulerAngles');
+		
+		this.router.route('/sensor/getGyroDegreesPerSecond/:targetId')
+			.get((request: Request, response: Response) =>
+				this.getGyroDegreesPerSecond(request, response));
+		this.registerCommand(0x0B, 'GetGyroDegreesPerSecond');
+		
 		this.router.route('/sensor/setExtendedSensorStreamingMask/:targetId')
 			.put((request: Request, response: Response) =>
 				this.setExtendedSensorStreamingMask(request, response));
@@ -82,6 +118,11 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 			.get((request: Request, response: Response) =>
 				this.getExtendedSensorStreamingMask(request, response));
 		this.registerCommand(0x0D, 'GetExtendedSensorStreamingMask');
+		
+		this.router.route('/sensor/getRightsideupness/:targetId')
+			.get((request: Request, response: Response) =>
+				this.getRightsideupness(request, response));
+		this.registerCommand(0x0E, 'GetRightsideupness');
 		
 		this.router.route('/sensor/enableGyroMaxNotify/:targetId')
 			.put((request: Request, response: Response) =>
@@ -123,6 +164,16 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 				this.listenForRobotToRobotInfraredMessage(request, response));
 		this.registerCommand(0x2B, 'ListenForRobotToRobotInfraredMessage');
 		
+		this.router.route('/sensor/getMagnetometerChipId/:targetId')
+			.get((request: Request, response: Response) =>
+				this.getMagnetometerChipId(request, response));
+		this.registerCommand(0x2D, 'GetMagnetometerChipId');
+		
+		this.router.route('/sensor/runInfraredSelfTest/:targetId')
+			.put((request: Request, response: Response) =>
+				this.runInfraredSelfTest(request, response));
+		this.registerCommand(0x2E, 'RunInfraredSelfTest');
+		
 	}
 	
 	public setSensorStreamingMask(request: Request, response: Response) {
@@ -155,7 +206,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		
 		let dataRawBytes: Array<number> = parseSetSensorStreamingMaskRequest(request.body);
 		
-		let targetId: number = parseInt(request.params.targetId);
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
 		this.logRequest(request.path, request.method,
@@ -183,7 +234,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 				''
 			);
 			
-			response.status(200);
+			response.sendStatus(200);
 		}).catch(reason => {
 			let errorCode: number = 400;
 			let errorDetail: string = `Error in setSensorStreamingMask while sending API Command: ${reason}`;
@@ -213,7 +264,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		
 		// No inputs...
 		
-		let targetId: number = parseInt(request.params.targetId);
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
 		this.logRequest(request.path, request.method,
@@ -252,6 +303,180 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		});
 	}
 	
+	public getEncoderCounts(request: Request, response: Response) {
+		// DID: 0x18 | CID: 0x09 | TID(s): 2
+		
+		let commandId: number = 0x09;
+		let commandName: string = this.getCommandName(commandId);
+		
+		if (!request.params.targetId) {
+			let errorCode: number = 400;
+			let errorDetail: string = 'targetId is required!';
+			
+			this.routeError(request.path, request.method, errorCode, errorDetail);
+			
+			response.status(errorCode).json({'error': errorDetail});
+			
+			return;
+		}
+		
+		// No inputs...
+		
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+		let sourceId: number = ApiTargetsAndSources.serviceSource;
+		
+		this.logRequest(request.path, request.method,
+			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+			commandId, commandName,
+			sourceId, targetId,
+			''
+		);
+		
+		let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+			targetId, ApiTargetsAndSources.serviceSource,
+			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+			commandId, commandName,
+			null
+		);
+		
+		apiCommandMessage.generateMessageRawBytes();
+		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+			let responsePayload: IGetEncoderCountsResponse = parseGetEncoderCountsResponse(apiResponseMessage.dataRawBytes);
+			
+			this.logResponse(request.path, request.method,
+				SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+				commandId, commandName,
+				sourceId, targetId,
+				JSON.stringify(responsePayload)
+			);
+			
+			response.status(200).json(responsePayload);
+		}).catch(reason => {
+			let errorCode: number = 400;
+			let errorDetail: string = `Error in getEncoderCounts while sending API Command: ${reason}`;
+			
+			this.routeError(request.path, request.method, errorCode, errorDetail);
+			
+			response.status(errorCode).json({'error': errorDetail});
+		});
+	}
+	
+	public getEulerAngles(request: Request, response: Response) {
+		// DID: 0x18 | CID: 0x0A | TID(s): 2
+		
+		let commandId: number = 0x0A;
+		let commandName: string = this.getCommandName(commandId);
+		
+		if (!request.params.targetId) {
+			let errorCode: number = 400;
+			let errorDetail: string = 'targetId is required!';
+			
+			this.routeError(request.path, request.method, errorCode, errorDetail);
+			
+			response.status(errorCode).json({'error': errorDetail});
+			
+			return;
+		}
+		
+		// No inputs...
+		
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+		let sourceId: number = ApiTargetsAndSources.serviceSource;
+		
+		this.logRequest(request.path, request.method,
+			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+			commandId, commandName,
+			sourceId, targetId,
+			''
+		);
+		
+		let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+			targetId, ApiTargetsAndSources.serviceSource,
+			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+			commandId, commandName,
+			null
+		);
+		
+		apiCommandMessage.generateMessageRawBytes();
+		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+			let responsePayload: IGetEulerAnglesResponse = parseGetEulerAnglesResponse(apiResponseMessage.dataRawBytes);
+			
+			this.logResponse(request.path, request.method,
+				SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+				commandId, commandName,
+				sourceId, targetId,
+				JSON.stringify(responsePayload)
+			);
+			
+			response.status(200).json(responsePayload);
+		}).catch(reason => {
+			let errorCode: number = 400;
+			let errorDetail: string = `Error in getEulerAngles while sending API Command: ${reason}`;
+			
+			this.routeError(request.path, request.method, errorCode, errorDetail);
+			
+			response.status(errorCode).json({'error': errorDetail});
+		});
+	}
+	
+	public getGyroDegreesPerSecond(request: Request, response: Response) {
+		// DID: 0x18 | CID: 0x0B | TID(s): 2
+		
+		let commandId: number = 0x0B;
+		let commandName: string = this.getCommandName(commandId);
+		
+		if (!request.params.targetId) {
+			let errorCode: number = 400;
+			let errorDetail: string = 'targetId is required!';
+			
+			this.routeError(request.path, request.method, errorCode, errorDetail);
+			
+			response.status(errorCode).json({'error': errorDetail});
+			
+			return;
+		}
+		
+		// No inputs...
+		
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+		let sourceId: number = ApiTargetsAndSources.serviceSource;
+		
+		this.logRequest(request.path, request.method,
+			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+			commandId, commandName,
+			sourceId, targetId,
+			''
+		);
+		
+		let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+			targetId, ApiTargetsAndSources.serviceSource,
+			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+			commandId, commandName,
+			null
+		);
+		
+		apiCommandMessage.generateMessageRawBytes();
+		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+			let responsePayload: IGetGyroDegreesPerSecondResponse = parseGetGyroDegreesPerSecondResponse(apiResponseMessage.dataRawBytes);
+			
+			this.logResponse(request.path, request.method,
+				SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+				commandId, commandName,
+				sourceId, targetId,
+				JSON.stringify(responsePayload)
+			);
+			
+			response.status(200).json(responsePayload);
+		}).catch(reason => {
+			let errorCode: number = 400;
+			let errorDetail: string = `Error in getGyroDegreesPerSecond while sending API Command: ${reason}`;
+			
+			this.routeError(request.path, request.method, errorCode, errorDetail);
+			
+			response.status(errorCode).json({'error': errorDetail});
+		});
+	}
+	
 	public setExtendedSensorStreamingMask(request: Request, response: Response) {
 		// DID: 0x18 | CID: 0x0C | TID(s): 2
 		
@@ -282,7 +507,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		
 		let dataRawBytes: Array<number> = parseSetExtendedSensorStreamingMaskRequest(request.body);
 		
-		let targetId: number = parseInt(request.params.targetId);
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
 		this.logRequest(request.path, request.method,
@@ -310,7 +535,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 				''
 			);
 			
-			response.status(200);
+			response.sendStatus(200);
 		}).catch(reason => {
 			let errorCode: number = 400;
 			let errorDetail: string = `Error in setExtendedSensorStreamingMask while sending API Command: ${reason}`;
@@ -340,7 +565,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		
 		// No inputs...
 		
-		let targetId: number = parseInt(request.params.targetId);
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
 		this.logRequest(request.path, request.method,
@@ -379,6 +604,64 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		});
 	}
 	
+	public getRightsideupness(request: Request, response: Response) {
+		// DID: 0x18 | CID: 0x0E | TID(s): 2
+		
+		let commandId: number = 0x0E;
+		let commandName: string = this.getCommandName(commandId);
+		
+		if (!request.params.targetId) {
+			let errorCode: number = 400;
+			let errorDetail: string = 'targetId is required!';
+			
+			this.routeError(request.path, request.method, errorCode, errorDetail);
+			
+			response.status(errorCode).json({'error': errorDetail});
+			
+			return;
+		}
+		
+		// No inputs...
+		
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+		let sourceId: number = ApiTargetsAndSources.serviceSource;
+		
+		this.logRequest(request.path, request.method,
+			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+			commandId, commandName,
+			sourceId, targetId,
+			''
+		);
+		
+		let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+			targetId, ApiTargetsAndSources.serviceSource,
+			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+			commandId, commandName,
+			null
+		);
+		
+		apiCommandMessage.generateMessageRawBytes();
+		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+			let responsePayload: IGetRightsideupnessResponse = parseGetRightsideupnessResponse(apiResponseMessage.dataRawBytes);
+			
+			this.logResponse(request.path, request.method,
+				SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+				commandId, commandName,
+				sourceId, targetId,
+				JSON.stringify(responsePayload)
+			);
+			
+			response.status(200).json(responsePayload);
+		}).catch(reason => {
+			let errorCode: number = 400;
+			let errorDetail: string = `Error in getRightsideupness while sending API Command: ${reason}`;
+			
+			this.routeError(request.path, request.method, errorCode, errorDetail);
+			
+			response.status(errorCode).json({'error': errorDetail});
+		});
+	}
+	
 	public enableGyroMaxNotify(request: Request, response: Response) {
 		// DID: 0x18 | CID: 0x0F | TID(s): 2
 		
@@ -409,7 +692,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		
 		let dataRawBytes: Array<number> = parseEnableGyroMaxNotifyRequest(request.body);
 		
-		let targetId: number = parseInt(request.params.targetId);
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
 		this.logRequest(request.path, request.method,
@@ -437,7 +720,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 				''
 			);
 			
-			response.status(200);
+			response.sendStatus(200);
 		}).catch(reason => {
 			let errorCode: number = 400;
 			let errorDetail: string = `Error in enableGyroMaxNotify while sending API Command: ${reason}`;
@@ -467,7 +750,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		
 		// No inputs...
 		
-		let targetId: number = parseInt(request.params.targetId);
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
 		this.logRequest(request.path, request.method,
@@ -525,7 +808,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		
 		// No inputs...
 		
-		let targetId: number = parseInt(request.params.targetId);
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
 		this.logRequest(request.path, request.method,
@@ -553,7 +836,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 				''
 			);
 			
-			response.status(200);
+			response.sendStatus(200);
 		}).catch(reason => {
 			let errorCode: number = 400;
 			let errorDetail: string = `Error in magnetometerCalibrateToNorth while sending API Command: ${reason}`;
@@ -594,7 +877,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		
 		let dataRawBytes: Array<number> = parseStartRobotToRobotInfraredBroadcastingRequest(request.body);
 		
-		let targetId: number = parseInt(request.params.targetId);
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
 		this.logRequest(request.path, request.method,
@@ -622,7 +905,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 				''
 			);
 			
-			response.status(200);
+			response.sendStatus(200);
 		}).catch(reason => {
 			let errorCode: number = 400;
 			let errorDetail: string = `Error in startRobotToRobotInfraredBroadcasting while sending API Command: ${reason}`;
@@ -663,7 +946,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		
 		let dataRawBytes: Array<number> = parseStartRobotToRobotInfraredFollowingRequest(request.body);
 		
-		let targetId: number = parseInt(request.params.targetId);
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
 		this.logRequest(request.path, request.method,
@@ -691,7 +974,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 				''
 			);
 			
-			response.status(200);
+			response.sendStatus(200);
 		}).catch(reason => {
 			let errorCode: number = 400;
 			let errorDetail: string = `Error in startRobotToRobotInfraredFollowing while sending API Command: ${reason}`;
@@ -721,7 +1004,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		
 		// No inputs...
 		
-		let targetId: number = parseInt(request.params.targetId);
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
 		this.logRequest(request.path, request.method,
@@ -749,7 +1032,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 				''
 			);
 			
-			response.status(200);
+			response.sendStatus(200);
 		}).catch(reason => {
 			let errorCode: number = 400;
 			let errorDetail: string = `Error in stopRobotToRobotInfraredBroadcasting while sending API Command: ${reason}`;
@@ -790,7 +1073,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		
 		let dataRawBytes: Array<number> = parseSendRobotToRobotInfraredMessageRequest(request.body);
 		
-		let targetId: number = parseInt(request.params.targetId);
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
 		this.logRequest(request.path, request.method,
@@ -818,7 +1101,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 				''
 			);
 			
-			response.status(200);
+			response.sendStatus(200);
 		}).catch(reason => {
 			let errorCode: number = 400;
 			let errorDetail: string = `Error in sendRobotToRobotInfraredMessage while sending API Command: ${reason}`;
@@ -859,7 +1142,7 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 		
 		let dataRawBytes: Array<number> = parseListenForRobotToRobotInfraredMessageRequest(request.body);
 		
-		let targetId: number = parseInt(request.params.targetId);
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
 		
 		this.logRequest(request.path, request.method,
@@ -887,10 +1170,126 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 				''
 			);
 			
-			response.status(200);
+			response.sendStatus(200);
 		}).catch(reason => {
 			let errorCode: number = 400;
 			let errorDetail: string = `Error in listenForRobotToRobotInfraredMessage while sending API Command: ${reason}`;
+			
+			this.routeError(request.path, request.method, errorCode, errorDetail);
+			
+			response.status(errorCode).json({'error': errorDetail});
+		});
+	}
+	
+	public getMagnetometerChipId(request: Request, response: Response) {
+		// DID: 0x18 | CID: 0x2D | TID(s): 2
+		
+		let commandId: number = 0x2D;
+		let commandName: string = this.getCommandName(commandId);
+		
+		if (!request.params.targetId) {
+			let errorCode: number = 400;
+			let errorDetail: string = 'targetId is required!';
+			
+			this.routeError(request.path, request.method, errorCode, errorDetail);
+			
+			response.status(errorCode).json({'error': errorDetail});
+			
+			return;
+		}
+		
+		// No inputs...
+		
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+		let sourceId: number = ApiTargetsAndSources.serviceSource;
+		
+		this.logRequest(request.path, request.method,
+			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+			commandId, commandName,
+			sourceId, targetId,
+			''
+		);
+		
+		let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+			targetId, ApiTargetsAndSources.serviceSource,
+			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+			commandId, commandName,
+			null
+		);
+		
+		apiCommandMessage.generateMessageRawBytes();
+		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+			let responsePayload: IGetMagnetometerChipIdResponse = parseGetMagnetometerChipIdResponse(apiResponseMessage.dataRawBytes);
+			
+			this.logResponse(request.path, request.method,
+				SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+				commandId, commandName,
+				sourceId, targetId,
+				JSON.stringify(responsePayload)
+			);
+			
+			response.status(200).json(responsePayload);
+		}).catch(reason => {
+			let errorCode: number = 400;
+			let errorDetail: string = `Error in getMagnetometerChipId while sending API Command: ${reason}`;
+			
+			this.routeError(request.path, request.method, errorCode, errorDetail);
+			
+			response.status(errorCode).json({'error': errorDetail});
+		});
+	}
+	
+	public runInfraredSelfTest(request: Request, response: Response) {
+		// DID: 0x18 | CID: 0x2E | TID(s): 2
+		
+		let commandId: number = 0x2E;
+		let commandName: string = this.getCommandName(commandId);
+		
+		if (!request.params.targetId) {
+			let errorCode: number = 400;
+			let errorDetail: string = 'targetId is required!';
+			
+			this.routeError(request.path, request.method, errorCode, errorDetail);
+			
+			response.status(errorCode).json({'error': errorDetail});
+			
+			return;
+		}
+		
+		// No inputs...
+		
+		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+		let sourceId: number = ApiTargetsAndSources.serviceSource;
+		
+		this.logRequest(request.path, request.method,
+			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+			commandId, commandName,
+			sourceId, targetId,
+			''
+		);
+		
+		let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+			targetId, ApiTargetsAndSources.serviceSource,
+			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+			commandId, commandName,
+			null
+		);
+		
+		apiCommandMessage.generateMessageRawBytes();
+		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+			// No outputs...
+			
+			this.logResponse(request.path, request.method,
+				SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+				commandId, commandName,
+				sourceId, targetId,
+				''
+			);
+			
+			response.sendStatus(200);
+		}).catch(reason => {
+			let errorCode: number = 400;
+			let errorDetail: string = `Error in runInfraredSelfTest while sending API Command: ${reason}`;
 			
 			this.routeError(request.path, request.method, errorCode, errorDetail);
 			

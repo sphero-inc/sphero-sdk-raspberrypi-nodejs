@@ -2,7 +2,7 @@
 import {ByteConversionUtilities} from '../../../../utilities/byte-conversion-utilities'
 
 
-export function parseSetBluetoothNameRequest(requestBody: any): Array<number> {
+export function parseSetBluetoothDeviceNameRequest(requestBody: any): Array<number> {
 	let dataRawBytes: Array<number> = [];
 	
 	// Index: 0 | Name: 'name' | Type: 'std::string' | Size: 1

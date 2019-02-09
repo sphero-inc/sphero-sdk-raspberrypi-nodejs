@@ -1,0 +1,10 @@
+// ************************************************************
+// The contents in this directory were automatically generated!
+// Device ID (DID):         0x1D
+// Device Name:             firmware
+// Device Description:      
+// Command Count:           1
+// Source File:             0x1D-secondary_mcu_firmware_update.json
+// Timestamp:               02/09/2019 @ 00:14:28.196755 (UTC)
+// ************************************************************
+

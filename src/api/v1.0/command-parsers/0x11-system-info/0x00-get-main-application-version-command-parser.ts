@@ -2,7 +2,7 @@
 import {ByteConversionUtilities} from '../../../../utilities/byte-conversion-utilities'
 
 
-export function parseGetMainAppVersionResponse(dataRawBytes: Array<number>): IGetMainAppVersionResponse {
+export function parseGetMainApplicationVersionResponse(dataRawBytes: Array<number>): IGetMainApplicationVersionResponse {
 	let currentIndex: number = 0;
 	
 	// Index: 0 | Name: 'major' | Type: 'uint16_t' | Size: 1
@@ -20,16 +20,16 @@ export function parseGetMainAppVersionResponse(dataRawBytes: Array<number>): IGe
 	let revision: number = ByteConversionUtilities.byteArrayToInt16(revisionBytes.reverse());
 	currentIndex += revisionBytes.length;
 	
-	let getMainAppVersionResponse: IGetMainAppVersionResponse = {
+	let getMainApplicationVersionResponse: IGetMainApplicationVersionResponse = {
 		major: major,
 		minor: minor,
 		revision: revision
 	};
 	
-	return getMainAppVersionResponse;
+	return getMainApplicationVersionResponse;
 }
 
-export interface IGetMainAppVersionResponse {
+export interface IGetMainApplicationVersionResponse {
 	readonly major: number;
 	readonly minor: number;
 	readonly revision: number;

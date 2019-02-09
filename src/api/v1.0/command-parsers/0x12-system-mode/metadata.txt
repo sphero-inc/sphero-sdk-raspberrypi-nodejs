@@ -1,10 +1,10 @@
 // ************************************************************
 // The contents in this directory were automatically generated!
-// Device ID (DID):         0x13
-// Device Name:             power
+// Device ID (DID):         0x12
+// Device Name:             system_mode
 // Device Description:      
-// Command Count:           12
-// Source File:             0x13-power.json
-// Timestamp:               02/09/2019 @ 00:14:28.196979 (UTC)
+// Command Count:           3
+// Source File:             0x12-system_modes.json
+// Timestamp:               02/09/2019 @ 00:14:28.196906 (UTC)
 // ************************************************************
 
