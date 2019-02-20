@@ -6,6 +6,12 @@ import {ApiFlags} from '../constants';
 export interface IApiCommandMessage extends IApiMessage {
 }
 
+let _sequenceNumber: number = 0;
+function getNextSequenceNumber(): number {
+    return _sequenceNumber++;
+}
+
+
 class ApiCommandMessage extends ApiBaseMessage implements IApiCommandMessage {
     constructor(flags: number, sequenceNumber: number,
                 targetId: number, sourceId: number,
@@ -52,7 +58,7 @@ export function buildApiCommandMessageWithDefaultFlags(targetId: number, sourceI
                                                        dataRawBytes: Array<number> | null = null): IApiCommandMessage {
 
     let flags: number = ApiFlags.defaultRequestWithResponseFlags;
-    let sequenceNumber: number = 0x00;  // TODO: own sequence number here?
+    let sequenceNumber: number = getNextSequenceNumber();  // TODO: own sequence number here?
 
     let apiMessage: IApiCommandMessage = new ApiCommandMessage(
         flags, sequenceNumber,
