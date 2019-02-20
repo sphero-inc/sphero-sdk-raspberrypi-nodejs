@@ -8,7 +8,7 @@ export function parseGetSupportedCidsRequest(requestBody: any): Array<number> {
 	// Index: 0 | Name: 'did' | Type: 'uint8_t' | Size: 1
 	let did: number = requestBody.did;
 	let didBytes: Array<number> = ByteConversionUtilities.int8ToByteArray(did);
-	dataRawBytes.concat(didBytes);
+	dataRawBytes = dataRawBytes.concat(didBytes);
 	
 	return dataRawBytes;
 }

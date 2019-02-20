@@ -9,7 +9,7 @@ export function parseEchoRequest(requestBody: any): Array<number> {
 	for (let i: number = 0; i < requestBody.data.length && i < 16; i++) {
 		let data: number = requestBody.data[i];
 		let dataBytes: Array<number> = ByteConversionUtilities.int8ToByteArray(data);
-		dataRawBytes.concat(dataBytes);
+		dataRawBytes = dataRawBytes.concat(dataBytes);
 	}
 	
 	return dataRawBytes;

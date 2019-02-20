@@ -8,7 +8,7 @@ export function parseGetTestFixtureResultRequest(requestBody: any): Array<number
 	// Index: 0 | Name: 'testId' | Type: 'uint16_t' | Size: 1
 	let testId: number = requestBody.testId;
 	let testIdBytes: Array<number> = ByteConversionUtilities.int16ToByteArray(testId).reverse();
-	dataRawBytes.concat(testIdBytes);
+	dataRawBytes = dataRawBytes.concat(testIdBytes);
 	
 	return dataRawBytes;
 }

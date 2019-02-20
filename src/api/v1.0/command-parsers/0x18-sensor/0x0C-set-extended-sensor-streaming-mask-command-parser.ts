@@ -8,7 +8,7 @@ export function parseSetExtendedSensorStreamingMaskRequest(requestBody: any): Ar
 	// Index: 0 | Name: 'dataMask' | Type: 'uint32_t' | Size: 1
 	let dataMask: number = requestBody.dataMask;
 	let dataMaskBytes: Array<number> = ByteConversionUtilities.int32ToByteArray(dataMask).reverse();
-	dataRawBytes.concat(dataMaskBytes);
+	dataRawBytes = dataRawBytes.concat(dataMaskBytes);
 	
 	return dataRawBytes;
 }

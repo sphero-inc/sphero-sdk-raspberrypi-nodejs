@@ -8,12 +8,12 @@ export function parseSetSwdLockingRequest(requestBody: any): Array<number> {
 	// Index: 0 | Name: 'isLocked' | Type: 'bool' | Size: 1
 	let isLocked: boolean = requestBody.isLocked;
 	let isLockedBytes: Array<number> = ByteConversionUtilities.boolToByteArray(isLocked);
-	dataRawBytes.concat(isLockedBytes);
+	dataRawBytes = dataRawBytes.concat(isLockedBytes);
 	
 	// Index: 1 | Name: 'unlockingKey' | Type: 'uint32_t' | Size: 1
 	let unlockingKey: number = requestBody.unlockingKey;
 	let unlockingKeyBytes: Array<number> = ByteConversionUtilities.int32ToByteArray(unlockingKey).reverse();
-	dataRawBytes.concat(unlockingKeyBytes);
+	dataRawBytes = dataRawBytes.concat(unlockingKeyBytes);
 	
 	return dataRawBytes;
 }

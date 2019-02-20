@@ -8,7 +8,7 @@ export function parseEnableExtendedLifeTestRequest(requestBody: any): Array<numb
 	// Index: 0 | Name: 'isEnabled' | Type: 'bool' | Size: 1
 	let isEnabled: boolean = requestBody.isEnabled;
 	let isEnabledBytes: Array<number> = ByteConversionUtilities.boolToByteArray(isEnabled);
-	dataRawBytes.concat(isEnabledBytes);
+	dataRawBytes = dataRawBytes.concat(isEnabledBytes);
 	
 	return dataRawBytes;
 }

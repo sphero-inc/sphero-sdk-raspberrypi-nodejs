@@ -8,12 +8,12 @@ export function parseStartRobotToRobotInfraredBroadcastingRequest(requestBody: a
 	// Index: 0 | Name: 'farCode' | Type: 'uint8_t' | Size: 1
 	let farCode: number = requestBody.farCode;
 	let farCodeBytes: Array<number> = ByteConversionUtilities.int8ToByteArray(farCode);
-	dataRawBytes.concat(farCodeBytes);
+	dataRawBytes = dataRawBytes.concat(farCodeBytes);
 	
 	// Index: 1 | Name: 'nearCode' | Type: 'uint8_t' | Size: 1
 	let nearCode: number = requestBody.nearCode;
 	let nearCodeBytes: Array<number> = ByteConversionUtilities.int8ToByteArray(nearCode);
-	dataRawBytes.concat(nearCodeBytes);
+	dataRawBytes = dataRawBytes.concat(nearCodeBytes);
 	
 	return dataRawBytes;
 }

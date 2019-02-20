@@ -8,7 +8,7 @@ export function parseSetBluetoothDeviceNameRequest(requestBody: any): Array<numb
 	// Index: 0 | Name: 'name' | Type: 'std::string' | Size: 1
 	let name: string = requestBody.name;
 	let nameBytes: Array<number> = ByteConversionUtilities.stringToByteArray(name);
-	dataRawBytes.concat(nameBytes);
+	dataRawBytes = dataRawBytes.concat(nameBytes);
 	
 	return dataRawBytes;
 }
