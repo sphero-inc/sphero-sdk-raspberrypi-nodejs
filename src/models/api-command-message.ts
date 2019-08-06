@@ -8,7 +8,7 @@ export interface IApiCommandMessage extends IApiMessage {
 
 let _sequenceNumber: number = 0;
 function getNextSequenceNumber(): number {
-    return _sequenceNumber++;
+    return _sequenceNumber++ % 256;
 }
 
 
