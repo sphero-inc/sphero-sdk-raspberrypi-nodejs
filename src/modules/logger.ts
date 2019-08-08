@@ -75,23 +75,23 @@ class WinstonLogger implements ILogger {
     }
 
     debug(message: string): void {
-        logger.debug(this.name + this._separator + message);
+        // logger.debug(this.name + this._separator + message);
     }
 
     info(message: string): void {
-        logger.info(this.name + this._separator + message);
+        // logger.info(this.name + this._separator + message);
     }
 
     warn(message: string): void {
-        logger.warn(this.name + this._separator + message);
+        // logger.warn(this.name + this._separator + message);
     }
 
     warning(message: string): void {
-        this.warn(this.name + this._separator + message);
+        // this.warn(this.name + this._separator + message);
     }
 
     error(message: string): void {
-        logger.error(this.name + this._separator + message);
+        // logger.error(this.name + this._separator + message);
     }
 
     exception(error: Error, message: string): void {
