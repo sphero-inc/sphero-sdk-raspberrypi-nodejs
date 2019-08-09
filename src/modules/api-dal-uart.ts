@@ -34,9 +34,19 @@ class ApiDalUart extends ApiDalBase {
         this._apiParser = ApiParserFactory.getApiParser();
 
         this._apiParser.apiMessageParsedCallback = (apiMessage: IApiMessage): void => {
-            console.log("blahblah");
-            this.socketSend("Sent from within DAL!");
-            logger.debug(`API Message parsed: ${apiMessage.prettyPrint()}`);
+
+            // console.log(`API Message parsed: ${JSON.stringify(apiMessage)}`);
+            console.log(`Data bytes: ${ByteConversionUtilities.convertNumbersToHexCsvString(apiMessage.dataRawBytes)}`)
+
+            console.log(apiMessage.isCommand);
+            console.log(apiMessage.isResponse);
+            if(apiMessage.isCommand && !apiMessage.isResponse){ //apiMessage.commandId === 2 && apiMessage.deviceId === 24
+                //  console.log("here");
+                this.socketSend("let's gooo");
+                return;
+            }
+
+
 
             let mapKey: string = this.getApiMessageMapKey(apiMessage);
             if (!this._apiCommandPendingResponseMap.has(mapKey)) {
@@ -143,6 +153,8 @@ class ApiDalUart extends ApiDalBase {
 
         return mapKey;
     }
+
+
 }
 
 let _uartApiDal: ApiDalUart | null = null;
