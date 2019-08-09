@@ -18,6 +18,8 @@ export interface IApiDal {
     sendApiCommandMessage(apiCommandMessage: IApiCommandMessage): Promise<IApiResponseMessage>;
 
     registerApiMessageNotificationObserver(apiMessageNotificationObserver: IApiMessageNotificationObserver): void;
+
+    socketSend: (message: string) => void;
 }
 
 export abstract class ApiDalBase implements IApiDal {
@@ -44,4 +46,7 @@ export abstract class ApiDalBase implements IApiDal {
             this._apiMessageNotificationObservers[i].apiCommandMessageReceivedNotification(apiCommandMessage);
         }
     }
+
+    public socketSend: (message: string) => void;
+
 }
