@@ -248,8 +248,8 @@ class ApiParser implements IApiParser {
 
         // TODO: where to get DID and CID names?
         let apiMessage: IApiMessage = isResponse
-            ? buildApiCommandMessage(flags, sequenceNumber, targetId, sourceId, did, '', cid, '', dataRawBytes)
-            : buildApiResponseMessage(flags, sequenceNumber, targetId, sourceId, did, '', cid, '', dataRawBytes);
+            ? buildApiResponseMessage(flags, sequenceNumber, targetId, sourceId, did, '', cid, '', dataRawBytes)
+            : buildApiCommandMessage(flags, sequenceNumber, targetId, sourceId, did, '', cid, '', dataRawBytes);
 
         if (errorCode && errorMessage) {
             apiMessage.associateError(errorCode, errorMessage);
