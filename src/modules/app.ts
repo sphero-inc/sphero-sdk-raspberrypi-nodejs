@@ -52,7 +52,7 @@ export class App {
 
         this._isInitialized = true;
 
-        const wss = new WebSocket.Server({ server: this._server, path: '/stream'});
+        const wss = new WebSocket.Server({ server: this._server, path: '/stream', clientTracking: true});
 
         wss.on('connection', (ws: WebSocket) => {
             ws.send("Hello from server");
@@ -65,9 +65,8 @@ export class App {
         });
 
         this._apiDal.socketSend = (message: string) => {
-            wss.on('connection', (ws: WebSocket) => {
-
-                ws.send(message);
+            wss.clients.forEach(client => {
+                client.send(`Hello, broadcast message -> ${message}`);
             });
         };
 

@@ -34,6 +34,8 @@ class ApiDalUart extends ApiDalBase {
         this._apiParser = ApiParserFactory.getApiParser();
 
         this._apiParser.apiMessageParsedCallback = (apiMessage: IApiMessage): void => {
+            console.log("blahblah");
+            this.socketSend("Sent from within DAL!");
             logger.debug(`API Message parsed: ${apiMessage.prettyPrint()}`);
 
             let mapKey: string = this.getApiMessageMapKey(apiMessage);
@@ -62,6 +64,7 @@ class ApiDalUart extends ApiDalBase {
             // if apiMessage is async, then websocket.send(data) , return
             // questions, concerns: in what class does WebSocket object live?
             //                      WebSocket.Server or WebSocket? How does WebSocket.Server fit in with the main server?
+
         };
 
         this._apiParser.apiProtocolErrorCallback = (errorCode: number): void => {
