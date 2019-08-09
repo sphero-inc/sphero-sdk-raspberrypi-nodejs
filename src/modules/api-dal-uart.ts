@@ -57,6 +57,10 @@ class ApiDalUart extends ApiDalBase {
             // TODO: do what?
 
             // TODO: what about async messages to the socket?
+
+            // if apiMessage is async, then websocket.send(data) , return
+            // questions, concerns: in what class does WebSocket object live?
+            //                      WebSocket.Server or WebSocket? How does WebSocket.Server fit in with the main server?
         };
 
         this._apiParser.apiProtocolErrorCallback = (errorCode: number): void => {
@@ -76,7 +80,7 @@ class ApiDalUart extends ApiDalBase {
         });
         this._serialPort.on('data', (data: Array<number>): void => {
             // var dataUTF8 = data.toString('utf-8');
-
+            console.log(`Received bytes: ${ByteConversionUtilities.convertNumbersToHexCsvString(data)}`);
             logger.debug(`Received bytes: ${ByteConversionUtilities.convertNumbersToHexCsvString(data)}`);
 
             this._apiParser.queueBytes(data);
@@ -117,7 +121,7 @@ class ApiDalUart extends ApiDalBase {
         logger.warning(`Key size: ${this._apiCommandPendingResponseMap.size}`);
 
         // TODO: do we need buffer the bytes in case we need to drain?
-
+        console.log(`Bytes being sent: ${ByteConversionUtilities.convertNumbersToHexCsvString(apiCommandMessage.messageRawBytes)}`);
         let isWaitingForDrain: boolean = this._serialPort.write(apiCommandMessage.messageRawBytes, 'utf8', ((error, bytesWritten) => {
             // TODO: do something with this - log?
         }));

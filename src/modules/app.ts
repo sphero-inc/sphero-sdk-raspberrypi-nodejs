@@ -4,6 +4,7 @@ import * as compression from 'compression';
 import * as cors from 'cors';
 import * as bodyParser from 'body-parser';
 import {Server as HttpServer} from 'http';
+import * as WebSocket from 'ws';
 
 const swaggerUi = require('swagger-ui-express');
 import swaggerDocument = require('../api/v1.0/swagger.json');
@@ -50,6 +51,20 @@ export class App {
         this.finalizeInitialization();
 
         this._isInitialized = true;
+
+        const wss = new WebSocket.Server({ server: this._server, path: '/stream'});
+
+        wss.on('connection', (ws: WebSocket) => {
+
+            ws.on('message', (message: string) => {
+
+                console.log('received: %s', message);
+                ws.send(`Hello, you sent -> ${message}`);
+            });
+
+            ws.send('Hi there, I am a WebSocket server');
+        });
+
     }
 
     private initializeMiddleware(): void {
@@ -100,6 +115,10 @@ export class App {
     private initializeRoutes(): void {
         this.expressApp.get('/', function (request, response) {
             response.sendFile('index.html');
+        });
+
+        this.expressApp.get('/dashboard', function (req, res){
+            res.sendFile( '/home/pi/raspberry-pi-node-js/dashboard/dashboard.html');
         });
 
         apiRouter.initializeRoutes(this.expressApp, this._apiDal, this._configuration);
