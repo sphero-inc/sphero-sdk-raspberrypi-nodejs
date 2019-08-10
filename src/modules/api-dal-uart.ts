@@ -40,9 +40,16 @@ class ApiDalUart extends ApiDalBase {
 
             console.log(apiMessage.isCommand);
             console.log(apiMessage.isResponse);
-            if(apiMessage.isCommand && !apiMessage.isResponse){ //apiMessage.commandId === 2 && apiMessage.deviceId === 24
-                //  console.log("here");
-                this.socketSend("let's gooo");
+            
+            // Check if message is async 
+            if(apiMessage.isCommand && !apiMessage.isResponse){ 
+                let parsedData = apiMessage.dataRawBytes;
+                let clientMessage = { "deviceId": apiMessage.deviceId, "deviceName": apiMessage.deviceName, "commandId": apiMessage.commandId, "commandName": apiMessage.commandName, "data": parsedData };
+
+
+                    // new ApiMessageLight(apiMessage.deviceId, apiMessage.deviceName, apiMessage.commandId, apiMessage.commandName, parsedData);
+                this.socketSend(JSON.stringify(clientMessage));
+                // this.socketSend("let's gooo");
                 return;
             }
 

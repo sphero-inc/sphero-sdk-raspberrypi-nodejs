@@ -34,6 +34,14 @@ export interface IApiMessage {
     prettyPrint(): string;
 }
 
+export class ApiMessageLight {
+    readonly deviceId: number;
+    readonly deviceName: string;
+    readonly commandId: number;
+    readonly commandName: string;
+    readonly data: object | null;
+}
+
 export abstract class ApiBaseMessage implements IApiMessage {
     protected _flags: number = 0x00;
     public get flags(): number {
