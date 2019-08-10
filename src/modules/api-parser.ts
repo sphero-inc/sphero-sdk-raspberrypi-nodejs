@@ -122,8 +122,7 @@ class ApiParser implements IApiParser {
 
                     let isRequestingResponse: boolean = (this._activeDataBuffer[1] & (ApiFlags.requestsResponse)) == (ApiFlags.requestsResponse);
                     let isResponse: boolean = (this._activeDataBuffer[1] & (ApiFlags.isResponse)) == (ApiFlags.isResponse);
-                    console.log("IS RESPONSE: ", isResponse);
-                    console.log("isRequestingResponse: ", isRequestingResponse);
+                    
                     if (isRequestingResponse && isResponse) {
                         this.invokeApiProtocolErrorCallback(ApiProtocolErrorCodes.badFlags);
                         this.resetParserState();

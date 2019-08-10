@@ -2,6 +2,7 @@
 import * as SerialPort from 'serialport';   // https://github.com/node-serialport/node-serialport
 
 // internal imports
+import {ApiMessageLight} from '../models/api-message';
 import {IApiCommandMessage} from '../models/api-command-message';
 import {IApiResponseMessage} from '../models/api-response-message';
 import {ApiDalBase, ApiDalTypes, IApiDal} from './api-dal-interface';
@@ -35,21 +36,15 @@ class ApiDalUart extends ApiDalBase {
 
         this._apiParser.apiMessageParsedCallback = (apiMessage: IApiMessage): void => {
 
-            // console.log(`API Message parsed: ${JSON.stringify(apiMessage)}`);
             console.log(`Data bytes: ${ByteConversionUtilities.convertNumbersToHexCsvString(apiMessage.dataRawBytes)}`)
 
-            console.log(apiMessage.isCommand);
-            console.log(apiMessage.isResponse);
-            
             // Check if message is async 
             if(apiMessage.isCommand && !apiMessage.isResponse){ 
                 let parsedData = apiMessage.dataRawBytes;
-                let clientMessage = { "deviceId": apiMessage.deviceId, "deviceName": apiMessage.deviceName, "commandId": apiMessage.commandId, "commandName": apiMessage.commandName, "data": parsedData };
-
-
-                    // new ApiMessageLight(apiMessage.deviceId, apiMessage.deviceName, apiMessage.commandId, apiMessage.commandName, parsedData);
-                this.socketSend(JSON.stringify(clientMessage));
-                // this.socketSend("let's gooo");
+                // let clientMessage = { "deviceId": apiMessage.deviceId, "deviceName": apiMessage.deviceName, "commandId": apiMessage.commandId, "commandName": apiMessage.commandName, "data": parsedData };
+                let messageLight = new ApiMessageLight(apiMessage.deviceId, apiMessage.deviceName, apiMessage.commandId, apiMessage.commandName, parsedData);
+                // console.log(JSON.stringify(msg));
+                this.socketSend(JSON.stringify(messageLight));
                 return;
             }
 

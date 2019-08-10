@@ -1,6 +1,41 @@
 import {ApiFlags} from '../constants';
 import {ApiParserFactory} from '../modules/api-parser';
 
+
+export interface IApiMessageLight {
+    readonly deviceId: number;
+    readonly deviceName: string;
+
+    readonly commandId: number;
+    readonly commandName: string;
+
+    readonly data: object | null;
+}
+
+
+export class ApiMessageLight implements IApiMessageLight {
+    readonly deviceId: number;
+    readonly deviceName: string;
+
+    readonly commandId: number;
+    readonly commandName: string;
+
+    readonly data: object | null;
+
+    constructor(deviceId: number, deviceName: string,
+                commandId: number, commandName: string,
+                data: Array<number> ) {
+
+        this.deviceId = deviceId;
+        this.deviceName = deviceName;
+
+        this.commandId = commandId;
+        this.commandName = commandName;
+
+        this.data = data;
+    }
+}
+
 export interface IApiMessage {
     readonly flags: number;
     readonly sequenceNumber: number;
@@ -34,13 +69,7 @@ export interface IApiMessage {
     prettyPrint(): string;
 }
 
-export class ApiMessageLight {
-    readonly deviceId: number;
-    readonly deviceName: string;
-    readonly commandId: number;
-    readonly commandName: string;
-    readonly data: object | null;
-}
+
 
 export abstract class ApiBaseMessage implements IApiMessage {
     protected _flags: number = 0x00;
