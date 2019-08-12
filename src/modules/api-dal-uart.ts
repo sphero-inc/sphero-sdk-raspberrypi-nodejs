@@ -13,7 +13,7 @@ import {DeferredPromise} from '../models/deferred-promise';
 import {ByteConversionUtilities} from '../utilities/byte-conversion-utilities';
 import {ApiProtocolErrorCodes} from '../constants';
 import {
-    parseSensorStreamingDataNotifyResponse
+    parseSensorStreamingDataNotify
 } from '../api/v1.0/command-parsers/0x18-sensor/0x02-sensor-streaming-data-notify-command-parser';
 
 
@@ -43,7 +43,7 @@ class ApiDalUart extends ApiDalBase {
 
             // Check if message is async 
             if(apiMessage.isCommand && !apiMessage.isResponse){ 
-                let parsedData = parseSensorStreamingDataNotifyResponse(apiMessage.dataRawBytes);
+                let parsedData = parseSensorStreamingDataNotify(apiMessage.dataRawBytes);
                 let messageLight = new ApiMessageLight(apiMessage.deviceId, apiMessage.deviceName, apiMessage.commandId, apiMessage.commandName, parsedData);
                 this.socketSend(JSON.stringify(messageLight));
                 return;

@@ -2,18 +2,25 @@
 import {ByteConversionUtilities} from '../../../../utilities/byte-conversion-utilities'
 
 
-export function parseSensorStreamingDataNotifyResponse(dataRawBytes: Array<number>): Array<number> {
-
-    let bytesPerData: number = 4;
+export function parseSensorStreamingDataNotify(dataRawBytes: Array<number>): Array<number> {
     let currentIndex: number = 0;
 
-    let parsedData : Array<number> = [];
+    let parsedData: Array<number> = [];
 
-    for(let currentIndex = 0; currentIndex < dataRawBytes.length; currentIndex += bytesPerData){
-        let currentIndexBytes: Array<number> = ByteConversionUtilities.getFloatBytes(dataRawBytes, currentIndex);
-        let data: number = ByteConversionUtilities.byteArrayToFloat(currentIndexBytes.reverse());
-        parsedData.push(data);
+    // Index: 0 | Name: 'sensorData' | Type: 'float' | Size: 255
+    let sensorDataValues: Array<number> = []
+    for (let i: number = 0; i < 255; i++) {
+        if (currentIndex >= dataRawBytes.length) {
+            break;
+        }
+
+        let sensorDataBytes: Array<number> = ByteConversionUtilities.getFloatBytes(dataRawBytes, currentIndex);
+        let sensorData: number = ByteConversionUtilities.byteArrayToFloat(sensorDataBytes.reverse());
+        currentIndex += sensorDataBytes.length;
+        parsedData.push(sensorData);
+        sensorDataValues.push(sensorData);
     }
-    return parsedData;
-}
 
+    return parsedData;
+
+}
