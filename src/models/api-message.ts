@@ -1,6 +1,10 @@
 import {ApiFlags} from '../constants';
 import {ApiParserFactory} from '../modules/api-parser';
 
+import {
+    IGetStreamingData
+} from '../api/v1.0/command-parsers/0x18-sensor/0x02-sensor-streaming-data-notify-command-parser';
+
 
 export interface IApiMessageLight {
     readonly deviceId: number;
@@ -24,7 +28,7 @@ export class ApiMessageLight implements IApiMessageLight {
 
     constructor(deviceId: number, deviceName: string,
                 commandId: number, commandName: string,
-                data: Array<number> ) {
+                data: IGetStreamingData ) {
 
         this.deviceId = deviceId;
         this.deviceName = deviceName;

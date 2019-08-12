@@ -12,6 +12,9 @@ import {IApiMessage} from '../models/api-message';
 import {DeferredPromise} from '../models/deferred-promise';
 import {ByteConversionUtilities} from '../utilities/byte-conversion-utilities';
 import {ApiProtocolErrorCodes} from '../constants';
+import {
+    parseSensorStreamingDataNotifyResponse
+} from '../api/v1.0/command-parsers/0x18-sensor/0x02-sensor-streaming-data-notify-command-parser';
 
 
 let logger: ILogger = createLogger('api-dal-uart');
@@ -40,10 +43,8 @@ class ApiDalUart extends ApiDalBase {
 
             // Check if message is async 
             if(apiMessage.isCommand && !apiMessage.isResponse){ 
-                let parsedData = apiMessage.dataRawBytes;
-                // let clientMessage = { "deviceId": apiMessage.deviceId, "deviceName": apiMessage.deviceName, "commandId": apiMessage.commandId, "commandName": apiMessage.commandName, "data": parsedData };
+                let parsedData = parseSensorStreamingDataNotifyResponse(apiMessage.dataRawBytes);
                 let messageLight = new ApiMessageLight(apiMessage.deviceId, apiMessage.deviceName, apiMessage.commandId, apiMessage.commandName, parsedData);
-                // console.log(JSON.stringify(msg));
                 this.socketSend(JSON.stringify(messageLight));
                 return;
             }
