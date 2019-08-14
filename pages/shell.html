@@ -16,12 +16,11 @@
 <h1>Shell Commands UI</h1>
 
 <textarea id="console"></textarea>
-<!-- <textarea id="input"></textarea> -->
+<textarea id="input"></textarea>
 <button type="submit" onclick="sendToShell()">Submit</button>
 
 
 <script>
-    document.getElementById("console").value = ">>>";
     let url = "ws://10.211.2.21:2010/stream";
     const socket = new WebSocket(url);
     socket.onopen = () => {
@@ -44,11 +43,7 @@
     }
 
     function sendToShell(){
-        let text = document.getElementById("console").value;
-        let re = />>> [a-z]*/;
-        let found = text.match(re);
-        let input = found[found.length-1].substring(3).replace(/\s/g, "");
-        appendToConsole("\n");
+        let input = document.getElementById("input").value;
         console.log(input);
         let jsonBody = {
             'shellCommandString':  input
