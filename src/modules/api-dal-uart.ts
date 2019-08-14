@@ -15,6 +15,9 @@ import {ApiProtocolErrorCodes} from '../constants';
 import {
     parseSensorStreamingDataNotify
 } from '../api/v1.0/command-parsers/0x18-sensor/0x02-sensor-streaming-data-notify-command-parser';
+import {
+    parseSendStringToConsole
+} from '../api/v1.0/command-parsers/0x10-api-and-shell/0x03-send-string-to-console-command-parser';
 
 
 let logger: ILogger = createLogger('api-dal-uart');
@@ -38,13 +41,12 @@ class ApiDalUart extends ApiDalBase {
         this._apiParser = ApiParserFactory.getApiParser();
 
         this._apiParser.apiMessageParsedCallback = (apiMessage: IApiMessage): void => {
-
-            console.log(`Data bytes: ${ByteConversionUtilities.convertNumbersToHexCsvString(apiMessage.dataRawBytes)}`)
-
             // Check if message is async 
             if(apiMessage.isCommand && !apiMessage.isResponse){ 
-                let parsedData = parseSensorStreamingDataNotify(apiMessage.dataRawBytes);
+                let parsedData = parseSendStringToConsole(apiMessage.dataRawBytes);
+                console.log("data to send to socket: ", parsedData);
                 let messageLight = new ApiMessageLight(apiMessage.deviceId, apiMessage.deviceName, apiMessage.commandId, apiMessage.commandName, parsedData);
+                console.log(JSON.stringify(messageLight));
                 this.socketSend(JSON.stringify(messageLight));
                 return;
             }

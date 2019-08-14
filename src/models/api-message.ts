@@ -9,7 +9,7 @@ export interface IApiMessageLight {
     readonly commandId: number;
     readonly commandName: string;
 
-    readonly data: object | null;
+    readonly data: Array<number> | string | null;
 }
 
 
@@ -20,18 +20,18 @@ export class ApiMessageLight implements IApiMessageLight {
     readonly commandId: number;
     readonly commandName: string;
 
-    readonly data: object | null;
+    readonly data: Array<number> | string | null;
 
     constructor(deviceId: number, deviceName: string,
                 commandId: number, commandName: string,
-                data: Array<number> ) {
+                data: Array<number> | string ) {
 
         this.deviceId = deviceId;
         this.deviceName = deviceName;
 
         this.commandId = commandId;
         this.commandName = commandName;
-
+        
         this.data = data;
     }
 }
