@@ -1,4 +1,6 @@
 // internal imports
+import {IApiMessageLight} from '../models/api-message'
+
 import {IApiCommandMessage} from '../models/api-command-message'
 import {IApiResponseMessage} from '../models/api-response-message'
 
@@ -19,7 +21,7 @@ export interface IApiDal {
 
     registerApiMessageNotificationObserver(apiMessageNotificationObserver: IApiMessageNotificationObserver): void;
 
-    socketSend: (message: string) => void;
+    commandToClientHandler: (message: IApiMessageLight) => void;
 }
 
 export abstract class ApiDalBase implements IApiDal {
@@ -47,6 +49,6 @@ export abstract class ApiDalBase implements IApiDal {
         }
     }
 
-    public socketSend: (message: string) => void;
+    public commandToClientHandler: (message: IApiMessageLight) => void;
 
 }

@@ -12,12 +12,14 @@ export interface IConfiguration {
     readonly port: number;
     readonly fullAddress: string;
 
+    readonly webSocketPath: string;
     initialize(address: string, port: number): void;
 }
 
 
 class Configuration implements IConfiguration {
     private _isInitialized: boolean = false;
+
 
     private readonly _applicationTitle: string = '';
     public get applicationTitle(): string {
@@ -32,6 +34,11 @@ class Configuration implements IConfiguration {
     private _port: number = 0;
     public get port(): number {
         return this._port;
+    }
+
+    private _webSocketPath: string = "/stream";
+    public get webSocketPath(): string {
+        return this._webSocketPath;
     }
 
     public get fullAddress(): string {

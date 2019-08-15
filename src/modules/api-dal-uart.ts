@@ -2,7 +2,7 @@
 import * as SerialPort from 'serialport';   // https://github.com/node-serialport/node-serialport
 
 // internal imports
-import {ApiMessageLight} from '../models/api-message';
+import {ApiMessageLight, IApiMessageLight} from '../models/api-message';
 import {IApiCommandMessage} from '../models/api-command-message';
 import {IApiResponseMessage} from '../models/api-response-message';
 import {ApiDalBase, ApiDalTypes, IApiDal} from './api-dal-interface';
@@ -15,7 +15,7 @@ import {ApiProtocolErrorCodes} from '../constants';
 import {
     parseSensorStreamingDataNotify
 } from '../api/v1.0/command-parsers/0x18-sensor/0x02-sensor-streaming-data-notify-command-parser';
-
+import { getAsyncMessageParser } from '../api/utilities/async-command-parser-factory';
 
 let logger: ILogger = createLogger('api-dal-uart');
 
@@ -24,7 +24,7 @@ class ApiDalUart extends ApiDalBase {
     private readonly _apiParser: IApiParser;
     private readonly _serialPort: SerialPort;
     private readonly _apiCommandPendingResponseMap: Map<string, DeferredPromise<IApiResponseMessage>>;
-    public socketSend: (message: string) => void;
+    public commandToClientHandler: (message: IApiMessageLight) => void;
 
     public get type(): ApiDalTypes {
         return ApiDalTypes.Uart;
@@ -43,9 +43,13 @@ class ApiDalUart extends ApiDalBase {
 
             // Check if message is async 
             if(apiMessage.isCommand && !apiMessage.isResponse){ 
-                let parsedData = parseSensorStreamingDataNotify(apiMessage.dataRawBytes);
+                // let parsedData = parseSensorStreamingDataNotify(apiMessage.dataRawBytes);
+                
+                let asyncMessageParser = getAsyncMessageParser(apiMessage.deviceId, apiMessage.commandId);
+                let parsedData = asyncMessageParser(apiMessage.dataRawBytes);
                 let messageLight = new ApiMessageLight(apiMessage.deviceId, apiMessage.deviceName, apiMessage.commandId, apiMessage.commandName, parsedData);
-                this.socketSend(JSON.stringify(messageLight));
+                this.commandToClientHandler(messageLight);
+
                 return;
             }
 

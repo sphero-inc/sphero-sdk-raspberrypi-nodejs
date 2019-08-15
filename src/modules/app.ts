@@ -15,6 +15,7 @@ import {IConfiguration} from '../configuration';
 import {createLogger, ILogger} from './logger';
 import dateTimeUtilities = require('../utilities/date-time-utilities');
 import {IApiDal} from './api-dal-interface';
+import {IApiMessageLight} from '../models/api-message'
 
 
 let logger: ILogger = createLogger('app');
@@ -52,21 +53,18 @@ export class App {
 
         this._isInitialized = true;
 
-        const wss = new WebSocket.Server({ server: this._server, path: '/stream', clientTracking: true});
+        const wss = new WebSocket.Server({ server: this._server, path: this._configuration.webSocketPath, clientTracking: true});
 
         wss.on('connection', (ws: WebSocket) => {
-            ws.send("Hello from server");
-
+            logger.info(`WebSocket client connected`);
             ws.on('message', (message: string) => {
-                ws.send(`Hello client, you sent -> ${message}`);
+                logger.info(`Client sent message -> ${message}`);
             });
-
-
         });
 
-        this._apiDal.socketSend = (message: string) => {
+        this._apiDal.commandToClientHandler = (message: IApiMessageLight) : void => {
             wss.clients.forEach(client => {
-                client.send(`Hello, broadcast message -> ${message}`);
+                client.send(JSON.stringify(message));
             });
         };
 
