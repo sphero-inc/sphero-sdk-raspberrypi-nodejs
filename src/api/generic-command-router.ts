@@ -9,6 +9,7 @@ import {IConfiguration} from '../configuration';
 import {IApiDal} from '../modules/api-dal-interface';
 import {ByteConversionUtilities} from '../utilities/byte-conversion-utilities'
 import {ApiTargetsAndSources} from '../constants';
+import {getCommandMessageParser} from './utilities/command-parser-factory'
 
 export class GenericCommandRouter extends RouterBase {
     private static readonly _routeName: string = 'GenericCommand';
@@ -29,45 +30,47 @@ export class GenericCommandRouter extends RouterBase {
 
         if (!request.body) {
             let errorCode: number = 400;
+
             let errorDetail: string = 'Payload is required!';
             response.status(errorCode).json({'error': errorDetail});
 
             return;
         }
-        console.log(request);
-        return;
 
-        // we need a way to invoke the correct parser here
-        // use the same logic as with sockets parser
-        // let dataRawBytes: Array<number> = parse...(request.body.data);
 
-        // DO ANOTHER FETCH
-        // does not work -- returns already parsed payload
-        // make fetch through actual API or make internally?
-        // let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.body.targetId)].reverse());
-        // let deviceId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.body.deviceId)].reverse());
-        // let commandId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.body.commandId)].reverse());
-        // let sourceId: number = ApiTargetsAndSources.serviceSource;
-        //
-        // let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-        //     targetId, ApiTargetsAndSources.serviceSource,
-        //     SystemInfoDeviceRouter._deviceId, SystemInfoDeviceRouter._deviceName,
-        //     commandId, commandName,
-        //     dataRawBytes
-        // );
-        //
-        // apiCommandMessage.generateMessageRawBytes();
-        // this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-        //     response.status(200).json(apiResponseMessage.dataRawBytes);
-        //
-        // }).catch(reason => {
-        //     let errorCode: number = 400;
-        //     let errorDetail: string = `Error in getMainApplicationVersion while sending API Command: ${reason}`;
-        //
-        //     this.routeError(request.path, request.method, errorCode, errorDetail);
-        //
-        //     response.status(errorCode).json({'error': errorDetail});
-        // });
+
+        let targetId: number = 2; // ByteConversionUtilities.nibblesToByte([1, parseInt(request.body.targetId)].reverse());
+        let deviceId: number = 0x11; // ByteConversionUtilities.nibblesToByte([1, parseInt(request.body.deviceId)].reverse());
+        let commandId: number = 0x00; // ByteConversionUtilities.nibblesToByte([1, parseInt(request.body.commandId)].reverse());
+        let sourceId: number = ApiTargetsAndSources.serviceSource;
+
+
+        let commandMessageParser = getCommandMessageParser(deviceId, commandId);
+        console.log(commandMessageParser);
+        console.log(request.body.data);
+        console.log(JSON.parse(request.body.data));
+        let dataRawBytes: Array<number> = commandMessageParser(JSON.parse(request.body.data));
+
+        console.log(dataRawBytes);
+
+
+        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+            targetId, ApiTargetsAndSources.serviceSource,
+            deviceId, "", commandId, "",
+            dataRawBytes
+        );
+
+        apiCommandMessage.generateMessageRawBytes();
+
+        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+            response.status(200).json(apiResponseMessage.dataRawBytes);
+
+        }).catch(reason => {
+            let errorCode: number = 400;
+            let errorDetail: string = `Error in getMainApplicationVersion while sending API Command: ${reason}`;
+
+            response.status(errorCode).json({'error': errorDetail});
+        });
     }
 
 

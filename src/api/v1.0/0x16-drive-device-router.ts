@@ -104,8 +104,11 @@ export class DriveDeviceRouter extends DeviceRouterBase {
 			
 			return;
 		}
-		
+		console.log(request.body);
+
 		let dataRawBytes: Array<number> = parseRawMotorsRequest(request.body);
+
+		console.log(dataRawBytes);
 		
 		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
 		let sourceId: number = ApiTargetsAndSources.serviceSource;
