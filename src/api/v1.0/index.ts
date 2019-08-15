@@ -6,6 +6,7 @@ import {createLogger, ILogger} from '../../modules/logger';
 import {IConfiguration} from '../../configuration';
 import {DeviceRouterBase} from '../device-router-base';
 import {IApiDal} from '../../modules/api-dal-interface';
+import {AsyncParserFactory} from '../../modules/async-command-parser-factory';
 
 // route imports
 import {ApiAndShellDeviceRouter} from './0x10-api-and-shell-device-router'
@@ -19,6 +20,9 @@ import {PowerDeviceRouter} from './0x13-power-device-router'
 import {ConnectionDeviceRouter} from './0x19-connection-device-router'
 import {SystemInfoDeviceRouter} from './0x11-system-info-device-router'
 
+// command parser imports
+import {parseSensorStreamingDataNotify} from './command-parsers/0x18-sensor/0x02-sensor-streaming-data-notify-command-parser'
+// ...
 
 let logger: ILogger = createLogger('api index v1.0');
 
@@ -41,4 +45,19 @@ export function initializeRoutes(app: Application, apiDal: IApiDal, configuratio
 function initializeRoute(app: Application, deviceRouter: DeviceRouterBase) {
 	deviceRouter.initialize();
 	app.use('/api/v1.0/', deviceRouter.router);
+}
+
+export function registerAsyncParserFactory(app: Application, apiDal: IApiDal, configuration: IConfiguration) {
+	console.log("Registering async parser factory");
+	let asyncParserFactory = new AsyncParserFactory();
+
+	// populate factory
+	asyncParserFactory.addParser(0x18, 0x02, parseSensorStreamingDataNotify)
+	// ...
+
+	apiDal.getAsyncMessageParser = (deviceId: number, commandId: number) : any => {
+		console.log("in get parser func");
+		return asyncParserFactory.getParser(deviceId, commandId);
+	};
+
 }

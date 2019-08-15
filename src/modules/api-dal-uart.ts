@@ -12,10 +12,6 @@ import {IApiMessage} from '../models/api-message';
 import {DeferredPromise} from '../models/deferred-promise';
 import {ByteConversionUtilities} from '../utilities/byte-conversion-utilities';
 import {ApiProtocolErrorCodes} from '../constants';
-import {
-    parseSensorStreamingDataNotify
-} from '../api/v1.0/command-parsers/0x18-sensor/0x02-sensor-streaming-data-notify-command-parser';
-import { getAsyncMessageParser } from '../api/utilities/async-command-parser-factory';
 
 let logger: ILogger = createLogger('api-dal-uart');
 
@@ -25,6 +21,8 @@ class ApiDalUart extends ApiDalBase {
     private readonly _serialPort: SerialPort;
     private readonly _apiCommandPendingResponseMap: Map<string, DeferredPromise<IApiResponseMessage>>;
     public commandToClientHandler: (message: IApiMessageLight) => void;
+    public getAsyncMessageParser: (deviceId: number, commandId: number) => any; // (dataRawBytes: Array<number>) => object;
+
 
     public get type(): ApiDalTypes {
         return ApiDalTypes.Uart;
@@ -40,14 +38,18 @@ class ApiDalUart extends ApiDalBase {
         this._apiParser.apiMessageParsedCallback = (apiMessage: IApiMessage): void => {
 
             console.log(`Data bytes: ${ByteConversionUtilities.convertNumbersToHexCsvString(apiMessage.dataRawBytes)}`)
-
+            console.log(apiMessage.isCommand);
+            console.log(apiMessage.isResponse);
             // Check if message is async 
             if(apiMessage.isCommand && !apiMessage.isResponse){ 
                 // let parsedData = parseSensorStreamingDataNotify(apiMessage.dataRawBytes);
-                
-                let asyncMessageParser = getAsyncMessageParser(apiMessage.deviceId, apiMessage.commandId);
+                console.log(" >>>>>>>> send msg to client");
+
+
+                let asyncMessageParser = this.getAsyncMessageParser(apiMessage.deviceId, apiMessage.commandId);
                 let parsedData = asyncMessageParser(apiMessage.dataRawBytes);
                 let messageLight = new ApiMessageLight(apiMessage.deviceId, apiMessage.deviceName, apiMessage.commandId, apiMessage.commandName, parsedData);
+                console.log(messageLight);
                 this.commandToClientHandler(messageLight);
 
                 return;

@@ -17,3 +17,8 @@ export function initializeRoutes(app: Application, apiDal: IApiDal, configuratio
     logger.debug('Initializing API routes');
     v1dot0Router.initializeRoutes(app, apiDal, configuration);
 }
+
+export function initializeCommandMappings(app: Application, apiDal: IApiDal, configuration: IConfiguration) {
+    console.log("Initializing command mappings...");
+    v1dot0Router.registerAsyncParserFactory(app, apiDal, configuration);
+}

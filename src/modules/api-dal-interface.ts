@@ -22,6 +22,8 @@ export interface IApiDal {
     registerApiMessageNotificationObserver(apiMessageNotificationObserver: IApiMessageNotificationObserver): void;
 
     commandToClientHandler: (message: IApiMessageLight) => void;
+
+    getAsyncMessageParser: (deviceId: number, commandId: number) => any;
 }
 
 export abstract class ApiDalBase implements IApiDal {
@@ -50,5 +52,7 @@ export abstract class ApiDalBase implements IApiDal {
     }
 
     public commandToClientHandler: (message: IApiMessageLight) => void;
+
+    public getAsyncMessageParser: (deviceId: number, commandId: number) => any;
 
 }

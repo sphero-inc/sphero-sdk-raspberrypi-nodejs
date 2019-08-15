@@ -11,6 +11,7 @@ import swaggerDocument = require('../api/v1.0/swagger.json');
 
 // internal imports
 import apiRouter = require('../api/');
+// import {initializeRoutes, initializeCommandMappings} from '../api/';
 import {IConfiguration} from '../configuration';
 import {createLogger, ILogger} from './logger';
 import dateTimeUtilities = require('../utilities/date-time-utilities');
@@ -63,6 +64,7 @@ export class App {
         });
 
         this._apiDal.commandToClientHandler = (message: IApiMessageLight) : void => {
+            console.log("Actually sending.....")
             wss.clients.forEach(client => {
                 client.send(JSON.stringify(message));
             });
@@ -127,6 +129,7 @@ export class App {
         });
 
         apiRouter.initializeRoutes(this.expressApp, this._apiDal, this._configuration);
+        apiRouter.initializeCommandMappings(this.expressApp, this._apiDal, this._configuration);
     }
 
     private finalizeInitialization(): void {
