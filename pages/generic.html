@@ -1,10 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Generic Commands Interface</title>
 </head>
 <body>
 
+<h1>Generic Commands UI</h1>
+
+<textarea id="output"></textarea>
+<textarea id="targetId"></textarea>
+<textarea id="deviceId"></textarea>
+<textarea id="commandId"></textarea>
+<textarea id="payload"></textarea>
+<button type="submit" onclick="sendCommand()">Submit</button>
+
+
+<script>
+
+    function sendCommand(){
+        console.log("sent command");
+        let tid = document.getElementById("targetId").value;
+        let did = document.getElementById("deviceId").value;
+        let cid = document.getElementById("commandId").value;
+        let payload = document.getElementById("payload").value;
+
+        let jsonBody = {
+            'targetId':  tid,
+            'deviceId':  did,
+            'commandId': cid,
+            'data': payload
+        };
+
+        let url = `http://10.211.2.21:2010/api/genericCommand`;
+
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonBody)
+        }).then(response => response.text().then((text) => console.log(text)));
+
+    }
+</script>
 </body>
 </html>
+
