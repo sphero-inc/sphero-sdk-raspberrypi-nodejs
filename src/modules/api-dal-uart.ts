@@ -28,6 +28,9 @@ class ApiDalUart extends ApiDalBase {
     private readonly _serialPort: SerialPort;
     private readonly _apiCommandPendingResponseMap: Map<string, DeferredPromise<IApiResponseMessage>>;
     public socketSend: (message: string) => void;
+    public getCommandMessageParser: (deviceId: number, commandId: number) => any; // (dataRawBytes: Array<number>) => object;
+
+
 
     public get type(): ApiDalTypes {
         return ApiDalTypes.Uart;

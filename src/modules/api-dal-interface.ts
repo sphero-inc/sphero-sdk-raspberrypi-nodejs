@@ -20,6 +20,8 @@ export interface IApiDal {
     registerApiMessageNotificationObserver(apiMessageNotificationObserver: IApiMessageNotificationObserver): void;
 
     socketSend: (message: string) => void;
+
+    getCommandMessageParser: (deviceId: number, commandId: number) => any;
 }
 
 export abstract class ApiDalBase implements IApiDal {
@@ -48,5 +50,7 @@ export abstract class ApiDalBase implements IApiDal {
     }
 
     public socketSend: (message: string) => void;
+
+    public getCommandMessageParser: (deviceId: number, commandId: number) => any;
 
 }

@@ -137,6 +137,7 @@ export class App {
         });
 
         apiRouter.initializeRoutes(this.expressApp, this._apiDal, this._configuration);
+        apiRouter.initializeCommandMappings(this.expressApp, this._apiDal, this._configuration);
     }
 
     private finalizeInitialization(): void {

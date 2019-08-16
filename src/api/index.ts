@@ -22,3 +22,8 @@ export function initializeRoutes(app: Application, apiDal: IApiDal, configuratio
     genericCommandRouter.initialize();
     app.use('/api/', genericCommandRouter.router);
 }
+
+export function initializeCommandMappings(app: Application, apiDal: IApiDal, configuration: IConfiguration) {
+    logger.debug("Initializing command mappings...");
+    v1dot0Router.registerCommandParserFactory(app, apiDal, configuration);
+}

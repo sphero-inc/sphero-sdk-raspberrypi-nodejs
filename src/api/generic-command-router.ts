@@ -9,7 +9,6 @@ import {IConfiguration} from '../configuration';
 import {IApiDal} from '../modules/api-dal-interface';
 import {ByteConversionUtilities} from '../utilities/byte-conversion-utilities'
 import {ApiTargetsAndSources} from '../constants';
-import {getCommandMessageParser} from './utilities/command-parser-factory'
 
 export class GenericCommandRouter extends RouterBase {
     private static readonly _routeName: string = 'GenericCommand';
@@ -37,22 +36,17 @@ export class GenericCommandRouter extends RouterBase {
             return;
         }
 
-
-
-        let targetId: number = 2; // ByteConversionUtilities.nibblesToByte([1, parseInt(request.body.targetId)].reverse());
-        let deviceId: number = 0x11; // ByteConversionUtilities.nibblesToByte([1, parseInt(request.body.deviceId)].reverse());
-        let commandId: number = 0x00; // ByteConversionUtilities.nibblesToByte([1, parseInt(request.body.commandId)].reverse());
         let sourceId: number = ApiTargetsAndSources.serviceSource;
 
+        let targetId: number = request.body.targetId;
+        let deviceId: number = request.body.deviceId;
+        let commandId: number = request.body.commandId;
 
-        let commandMessageParser = getCommandMessageParser(deviceId, commandId);
-        console.log(commandMessageParser);
-        console.log(request.body.data);
-        console.log(JSON.parse(request.body.data));
-        let dataRawBytes: Array<number> = commandMessageParser(JSON.parse(request.body.data));
-
-        console.log(dataRawBytes);
-
+        let commandMessageParser = this._apiDal.getCommandMessageParser(deviceId, commandId);
+        let dataRawBytes = null;
+        if (commandMessageParser){
+            dataRawBytes = commandMessageParser(request.body.data);
+        }
 
         let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
             targetId, ApiTargetsAndSources.serviceSource,
@@ -63,11 +57,11 @@ export class GenericCommandRouter extends RouterBase {
         apiCommandMessage.generateMessageRawBytes();
 
         this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-            response.status(200).json(apiResponseMessage.dataRawBytes);
+            response.status(200).json(apiResponseMessage.messageRawBytes);
 
         }).catch(reason => {
             let errorCode: number = 400;
-            let errorDetail: string = `Error in getMainApplicationVersion while sending API Command: ${reason}`;
+            let errorDetail: string = `Error in sendGenericCommand while sending API Command: ${reason}`;
 
             response.status(errorCode).json({'error': errorDetail});
         });

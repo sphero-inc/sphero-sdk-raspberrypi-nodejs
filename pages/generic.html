@@ -2,18 +2,40 @@
 <html>
 <head>
     <title>Generic Commands Interface</title>
+    <style>
+        #output {
+            width: 500px;
+            height: 200px;
+        }
+        #recent {
+            width: 500px;
+            height: 200px;
+        }
+    </style>
 </head>
 <body>
 
 <h1>Generic Commands UI</h1>
 
-<textarea id="output"></textarea>
-<textarea id="targetId"></textarea>
-<textarea id="deviceId"></textarea>
-<textarea id="commandId"></textarea>
-<textarea id="payload"></textarea>
+<label for="targetId">Target ID (1 or 2)</label>
+<input id="targetId" type="text">
+
+<label for="deviceId">Device ID (as hex or decimal)</label>
+<input id="deviceId" type="text">
+
+<label for="commandId">Command ID (as hex or decimal)</label>
+<input id="commandId" type="text">
+
+<label for="payload">Payload (as JSON)</label>
+<textarea id="payload">{}</textarea>
+
 <button type="submit" onclick="sendCommand()">Submit</button>
 
+<label for="output">Response bytes</label>
+<textarea id="output" readonly></textarea>
+
+<label for="recent">Recent Commands</label>
+<textarea id="recent" readonly></textarea>
 
 <script>
 
@@ -25,11 +47,13 @@
         let payload = document.getElementById("payload").value;
 
         let jsonBody = {
-            'targetId':  tid,
-            'deviceId':  did,
-            'commandId': cid,
-            'data': payload
+            'targetId':  parseInt(tid),
+            'deviceId':  parseInt(did),
+            'commandId': parseInt(cid),
+            'data': JSON.parse(payload)
         };
+
+        appendToConsole("recent", JSON.stringify(jsonBody));
 
         let url = `http://10.211.2.21:2010/api/genericCommand`;
 
@@ -40,9 +64,17 @@
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(jsonBody)
-        }).then(response => response.text().then((text) => console.log(text)));
+        }).then(response => response.text()
+          .then((text) => appendToConsole("output", text)));
 
     }
+
+    function appendToConsole(element, text){
+        let val = document.getElementById(element).value;
+        val = val + text + "\n";
+        document.getElementById(element).value = val;
+    }
+
 </script>
 </body>
 </html>

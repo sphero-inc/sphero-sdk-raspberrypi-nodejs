@@ -6,6 +6,7 @@ import {createLogger, ILogger} from '../../modules/logger';
 import {IConfiguration} from '../../configuration';
 import {DeviceRouterBase} from '../device-router-base';
 import {IApiDal} from '../../modules/api-dal-interface';
+import {CommandParserFactory} from '../../modules/command-parser-factory';
 
 // route imports
 import {ApiAndShellDeviceRouter} from './0x10-api-and-shell-device-router'
@@ -18,6 +19,10 @@ import {SystemModeDeviceRouter} from './0x12-system-mode-device-router'
 import {PowerDeviceRouter} from './0x13-power-device-router'
 import {ConnectionDeviceRouter} from './0x19-connection-device-router'
 import {SystemInfoDeviceRouter} from './0x11-system-info-device-router'
+
+//command parser imports
+import {parseSetAllLedsWith64BitMaskRequest} from './command-parsers/0x1A-io/0x1B-set-all-leds-with-64-bit-mask-command-parser'
+import {parseGetMainApplicationVersionResponse} from './command-parsers/0x11-system-info/0x00-get-main-application-version-command-parser'
 
 
 let logger: ILogger = createLogger('api index v1.0');
@@ -42,3 +47,18 @@ function initializeRoute(app: Application, deviceRouter: DeviceRouterBase) {
 	deviceRouter.initialize();
 	app.use('/api/v1.0/', deviceRouter.router);
 }
+
+export function registerCommandParserFactory(app: Application, apiDal: IApiDal, configuration: IConfiguration) {
+	let commandParserFactory = new CommandParserFactory();
+
+	// populate factory
+	commandParserFactory.addParser(0x1A, 0x1B, parseSetAllLedsWith64BitMaskRequest)
+	// commandParserFactory.addParser(0x11, 0x00, parseGetMainApplicationVersionResponse)
+	// ...
+
+	apiDal.getCommandMessageParser = (deviceId: number, commandId: number) : any => {
+		return commandParserFactory.getParser(deviceId, commandId);
+	};
+
+}
+
