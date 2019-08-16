@@ -64,7 +64,6 @@ export class App {
         });
 
         this._apiDal.commandToClientHandler = (message: IApiMessageLight) : void => {
-            console.log("Actually sending.....")
             wss.clients.forEach(client => {
                 client.send(JSON.stringify(message));
             });

@@ -38,18 +38,11 @@ class ApiDalUart extends ApiDalBase {
         this._apiParser.apiMessageParsedCallback = (apiMessage: IApiMessage): void => {
 
             console.log(`Data bytes: ${ByteConversionUtilities.convertNumbersToHexCsvString(apiMessage.dataRawBytes)}`)
-            console.log(apiMessage.isCommand);
-            console.log(apiMessage.isResponse);
             // Check if message is async 
-            if(apiMessage.isCommand && !apiMessage.isResponse){ 
-                // let parsedData = parseSensorStreamingDataNotify(apiMessage.dataRawBytes);
-                console.log(" >>>>>>>> send msg to client");
-
-
+            if(apiMessage.isCommand && !apiMessage.isResponse){
                 let asyncMessageParser = this.getAsyncMessageParser(apiMessage.deviceId, apiMessage.commandId);
                 let parsedData = asyncMessageParser(apiMessage.dataRawBytes);
                 let messageLight = new ApiMessageLight(apiMessage.deviceId, apiMessage.deviceName, apiMessage.commandId, apiMessage.commandName, parsedData);
-                console.log(messageLight);
                 this.commandToClientHandler(messageLight);
 
                 return;

@@ -48,7 +48,6 @@ function initializeRoute(app: Application, deviceRouter: DeviceRouterBase) {
 }
 
 export function registerAsyncParserFactory(app: Application, apiDal: IApiDal, configuration: IConfiguration) {
-	console.log("Registering async parser factory");
 	let asyncParserFactory = new AsyncParserFactory();
 
 	// populate factory
@@ -56,7 +55,6 @@ export function registerAsyncParserFactory(app: Application, apiDal: IApiDal, co
 	// ...
 
 	apiDal.getAsyncMessageParser = (deviceId: number, commandId: number) : any => {
-		console.log("in get parser func");
 		return asyncParserFactory.getParser(deviceId, commandId);
 	};
 
