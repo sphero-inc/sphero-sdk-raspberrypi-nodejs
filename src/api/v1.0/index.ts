@@ -21,7 +21,7 @@ import {ConnectionDeviceRouter} from './0x19-connection-device-router'
 import {SystemInfoDeviceRouter} from './0x11-system-info-device-router'
 
 // command parser imports
-import {parseSensorStreamingDataNotify} from './command-parsers/0x18-sensor/0x02-sensor-streaming-data-notify-command-parser'
+import {parseSensorStreamingDataNotifyResponse} from './command-parsers/0x18-sensor/0x02-sensor-streaming-data-notify-command-parser'
 // ...
 
 let logger: ILogger = createLogger('api index v1.0');
@@ -51,7 +51,7 @@ export function registerAsyncParserFactory(app: Application, apiDal: IApiDal, co
 	let asyncParserFactory = new AsyncParserFactory();
 
 	// populate factory
-	asyncParserFactory.addParser(0x18, 0x02, parseSensorStreamingDataNotify)
+	asyncParserFactory.addParser(0x18, 0x02, parseSensorStreamingDataNotifyResponse)
 	// ...
 
 	apiDal.getAsyncMessageParser = (deviceId: number, commandId: number) : any => {

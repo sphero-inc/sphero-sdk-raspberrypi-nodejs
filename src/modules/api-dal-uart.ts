@@ -38,7 +38,8 @@ class ApiDalUart extends ApiDalBase {
         this._apiParser.apiMessageParsedCallback = (apiMessage: IApiMessage): void => {
 
             console.log(`Data bytes: ${ByteConversionUtilities.convertNumbersToHexCsvString(apiMessage.dataRawBytes)}`)
-            // Check if message is async 
+
+            // Check if message is async
             if(apiMessage.isCommand && !apiMessage.isResponse){
                 let asyncMessageParser = this.getAsyncMessageParser(apiMessage.deviceId, apiMessage.commandId);
                 let parsedData = asyncMessageParser(apiMessage.dataRawBytes);
@@ -47,9 +48,7 @@ class ApiDalUart extends ApiDalBase {
 
                 return;
             }
-
-
-
+            
             let mapKey: string = this.getApiMessageMapKey(apiMessage);
             if (!this._apiCommandPendingResponseMap.has(mapKey)) {
                 logger.error(`API Message key not found: ${mapKey}`);
@@ -68,15 +67,6 @@ class ApiDalUart extends ApiDalBase {
 
             logger.warning(`Key size: ${this._apiCommandPendingResponseMap.size}`);
             logger.warning('NO promise found!');
-
-            // TODO: do what?
-
-            // TODO: what about async messages to the socket?
-
-            // if apiMessage is async, then websocket.send(data) , return
-            // questions, concerns: in what class does WebSocket object live?
-            //                      WebSocket.Server or WebSocket? How does WebSocket.Server fit in with the main server?
-
         };
 
         this._apiParser.apiProtocolErrorCallback = (errorCode: number): void => {
