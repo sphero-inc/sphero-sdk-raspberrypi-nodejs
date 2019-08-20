@@ -6,7 +6,7 @@ import {createLogger, ILogger} from '../../modules/logger';
 import {IConfiguration} from '../../configuration';
 import {DeviceRouterBase} from '../device-router-base';
 import {IApiDal} from '../../modules/api-dal-interface';
-import {AsyncParserFactory} from '../../modules/async-command-parser-factory';
+import {CommandParserFactory, ICommandParserHandler} from '../../modules/command-parser-factory';
 
 // route imports
 import {ApiAndShellDeviceRouter} from './0x10-api-and-shell-device-router'
@@ -22,14 +22,14 @@ import {SystemInfoDeviceRouter} from './0x11-system-info-device-router'
 
 // command parser imports
 import {parseSensorStreamingDataNotifyResponse} from './command-parsers/0x18-sensor/0x02-sensor-streaming-data-notify-command-parser'
-// ...
+
 
 let logger: ILogger = createLogger('api index v1.0');
 
 
 export function initializeRoutes(app: Application, apiDal: IApiDal, configuration: IConfiguration): void {
 	logger.debug('Initializing API v1.0 routes');
-	
+
 	initializeRoute(app, new ApiAndShellDeviceRouter(apiDal, configuration));
 	initializeRoute(app, new IoDeviceRouter(apiDal, configuration));
 	initializeRoute(app, new FactoryTestDeviceRouter(apiDal, configuration));
@@ -47,15 +47,13 @@ function initializeRoute(app: Application, deviceRouter: DeviceRouterBase) {
 	app.use('/api/v1.0/', deviceRouter.router);
 }
 
-export function registerAsyncParserFactory(app: Application, apiDal: IApiDal, configuration: IConfiguration) {
-	let asyncParserFactory = new AsyncParserFactory();
+export function registerCommandParserFactory(app: Application, apiDal: IApiDal, configuration: IConfiguration) {
+	let commandParserFactory = new CommandParserFactory();
 
 	// populate factory
-	asyncParserFactory.addParser(0x18, 0x02, parseSensorStreamingDataNotifyResponse)
-	// ...
+	commandParserFactory.addParser(0x18, 0x02, parseSensorStreamingDataNotifyResponse);
 
-	apiDal.getAsyncMessageParser = (deviceId: number, commandId: number) : any => {
-		return asyncParserFactory.getParser(deviceId, commandId);
+	apiDal.getCommandParserHandler = (deviceId: number, commandId: number): ICommandParserHandler | null => {
+		return commandParserFactory.getParser(deviceId, commandId);
 	};
-
 }

@@ -13,13 +13,12 @@ export interface IConfiguration {
     readonly fullAddress: string;
 
     readonly webSocketPath: string;
-    initialize(address: string, port: number): void;
-}
 
+    initialize(address: string, port: number, webSocketPath: string): void;
+}
 
 class Configuration implements IConfiguration {
     private _isInitialized: boolean = false;
-
 
     private readonly _applicationTitle: string = '';
     public get applicationTitle(): string {
@@ -36,7 +35,7 @@ class Configuration implements IConfiguration {
         return this._port;
     }
 
-    private _webSocketPath: string = "/stream";
+    private _webSocketPath: string = '';
     public get webSocketPath(): string {
         return this._webSocketPath;
     }
@@ -52,9 +51,10 @@ class Configuration implements IConfiguration {
 
         this._address = '';
         this._port = 0;
+        this._webSocketPath = '';
     }
 
-    public initialize(address: string, port: number): void {
+    public initialize(address: string, port: number, webSocketPath: string): void {
         if (this._isInitialized) {
             logger.warning('Configuration has already been initialized!');
             return;
@@ -63,11 +63,13 @@ class Configuration implements IConfiguration {
         logger.debug('Initializing Configuration');
         logger.debug(`Address: ${address}`);
         logger.debug(`Port: ${port}`);
+        logger.debug(`WebSocket Path: ${webSocketPath}`);
 
         // TODO: validate args
 
         this._address = address;
         this._port = port;
+        this._webSocketPath = webSocketPath;
 
         this._isInitialized = true;
     }

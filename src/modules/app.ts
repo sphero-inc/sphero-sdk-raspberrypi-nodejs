@@ -11,12 +11,11 @@ import swaggerDocument = require('../api/v1.0/swagger.json');
 
 // internal imports
 import apiRouter = require('../api/');
-// import {initializeRoutes, initializeCommandMappings} from '../api/';
 import {IConfiguration} from '../configuration';
 import {createLogger, ILogger} from './logger';
 import dateTimeUtilities = require('../utilities/date-time-utilities');
 import {IApiDal} from './api-dal-interface';
-import {IApiMessageLight} from '../models/api-message'
+import {IApiMessageLite} from '../models/api-message-lite';
 
 
 let logger: ILogger = createLogger('app');
@@ -63,14 +62,11 @@ export class App {
             });
         });
 
-        this._apiDal.commandToClientHandler = (message: IApiMessageLight) : void => {
+        this._apiDal.sendCommandToClientHandler = (message: IApiMessageLite): void => {
             wss.clients.forEach(client => {
                 client.send(JSON.stringify(message));
             });
         };
-
-
-
     }
 
     private initializeMiddleware(): void {

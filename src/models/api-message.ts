@@ -1,42 +1,10 @@
+// internal imports
 import {ApiFlags} from '../constants';
 import {ApiParserFactory} from '../modules/api-parser';
+import {IPrettyPrint} from './pretty-print';
 
 
-export interface IApiMessageLight {
-    readonly deviceId: number;
-    readonly deviceName: string;
-
-    readonly commandId: number;
-    readonly commandName: string;
-
-    readonly data: object | null;
-}
-
-
-export class ApiMessageLight implements IApiMessageLight {
-    readonly deviceId: number;
-    readonly deviceName: string;
-
-    readonly commandId: number;
-    readonly commandName: string;
-
-    readonly data: object | null;
-
-    constructor(deviceId: number, deviceName: string,
-                commandId: number, commandName: string,
-                data: object | null ) {
-
-        this.deviceId = deviceId;
-        this.deviceName = deviceName;
-
-        this.commandId = commandId;
-        this.commandName = commandName;
-
-        this.data = data;
-    }
-}
-
-export interface IApiMessage {
+export interface IApiMessage extends IPrettyPrint {
     readonly flags: number;
     readonly sequenceNumber: number;
 
@@ -65,11 +33,7 @@ export interface IApiMessage {
     generateMessageRawBytes(): void;
 
     associateError(errorCode: number, errorMessage: string): void;
-
-    prettyPrint(): string;
 }
-
-
 
 export abstract class ApiBaseMessage implements IApiMessage {
     protected _flags: number = 0x00;

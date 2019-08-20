@@ -5,8 +5,6 @@ import {ApiDalBase, ApiDalTypes, IApiDal} from './api-dal-interface';
 
 
 class ApiDalMock extends ApiDalBase {
-    public socketSend: (message: string) => void;
-    
     public get type(): ApiDalTypes {
         return ApiDalTypes.Mock;
     }

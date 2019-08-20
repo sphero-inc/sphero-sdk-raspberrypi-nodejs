@@ -1,8 +1,8 @@
 // internal imports
-import {IApiMessageLight} from '../models/api-message'
-
 import {IApiCommandMessage} from '../models/api-command-message'
 import {IApiResponseMessage} from '../models/api-response-message'
+import {IApiMessageLite} from '../models/api-message-lite';
+import {ICommandParserHandler} from './command-parser-factory';
 
 
 export enum ApiDalTypes {
@@ -21,9 +21,9 @@ export interface IApiDal {
 
     registerApiMessageNotificationObserver(apiMessageNotificationObserver: IApiMessageNotificationObserver): void;
 
-    commandToClientHandler: (message: IApiMessageLight) => void;
+    sendCommandToClientHandler: (message: IApiMessageLite) => void;
 
-    getAsyncMessageParser: (deviceId: number, commandId: number) => any;
+    getCommandParserHandler: (deviceId: number, commandId: number) => ICommandParserHandler | null;
 }
 
 export abstract class ApiDalBase implements IApiDal {
@@ -51,8 +51,7 @@ export abstract class ApiDalBase implements IApiDal {
         }
     }
 
-    public commandToClientHandler: (message: IApiMessageLight) => void;
+    public sendCommandToClientHandler: (message: IApiMessageLite) => void;
 
-    public getAsyncMessageParser: (deviceId: number, commandId: number) => any;
-
+    public getCommandParserHandler: (deviceId: number, commandId: number) => ICommandParserHandler | null;
 }
