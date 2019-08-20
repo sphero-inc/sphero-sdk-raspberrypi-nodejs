@@ -4,7 +4,7 @@ export interface ICommandParserHandler {
     (dataRawBytes: Array<number>): object;
 }
 
-export class CommandParserFactory<T> {
+export class CommandParserFactory {
     private _commandParserMapping : Map<string, ICommandParserHandler>;
 
     constructor() {
@@ -32,3 +32,6 @@ export class CommandParserFactory<T> {
         return `${deviceId}, ${commandId}`;
     }
 }
+
+// TODO: create an interface for CommandParserFactory and export the interface instead of the class
+// TODO: create a builder method that instantiates only a single instance of the CommandParserFactory and returns the interface (see api-command-message.ts for a reference)
