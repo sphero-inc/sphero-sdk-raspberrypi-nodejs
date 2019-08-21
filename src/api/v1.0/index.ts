@@ -6,7 +6,7 @@ import {createLogger, ILogger} from '../../modules/logger';
 import {IConfiguration} from '../../configuration';
 import {DeviceRouterBase} from '../device-router-base';
 import {IApiDal} from '../../modules/api-dal-interface';
-import {CommandParserFactory, ICommandParserHandler} from '../../modules/command-parser-factory';
+import {getCommandParserFactory, ICommandParserHandler} from '../../modules/command-parser-factory';
 
 // route imports
 import {ApiAndShellDeviceRouter} from './0x10-api-and-shell-device-router'
@@ -48,7 +48,7 @@ function initializeRoute(app: Application, deviceRouter: DeviceRouterBase) {
 }
 
 export function registerCommandParserFactory(app: Application, apiDal: IApiDal, configuration: IConfiguration) {
-	let commandParserFactory = new CommandParserFactory();
+	let commandParserFactory = getCommandParserFactory();
 
 	// populate factory
 	commandParserFactory.addParser(0x18, 0x02, parseSensorStreamingDataNotifyResponse);

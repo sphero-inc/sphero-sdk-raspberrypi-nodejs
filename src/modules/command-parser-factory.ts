@@ -1,10 +1,18 @@
 
+export interface ICommandParserFactory {
+
+    addParser(deviceId: number, commandId: number, commandParserHandler: ICommandParserHandler): void;
+
+    getParser(deviceId: number, commandId: number): ICommandParserHandler | null
+
+
+}
 
 export interface ICommandParserHandler {
     (dataRawBytes: Array<number>): object;
 }
 
-export class CommandParserFactory {
+class CommandParserFactory implements ICommandParserFactory {
     private _commandParserMapping : Map<string, ICommandParserHandler>;
 
     constructor() {
@@ -35,3 +43,8 @@ export class CommandParserFactory {
 
 // TODO: create an interface for CommandParserFactory and export the interface instead of the class
 // TODO: create a builder method that instantiates only a single instance of the CommandParserFactory and returns the interface (see api-command-message.ts for a reference)
+
+
+export function getCommandParserFactory(): ICommandParserFactory {
+    return new CommandParserFactory();
+}
