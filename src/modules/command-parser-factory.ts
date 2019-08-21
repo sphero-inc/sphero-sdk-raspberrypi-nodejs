@@ -41,10 +41,11 @@ class CommandParserFactory implements ICommandParserFactory {
     }
 }
 
-// TODO: create an interface for CommandParserFactory and export the interface instead of the class
-// TODO: create a builder method that instantiates only a single instance of the CommandParserFactory and returns the interface (see api-command-message.ts for a reference)
-
-
+let _commandParserFactory: ICommandParserFactory | null = null;
 export function getCommandParserFactory(): ICommandParserFactory {
-    return new CommandParserFactory();
+    if (_commandParserFactory == null) {
+        _commandParserFactory = new CommandParserFactory();
+    }
+
+    return _commandParserFactory;
 }
