@@ -1,6 +1,8 @@
 // internal imports
 import {IApiCommandMessage} from '../models/api-command-message'
 import {IApiResponseMessage} from '../models/api-response-message'
+import {IApiMessageLite} from '../models/api-message-lite';
+import {ICommandParserHandler} from './command-parser-factory';
 
 
 export enum ApiDalTypes {
@@ -18,6 +20,10 @@ export interface IApiDal {
     sendApiCommandMessage(apiCommandMessage: IApiCommandMessage): Promise<IApiResponseMessage>;
 
     registerApiMessageNotificationObserver(apiMessageNotificationObserver: IApiMessageNotificationObserver): void;
+
+    sendCommandToClientHandler: (message: IApiMessageLite) => void;
+
+    getCommandParserHandler: (deviceId: number, commandId: number) => ICommandParserHandler | null;
 }
 
 export abstract class ApiDalBase implements IApiDal {
@@ -44,4 +50,8 @@ export abstract class ApiDalBase implements IApiDal {
             this._apiMessageNotificationObservers[i].apiCommandMessageReceivedNotification(apiCommandMessage);
         }
     }
+
+    public sendCommandToClientHandler: (message: IApiMessageLite) => void;
+
+    public getCommandParserHandler: (deviceId: number, commandId: number) => ICommandParserHandler | null;
 }

@@ -33,7 +33,7 @@
     "@types/serialport": "^7.0.1",
     "@types/sinon": "^4.1.2",
     "@types/winston": "^2.3.7",
-    "@types/ws": "^6.0.1",
+    "@types/ws": "^6.0.2",
     "chai": "^4.1.2",
     "mocha": "^4.0.1",
     "rewire": "^3.0.2",

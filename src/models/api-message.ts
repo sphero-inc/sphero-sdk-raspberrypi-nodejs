@@ -1,7 +1,10 @@
+// internal imports
 import {ApiFlags} from '../constants';
 import {ApiParserFactory} from '../modules/api-parser';
+import {IPrettyPrint} from './pretty-print';
 
-export interface IApiMessage {
+
+export interface IApiMessage extends IPrettyPrint {
     readonly flags: number;
     readonly sequenceNumber: number;
 
@@ -30,8 +33,6 @@ export interface IApiMessage {
     generateMessageRawBytes(): void;
 
     associateError(errorCode: number, errorMessage: string): void;
-
-    prettyPrint(): string;
 }
 
 export abstract class ApiBaseMessage implements IApiMessage {

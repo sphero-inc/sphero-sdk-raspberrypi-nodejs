@@ -17,7 +17,7 @@ let apiDal: IApiDal = buildUartApiDal('/dev/ttyS0', 115200);
 
 
 logger.debug('Server is starting');
-configuration.defaultConfiguration.initialize(ip.address(), 2010);
+configuration.defaultConfiguration.initialize(ip.address(), 2010, '/stream');
 logger.debug('Initializing with configuration: ' + JSON.stringify(configuration.defaultConfiguration));
 
 logger.debug('Creating server and app');

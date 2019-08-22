@@ -178,7 +178,6 @@ export class SensorDeviceRouter extends DeviceRouterBase {
 	
 	public setSensorStreamingMask(request: Request, response: Response) {
 		// DID: 0x18 | CID: 0x00 | TID(s): 2
-		
 		let commandId: number = 0x00;
 		let commandName: string = this.getCommandName(commandId);
 		

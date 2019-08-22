@@ -11,6 +11,8 @@ import {IApiMessage} from '../models/api-message';
 import {DeferredPromise} from '../models/deferred-promise';
 import {ByteConversionUtilities} from '../utilities/byte-conversion-utilities';
 import {ApiProtocolErrorCodes} from '../constants';
+import {ApiMessageLite, IApiMessageLite} from '../models/api-message-lite';
+import {ICommandParserHandler} from './command-parser-factory';
 
 
 let logger: ILogger = createLogger('api-dal-uart');
@@ -20,6 +22,10 @@ class ApiDalUart extends ApiDalBase {
     private readonly _apiParser: IApiParser;
     private readonly _serialPort: SerialPort;
     private readonly _apiCommandPendingResponseMap: Map<string, DeferredPromise<IApiResponseMessage>>;
+
+    public sendCommandToClientHandler: (message: IApiMessageLite) => void;
+
+    public getCommandParserHandler: (deviceId: number, commandId: number) => ICommandParserHandler | null;
 
     public get type(): ApiDalTypes {
         return ApiDalTypes.Uart;
@@ -33,7 +39,31 @@ class ApiDalUart extends ApiDalBase {
         this._apiParser = ApiParserFactory.getApiParser();
 
         this._apiParser.apiMessageParsedCallback = (apiMessage: IApiMessage): void => {
-            logger.debug(`API Message parsed: ${apiMessage.prettyPrint()}`);
+
+            logger.debug(`Data bytes: ${ByteConversionUtilities.convertNumbersToHexCsvString(apiMessage.dataRawBytes)}`);
+
+            // Check if message is command from robot (e.g. an async)
+            if(apiMessage.isCommand && !apiMessage.isResponse){
+                let commandParserHandler: ICommandParserHandler | null = this.getCommandParserHandler(apiMessage.deviceId, apiMessage.commandId);
+                if (!commandParserHandler) {
+                    // TODO: log this
+                    return;
+                }
+
+                let parsedData: object = commandParserHandler(apiMessage.dataRawBytes);
+
+                let apiMessageLite: IApiMessageLite = new ApiMessageLite(
+                    apiMessage.deviceId,
+                    apiMessage.deviceName,
+                    apiMessage.commandId,
+                    apiMessage.commandName,
+                    parsedData
+                );
+
+                this.sendCommandToClientHandler(apiMessageLite);
+
+                return;
+            }
 
             let mapKey: string = this.getApiMessageMapKey(apiMessage);
             if (!this._apiCommandPendingResponseMap.has(mapKey)) {
@@ -53,10 +83,6 @@ class ApiDalUart extends ApiDalBase {
 
             logger.warning(`Key size: ${this._apiCommandPendingResponseMap.size}`);
             logger.warning('NO promise found!');
-
-            // TODO: do what?
-
-            // TODO: what about async messages to the socket?
         };
 
         this._apiParser.apiProtocolErrorCallback = (errorCode: number): void => {
@@ -75,8 +101,6 @@ class ApiDalUart extends ApiDalBase {
             logger.debug('Serial Port closed');
         });
         this._serialPort.on('data', (data: Array<number>): void => {
-            // var dataUTF8 = data.toString('utf-8');
-
             logger.debug(`Received bytes: ${ByteConversionUtilities.convertNumbersToHexCsvString(data)}`);
 
             this._apiParser.queueBytes(data);
@@ -117,7 +141,7 @@ class ApiDalUart extends ApiDalBase {
         logger.warning(`Key size: ${this._apiCommandPendingResponseMap.size}`);
 
         // TODO: do we need buffer the bytes in case we need to drain?
-
+        logger.debug(`Bytes being sent: ${ByteConversionUtilities.convertNumbersToHexCsvString(apiCommandMessage.messageRawBytes)}`);
         let isWaitingForDrain: boolean = this._serialPort.write(apiCommandMessage.messageRawBytes, 'utf8', ((error, bytesWritten) => {
             // TODO: do something with this - log?
         }));

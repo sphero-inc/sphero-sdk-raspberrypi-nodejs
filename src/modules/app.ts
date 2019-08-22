@@ -4,6 +4,7 @@ import * as compression from 'compression';
 import * as cors from 'cors';
 import * as bodyParser from 'body-parser';
 import {Server as HttpServer} from 'http';
+import * as WebSocket from 'ws';
 
 const swaggerUi = require('swagger-ui-express');
 import swaggerDocument = require('../api/v1.0/swagger.json');
@@ -14,6 +15,7 @@ import {IConfiguration} from '../configuration';
 import {createLogger, ILogger} from './logger';
 import dateTimeUtilities = require('../utilities/date-time-utilities');
 import {IApiDal} from './api-dal-interface';
+import {IApiMessageLite} from '../models/api-message-lite';
 
 
 let logger: ILogger = createLogger('app');
@@ -50,6 +52,21 @@ export class App {
         this.finalizeInitialization();
 
         this._isInitialized = true;
+
+        const wss = new WebSocket.Server({ server: this._server, path: this._configuration.webSocketPath, clientTracking: true});
+
+        wss.on('connection', (ws: WebSocket) => {
+            logger.info(`WebSocket client connected`);
+            ws.on('message', (message: string) => {
+                logger.info(`Client sent message -> ${message}`);
+            });
+        });
+
+        this._apiDal.sendCommandToClientHandler = (message: IApiMessageLite): void => {
+            wss.clients.forEach(client => {
+                client.send(JSON.stringify(message));
+            });
+        };
     }
 
     private initializeMiddleware(): void {
@@ -102,7 +119,12 @@ export class App {
             response.sendFile('index.html');
         });
 
+        this.expressApp.get('/dashboard', function (req, res){
+            res.sendFile( '/home/pi/raspberry-pi-node-js/dashboard/dashboard.html');
+        });
+
         apiRouter.initializeRoutes(this.expressApp, this._apiDal, this._configuration);
+        apiRouter.initializeCommandMappings(this.expressApp, this._apiDal, this._configuration);
     }
 
     private finalizeInitialization(): void {
