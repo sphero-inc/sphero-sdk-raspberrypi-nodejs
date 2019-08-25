@@ -142,6 +142,7 @@ class ApiDalUart extends ApiDalBase {
 
         // TODO: do we need buffer the bytes in case we need to drain?
         logger.debug(`Bytes being sent: ${ByteConversionUtilities.convertNumbersToHexCsvString(apiCommandMessage.messageRawBytes)}`);
+
         let isWaitingForDrain: boolean = this._serialPort.write(apiCommandMessage.messageRawBytes, 'utf8', ((error, bytesWritten) => {
             // TODO: do something with this - log?
         }));

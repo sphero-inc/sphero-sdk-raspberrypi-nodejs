@@ -54,4 +54,5 @@ export abstract class ApiDalBase implements IApiDal {
     public sendCommandToClientHandler: (message: IApiMessageLite) => void;
 
     public getCommandParserHandler: (deviceId: number, commandId: number) => ICommandParserHandler | null;
+
 }

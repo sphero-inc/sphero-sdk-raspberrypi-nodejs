@@ -119,8 +119,12 @@ export class App {
             response.sendFile('index.html');
         });
 
-        this.expressApp.get('/dashboard', function (req, res){
-            res.sendFile( '/home/pi/raspberry-pi-node-js/dashboard/dashboard.html');
+        this.expressApp.get('/shell', function (req, res){
+            res.sendFile( '/home/pi/raspberry-pi-node-js/pages/shell.html');
+        });
+
+        this.expressApp.get('/generic', function (req, res){
+            res.sendFile( '/home/pi/raspberry-pi-node-js/pages/generic.html');
         });
 
         apiRouter.initializeRoutes(this.expressApp, this._apiDal, this._configuration);

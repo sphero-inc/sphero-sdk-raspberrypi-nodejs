@@ -40,6 +40,7 @@ function initializeRoute(app: Application, deviceRouter: DeviceRouterBase) {
 	deviceRouter.initialize();
 	app.use('/api/v1.0/', deviceRouter.router);
 }
+
 export function registerCommandParserFactory(app: Application, apiDal: IApiDal, configuration: IConfiguration) {
 	let commandParserFactory = getCommandParserFactory();
 
