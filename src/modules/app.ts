@@ -16,7 +16,7 @@ import {createLogger, ILogger} from './logger';
 import dateTimeUtilities = require('../utilities/date-time-utilities');
 import {IApiDal} from './api-dal-interface';
 import {IApiMessageLite} from '../models/api-message-lite';
-
+import * as path from 'path';
 
 let logger: ILogger = createLogger('app');
 
@@ -74,7 +74,8 @@ export class App {
         this.expressApp.use(bodyParser.urlencoded({extended: true}));
         this.expressApp.use(compression());
         this.expressApp.use(cors());
-        // this.expressApp.use(express.static(path.join(path.dirname(__dirname), 'public')));
+        this.expressApp.use(express.static(path.join(process.cwd(), 'public')));
+
 
         // more options --> https://github.com/scottie1984/swagger-ui-express
         this.expressApp.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
@@ -117,14 +118,6 @@ export class App {
     private initializeRoutes(): void {
         this.expressApp.get('/', function (request, response) {
             response.sendFile('index.html');
-        });
-
-        this.expressApp.get('/shell', function (req, res){
-            res.sendFile( '/home/pi/raspberry-pi-node-js/pages/shell.html');
-        });
-
-        this.expressApp.get('/generic', function (req, res){
-            res.sendFile( '/home/pi/raspberry-pi-node-js/pages/generic.html');
         });
 
         apiRouter.initializeRoutes(this.expressApp, this._apiDal, this._configuration);

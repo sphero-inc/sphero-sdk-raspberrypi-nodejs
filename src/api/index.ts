@@ -27,8 +27,3 @@ export function initializeCommandMappings(app: Application, apiDal: IApiDal, con
     logger.debug("Initializing command mappings...");
     v1dot0Router.registerCommandParserFactory(app, apiDal, configuration);
 }
-
-export function initializeCommandMappings(app: Application, apiDal: IApiDal, configuration: IConfiguration) {
-    logger.debug("Initializing command mappings");
-    v1dot0Router.registerCommandParserFactory(app, apiDal, configuration);
-}
