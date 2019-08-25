@@ -20,12 +20,13 @@ export class GenericCommandRouter extends RouterBase {
     }
 
     protected initializeRoutes(): void {
-        console.log("In initialize routers/GenericCommandRouter");
-        this.router.route('/genericCommand')
+        console.log("In initialize routers/GenericCommandRouter:targetId");
+        this.router.route('/genericCommand/:targetId')
             .put((request: Request, response: Response) => this.getBytesFromGeneric(request, response));
     }
 
     public getBytesFromGeneric(request: Request, response: Response) {
+        console.log("in generic command !");
 
         if (!request.body) {
             let errorCode: number = 400;
@@ -36,17 +37,22 @@ export class GenericCommandRouter extends RouterBase {
             return;
         }
 
+        if (!request.params.targetId) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'targetId is required!';
+
+            response.status(errorCode).json({'error': errorDetail});
+
+            return;
+        }
+
+
         let sourceId: number = ApiTargetsAndSources.serviceSource;
 
-        let targetId: number = request.body.targetId;
+        let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
         let deviceId: number = request.body.deviceId;
         let commandId: number = request.body.commandId;
-
-        let commandMessageParser = this._apiDal.getCommandMessageParser(deviceId, commandId);
-        let dataRawBytes = null;
-        if (commandMessageParser){
-            dataRawBytes = commandMessageParser(request.body.data);
-        }
+        let dataRawBytes: number[] | null = request.body.data;
 
         let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
             targetId, ApiTargetsAndSources.serviceSource,
@@ -55,6 +61,7 @@ export class GenericCommandRouter extends RouterBase {
         );
 
         apiCommandMessage.generateMessageRawBytes();
+        console.log(apiCommandMessage);
 
         this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
             response.status(200).json(apiResponseMessage.messageRawBytes);

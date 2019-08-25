@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Generic Commands Interface</title>
+    <title>Generic Commands</title>
     <style>
+        input, label {
+            display:block;
+        }
+
         #output {
             width: 500px;
             height: 200px;
         }
-        #recent {
+        #recent-commands {
             width: 500px;
             height: 200px;
         }
@@ -15,48 +19,67 @@
 </head>
 <body>
 
-<h1>Generic Commands UI</h1>
+<h1>Send Generic Command</h1>
 
-<label for="targetId">Target ID (1 or 2)</label>
-<input id="targetId" type="text">
+<div>
+    <label for="targetId">Target ID (1 or 2)</label>
+    <input id="targetId" type="text">
+</div>
 
-<label for="deviceId">Device ID (as hex or decimal)</label>
-<input id="deviceId" type="text">
+<div>
+    <label for="deviceId">Device ID (as hex or decimal)</label>
+    <input id="deviceId" type="text">
 
-<label for="commandId">Command ID (as hex or decimal)</label>
-<input id="commandId" type="text">
+</div>
 
-<label for="payload">Payload (as JSON)</label>
-<textarea id="payload">{}</textarea>
+<div>
+    <label for="commandId">Command ID (as hex or decimal)</label>
+    <input id="commandId" type="text">
+
+</div>
+
+<div>
+    <label for="has-payload">Command has input data (check if yes)</label>
+    <input id="has-payload" type="checkbox" checked onclick="updateInputTextState()">
+</div>
+
+<div>
+    <label for="input-data">Input data (in bytes)</label>
+    <textarea id="input-data"></textarea>
+</div>
+
+
 
 <button type="submit" onclick="sendCommand()">Submit</button>
 
-<label for="output">Response bytes</label>
-<textarea id="output" readonly></textarea>
+<div>
+    <label for="output">Response bytes</label>
+    <textarea id="output" readonly></textarea>
+</div>
 
-<label for="recent">Recent Commands</label>
-<textarea id="recent" readonly></textarea>
+<div>
+    <label for="recent-commands">Recent Commands</label>
+    <textarea id="recent-commands" readonly></textarea>
+</div>
 
 <script>
 
     function sendCommand(){
         console.log("sent command");
-        let tid = document.getElementById("targetId").value;
-        let did = document.getElementById("deviceId").value;
-        let cid = document.getElementById("commandId").value;
-        let payload = document.getElementById("payload").value;
+        let targetId = document.getElementById("targetId").value;
+        let deviceId = document.getElementById("deviceId").value;
+        let commandId = document.getElementById("commandId").value;
+        let inputData = document.getElementById("has-payload").checked ? JSON.parse("[" + document.getElementById("input-data").value + "]") : null;
 
         let jsonBody = {
-            'targetId':  parseInt(tid),
-            'deviceId':  parseInt(did),
-            'commandId': parseInt(cid),
-            'data': JSON.parse(payload)
+            'deviceId':  parseInt(deviceId),
+            'commandId': parseInt(commandId),
+            'data': inputData
         };
 
-        appendToConsole("recent", JSON.stringify(jsonBody));
+        appendToTextfield("recent-commands", JSON.stringify({"targetId": targetId, "deviceId": deviceId, "commandId": commandId, "inputData": inputData}));
 
-        let url = `http://10.211.2.21:2010/api/genericCommand`;
-
+        let url = `http://10.211.2.21:2010/api/genericCommand/${targetId}`;
         fetch(url, {
             method: 'PUT',
             headers: {
@@ -65,14 +88,25 @@
             },
             body: JSON.stringify(jsonBody)
         }).then(response => response.text()
-          .then((text) => appendToConsole("output", text)));
-
+          .then((text) => appendToTextfield("output", text)));
     }
 
-    function appendToConsole(element, text){
+    function appendToTextfield(element, text){
         let val = document.getElementById(element).value;
         val = val + text + "\n";
         document.getElementById(element).value = val;
+    }
+
+    function updateInputTextState(){
+        if(document.getElementById("has-payload").checked) {
+            document.getElementById("input-data").disabled = false;
+            document.getElementById("input-data").style.backgroundColor = "white";
+
+        } else {
+            document.getElementById("input-data").disabled = true;
+            document.getElementById("input-data").style.backgroundColor = "lightgray";
+            document.getElementById("input-data").value = "";
+        }
     }
 
 </script>

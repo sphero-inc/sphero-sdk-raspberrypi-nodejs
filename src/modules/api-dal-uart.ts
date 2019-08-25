@@ -47,9 +47,7 @@ class ApiDalUart extends ApiDalBase {
             // Check if message is async 
             if(apiMessage.isCommand && !apiMessage.isResponse){ 
                 let parsedData = parseSendStringToConsole(apiMessage.dataRawBytes);
-                console.log("data to send to socket: ", parsedData);
                 let messageLight = new ApiMessageLight(apiMessage.deviceId, apiMessage.deviceName, apiMessage.commandId, apiMessage.commandName, parsedData);
-                console.log(JSON.stringify(messageLight));
                 this.socketSend(JSON.stringify(messageLight));
                 return;
             }
@@ -102,7 +100,6 @@ class ApiDalUart extends ApiDalBase {
         });
         this._serialPort.on('data', (data: Array<number>): void => {
             // var dataUTF8 = data.toString('utf-8');
-            console.log(`Received bytes: ${ByteConversionUtilities.convertNumbersToHexCsvString(data)}`);
             logger.debug(`Received bytes: ${ByteConversionUtilities.convertNumbersToHexCsvString(data)}`);
 
             this._apiParser.queueBytes(data);
@@ -143,7 +140,6 @@ class ApiDalUart extends ApiDalBase {
         logger.warning(`Key size: ${this._apiCommandPendingResponseMap.size}`);
 
         // TODO: do we need buffer the bytes in case we need to drain?
-        console.log(`Bytes being sent: ${ByteConversionUtilities.convertNumbersToHexCsvString(apiCommandMessage.messageRawBytes)}`);
         let isWaitingForDrain: boolean = this._serialPort.write(apiCommandMessage.messageRawBytes, 'utf8', ((error, bytesWritten) => {
             // TODO: do something with this - log?
         }));

@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Shell Commands Interface</title>
+    <title>Send Command to Shell</title>
     <style>
+    input, label {
+        display:block;
+    }
     #console {
         width: 500px;
         height: 200px;
@@ -13,55 +16,62 @@
 </head>
 <body>
 
-<h1>Shell Commands UI</h1>
+    <h1>Send Command to Shell</h1>
 
-<textarea id="console"></textarea>
-<textarea id="input"></textarea>
-<button type="submit" onclick="sendToShell()">Submit</button>
+    <div>
+        <label for=console>Output console</label>
+        <textarea id="console">>>></textarea>
+    </div>
+    <div>
+        <label for="input">Input (full command string, e.g. "ver")</label>
+        <textarea id="input"></textarea>
+
+    </div>
+    <button type="submit" onclick="sendToShell()">Submit</button>
 
 
-<script>
-    let url = "ws://10.211.2.21:2010/stream";
-    const socket = new WebSocket(url);
-    socket.onopen = () => {
-        console.log("connected");
-        socket.send("hello server");
-    };
-    socket.onmessage = (e) => {
-        try{
-            let messageData = JSON.parse(e.data);
-            appendToConsole(messageData.data);
-        } catch(error) {
-            console.log(e.data);
-        }
-    };
-
-    function appendToConsole(str){
-        let val = document.getElementById("console").value;
-        val = val + str;
-        document.getElementById("console").value = val;
-    }
-
-    function sendToShell(){
-        let input = document.getElementById("input").value;
-        console.log(input);
-        let jsonBody = {
-            'shellCommandString':  input
+    <script>
+        let url = "ws://10.211.2.21:2010/stream";
+        const socket = new WebSocket(url);
+        socket.onopen = () => {
+            console.log("Socket connected");
+        };
+        socket.onmessage = (e) => {
+            try{
+                let messageData = JSON.parse(e.data);
+                appendToConsole(messageData.data);
+            } catch(error) {
+                console.log(e.data);
+            }
         };
 
-        let url = "http://10.211.2.21:2010/api/v1.0/apiAndShell/sendCommandToShell/1";
+        function appendToConsole(str){
+            let val = document.getElementById("console").value;
+            val = val + str;
+            document.getElementById("console").value = val;
+        }
 
-        fetch(url, {
-            method: 'PUT',
-            headers: {
-                'accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(jsonBody)
-        }).then(response => response.text().then((text) => console.log(text)));
+        function sendToShell(){
+            let input = document.getElementById("input").value;
+            console.log(input);
 
-    }
-</script>
+            let jsonBody = {
+                'shellCommandString':  input
+            };
+
+            let url = "http://10.211.2.21:2010/api/v1.0/apiAndShell/sendCommandToShell/1";
+
+            fetch(url, {
+                method: 'PUT',
+                headers: {
+                    'accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(jsonBody)
+            }).then(response => response.text().then((text) => console.log(text)));
+
+        }
+    </script>
 </body>
 </html>
 
