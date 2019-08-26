@@ -79,7 +79,7 @@
 
         appendToTextfield("recent-commands", JSON.stringify({"targetId": targetId, "deviceId": deviceId, "commandId": commandId, "inputData": inputData}));
 
-        let url = `http://10.211.2.21:2010/api/genericCommand/${targetId}`;
+        let url = `http://` + location.hostname + `:` + location.port + `/api/genericCommand/${targetId}`;
         fetch(url, {
             method: 'PUT',
             headers: {

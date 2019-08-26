@@ -46,12 +46,11 @@ class ApiDalUart extends ApiDalBase {
             if(apiMessage.isCommand && !apiMessage.isResponse){
                 let commandParserHandler: ICommandParserHandler | null = this.getCommandParserHandler(apiMessage.deviceId, apiMessage.commandId);
                 if (!commandParserHandler) {
-                    // TODO: log this
+                    logger.warning("Unable to retrieve command parser for given command.");
                     return;
                 }
 
                 let parsedData: object = commandParserHandler(apiMessage.dataRawBytes);
-
                 let apiMessageLite: IApiMessageLite = new ApiMessageLite(
                     apiMessage.deviceId,
                     apiMessage.deviceName,

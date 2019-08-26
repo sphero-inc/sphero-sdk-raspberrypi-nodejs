@@ -19,7 +19,7 @@ import {SystemInfoDeviceRouter} from './0x11-system-info-device-router'
 
 // command parsers
 import {parseSensorStreamingDataNotifyResponse} from './command-parsers/0x18-sensor/0x02-sensor-streaming-data-notify-command-parser'
-
+import {parseSendStringToConsoleResponse} from './command-parsers/0x10-api-and-shell/0x03-send-string-to-console-command-parser'
 
 let logger: ILogger = createLogger('api index v1.0');
 
@@ -46,6 +46,7 @@ export function registerCommandParserFactory(app: Application, apiDal: IApiDal, 
 
 	// populate factory
 	commandParserFactory.addParser(0x18, 0x02, parseSensorStreamingDataNotifyResponse);
+	commandParserFactory.addParser(0x10, 0x03, parseSendStringToConsoleResponse);
 
 	apiDal.getCommandParserHandler = (deviceId: number, commandId: number): ICommandParserHandler | null => {
 		return commandParserFactory.getParser(deviceId, commandId);

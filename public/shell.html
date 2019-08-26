@@ -31,7 +31,7 @@
 
 
     <script>
-        let url = "ws://10.211.2.21:2010/stream";
+        let url = `ws://` + location.hostname + `:` + location.port + `/stream`;
         const socket = new WebSocket(url);
         socket.onopen = () => {
             console.log("Socket connected");
@@ -39,7 +39,7 @@
         socket.onmessage = (e) => {
             try{
                 let messageData = JSON.parse(e.data);
-                appendToConsole(messageData.data);
+                appendToConsole(messageData._data.consoleString);
             } catch(error) {
                 console.log(e.data);
             }
@@ -53,13 +53,12 @@
 
         function sendToShell(){
             let input = document.getElementById("input").value;
-            console.log(input);
 
             let jsonBody = {
                 'shellCommandString':  input
             };
 
-            let url = "http://10.211.2.21:2010/api/v1.0/apiAndShell/sendCommandToShell/1";
+            let url = `http://` + location.hostname + `:` + location.port + `/api/v1.0/apiAndShell/sendCommandToShell/1`;
 
             fetch(url, {
                 method: 'PUT',
@@ -68,7 +67,7 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(jsonBody)
-            }).then(response => response.text().then((text) => console.log(text)));
+            }).then(response => response.text().then((text) => console.log("Request response text: " + text)));
 
         }
     </script>
