@@ -76,7 +76,6 @@ export class App {
         this.expressApp.use(cors());
         this.expressApp.use(express.static(path.join(process.cwd(), 'public')));
 
-
         // more options --> https://github.com/scottie1984/swagger-ui-express
         this.expressApp.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 

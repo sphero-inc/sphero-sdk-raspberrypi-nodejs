@@ -52,4 +52,3 @@ export function registerCommandParserFactory(app: Application, apiDal: IApiDal, 
 		return commandParserFactory.getParser(deviceId, commandId);
 	};
 }
-
