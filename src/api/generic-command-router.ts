@@ -15,19 +15,14 @@ export class GenericCommandRouter extends RouterBase {
 
     constructor(apiDal: IApiDal, configuration: IConfiguration) {
         super(GenericCommandRouter._routeName, apiDal, configuration);
-        console.log('Constructing object/GenericCommandRouter');
-
     }
 
     protected initializeRoutes(): void {
-        console.log('In initialize routers/GenericCommandRouter:targetId');
         this.router.route('/genericCommand/:targetId')
             .put((request: Request, response: Response) => this.getBytesFromGeneric(request, response));
     }
 
     public getBytesFromGeneric(request: Request, response: Response) {
-        console.log('in generic command !');
-
         if (!request.body) {
             let errorCode: number = 400;
 
@@ -61,7 +56,6 @@ export class GenericCommandRouter extends RouterBase {
         );
 
         apiCommandMessage.generateMessageRawBytes();
-        console.log(apiCommandMessage);
 
         this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
             response.status(200).json(apiResponseMessage.messageRawBytes);
