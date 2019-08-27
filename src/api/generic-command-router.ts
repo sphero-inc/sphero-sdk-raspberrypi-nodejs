@@ -2,7 +2,7 @@
 import {Request, Response} from 'express';
 
 // internal imports
-import {RouterBase} from "./router-base";
+import {RouterBase} from './router-base';
 import {IApiCommandMessage, buildApiCommandMessageWithDefaultFlags} from '../models/api-command-message';
 import {IApiResponseMessage} from '../models/api-response-message';
 import {IConfiguration} from '../configuration';
@@ -15,18 +15,18 @@ export class GenericCommandRouter extends RouterBase {
 
     constructor(apiDal: IApiDal, configuration: IConfiguration) {
         super(GenericCommandRouter._routeName, apiDal, configuration);
-        console.log("Constructing object/GenericCommandRouter");
+        console.log('Constructing object/GenericCommandRouter');
 
     }
 
     protected initializeRoutes(): void {
-        console.log("In initialize routers/GenericCommandRouter:targetId");
+        console.log('In initialize routers/GenericCommandRouter:targetId');
         this.router.route('/genericCommand/:targetId')
             .put((request: Request, response: Response) => this.getBytesFromGeneric(request, response));
     }
 
     public getBytesFromGeneric(request: Request, response: Response) {
-        console.log("in generic command !");
+        console.log('in generic command !');
 
         if (!request.body) {
             let errorCode: number = 400;
@@ -56,7 +56,7 @@ export class GenericCommandRouter extends RouterBase {
 
         let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
             targetId, ApiTargetsAndSources.serviceSource,
-            deviceId, "", commandId, "",
+            deviceId, 'generic', commandId, 'generic',
             dataRawBytes
         );
 
