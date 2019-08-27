@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Send Command to Shell</title>
+    <style>
+    input, label {
+        display:block;
+    }
+    #console {
+        width: 500px;
+        height: 200px;
+        background-color: black;
+        color: #4cae4c;
+    }
+    </style>
+</head>
+<body>
+
+    <h1>Send Command to Shell</h1>
+
+    <div>
+        <label for=console>Output console</label>
+        <textarea id='console'>>>></textarea>
+    </div>
+    <div>
+        <label for='input'>Input (full command string, e.g. 'ver')</label>
+        <textarea id='input'></textarea>
+
+    </div>
+    <button type='submit' onclick='sendToShell()'>Submit</button>
+
+
+    <script>
+        let url = `ws://` + location.hostname + `:` + location.port + `/stream`;
+        const socket = new WebSocket(url);
+        socket.onopen = () => {
+            console.log('Socket connected');
+        };
+        socket.onmessage = (e) => {
+            try{
+                let messageData = JSON.parse(e.data);
+                appendToConsole(messageData._data.consoleString);
+            } catch(error) {
+                console.log(e.data);
+            }
+        };
+
+        function appendToConsole(str){
+            let val = document.getElementById('console').value;
+            val = val + str;
+            document.getElementById('console').value = val;
+        }
+
+        function sendToShell(){
+            let input = document.getElementById('input').value;
+
+            let jsonBody = {
+                'shellCommandString':  input
+            };
+
+            let url = `http://` + location.hostname + `:` + location.port + `/api/v1.0/apiAndShell/sendCommandToShell/1`;
+
+            fetch(url, {
+                method: 'PUT',
+                headers: {
+                    'accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(jsonBody)
+            }).then(response => response.text().then((text) => console.log('Request response text: ' + text)));
+
+        }
+    </script>
+</body>
+</html>
+
