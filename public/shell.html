@@ -20,21 +20,21 @@
 
     <div>
         <label for=console>Output console</label>
-        <textarea id="console">>>></textarea>
+        <textarea id='console'>>>></textarea>
     </div>
     <div>
-        <label for="input">Input (full command string, e.g. "ver")</label>
-        <textarea id="input"></textarea>
+        <label for='input'>Input (full command string, e.g. 'ver')</label>
+        <textarea id='input'></textarea>
 
     </div>
-    <button type="submit" onclick="sendToShell()">Submit</button>
+    <button type='submit' onclick='sendToShell()'>Submit</button>
 
 
     <script>
         let url = `ws://` + location.hostname + `:` + location.port + `/stream`;
         const socket = new WebSocket(url);
         socket.onopen = () => {
-            console.log("Socket connected");
+            console.log('Socket connected');
         };
         socket.onmessage = (e) => {
             try{
@@ -46,13 +46,13 @@
         };
 
         function appendToConsole(str){
-            let val = document.getElementById("console").value;
+            let val = document.getElementById('console').value;
             val = val + str;
-            document.getElementById("console").value = val;
+            document.getElementById('console').value = val;
         }
 
         function sendToShell(){
-            let input = document.getElementById("input").value;
+            let input = document.getElementById('input').value;
 
             let jsonBody = {
                 'shellCommandString':  input
@@ -67,7 +67,7 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(jsonBody)
-            }).then(response => response.text().then((text) => console.log("Request response text: " + text)));
+            }).then(response => response.text().then((text) => console.log('Request response text: ' + text)));
 
         }
     </script>

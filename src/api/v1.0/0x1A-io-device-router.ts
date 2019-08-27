@@ -160,8 +160,7 @@ export class IoDeviceRouter extends DeviceRouterBase {
 			
 			return;
 		}
-
-
+		
 		let dataRawBytes: Array<number> = parseSetAllLedsWith32BitMaskRequest(request.body);
 		
 		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
@@ -230,7 +229,7 @@ export class IoDeviceRouter extends DeviceRouterBase {
 			
 			return;
 		}
-		console.log(request.body);
+		
 		let dataRawBytes: Array<number> = parseSetAllLedsWith64BitMaskRequest(request.body);
 		
 		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());

@@ -22,54 +22,54 @@
 <h1>Send Generic Command</h1>
 
 <div>
-    <label for="targetId">Target ID (1 or 2)</label>
-    <input id="targetId" type="text">
+    <label for='targetId'>Target ID (1 or 2)</label>
+    <input id='targetId' type='text'>
 </div>
 
 <div>
-    <label for="deviceId">Device ID (as hex or decimal)</label>
-    <input id="deviceId" type="text">
-
-</div>
-
-<div>
-    <label for="commandId">Command ID (as hex or decimal)</label>
-    <input id="commandId" type="text">
+    <label for='deviceId'>Device ID (as hex or decimal)</label>
+    <input id='deviceId' type='text'>
 
 </div>
 
 <div>
-    <label for="has-payload">Command has input data (check if yes)</label>
-    <input id="has-payload" type="checkbox" checked onclick="updateInputTextState()">
+    <label for='commandId'>Command ID (as hex or decimal)</label>
+    <input id='commandId' type='text'>
+
 </div>
 
 <div>
-    <label for="input-data">Input data (in bytes)</label>
-    <textarea id="input-data"></textarea>
+    <label for='has-payload'>Command has input data (check if yes)</label>
+    <input id='has-payload' type='checkbox' checked onclick='updateInputTextState()'>
+</div>
+
+<div>
+    <label for='input-data'>Input data (in bytes)</label>
+    <textarea id='input-data'></textarea>
 </div>
 
 
 
-<button type="submit" onclick="sendCommand()">Submit</button>
+<button type='submit' onclick='sendCommand()'>Submit</button>
 
 <div>
-    <label for="output">Response bytes</label>
-    <textarea id="output" readonly></textarea>
+    <label for='output'>Response bytes</label>
+    <textarea id='output' readonly></textarea>
 </div>
 
 <div>
-    <label for="recent-commands">Recent Commands</label>
-    <textarea id="recent-commands" readonly></textarea>
+    <label for='recent-commands'>Recent Commands</label>
+    <textarea id='recent-commands' readonly></textarea>
 </div>
 
 <script>
 
     function sendCommand(){
-        console.log("sent command");
-        let targetId = document.getElementById("targetId").value;
-        let deviceId = document.getElementById("deviceId").value;
-        let commandId = document.getElementById("commandId").value;
-        let inputData = document.getElementById("has-payload").checked ? JSON.parse("[" + document.getElementById("input-data").value + "]") : null;
+        console.log('sent command');
+        let targetId = document.getElementById('targetId').value;
+        let deviceId = document.getElementById('deviceId').value;
+        let commandId = document.getElementById('commandId').value;
+        let inputData = document.getElementById('has-payload').checked ? JSON.parse('[' + document.getElementById('input-data').value + ']') : null;
 
         let jsonBody = {
             'deviceId':  parseInt(deviceId),
@@ -77,7 +77,7 @@
             'data': inputData
         };
 
-        appendToTextfield("recent-commands", JSON.stringify({"targetId": targetId, "deviceId": deviceId, "commandId": commandId, "inputData": inputData}));
+        appendToTextfield('recent-commands', JSON.stringify({'targetId': targetId, 'deviceId': deviceId, 'commandId': commandId, 'inputData': inputData}));
 
         let url = `http://` + location.hostname + `:` + location.port + `/api/genericCommand/${targetId}`;
         fetch(url, {
@@ -88,24 +88,24 @@
             },
             body: JSON.stringify(jsonBody)
         }).then(response => response.text()
-          .then((text) => appendToTextfield("output", text)));
+          .then((text) => appendToTextfield('output', text)));
     }
 
     function appendToTextfield(element, text){
         let val = document.getElementById(element).value;
-        val = val + text + "\n";
+        val = val + text + '\n';
         document.getElementById(element).value = val;
     }
 
     function updateInputTextState(){
-        if(document.getElementById("has-payload").checked) {
-            document.getElementById("input-data").disabled = false;
-            document.getElementById("input-data").style.backgroundColor = "white";
+        if(document.getElementById('has-payload').checked) {
+            document.getElementById('input-data').disabled = false;
+            document.getElementById('input-data').style.backgroundColor = 'white';
 
         } else {
-            document.getElementById("input-data").disabled = true;
-            document.getElementById("input-data").style.backgroundColor = "lightgray";
-            document.getElementById("input-data").value = "";
+            document.getElementById('input-data').disabled = true;
+            document.getElementById('input-data').style.backgroundColor = 'lightgray';
+            document.getElementById('input-data').value = '';
         }
     }
 
