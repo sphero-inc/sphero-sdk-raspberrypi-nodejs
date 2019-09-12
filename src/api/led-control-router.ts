@@ -8,17 +8,22 @@ import {IConfiguration} from '../configuration';
 import {IApiDal} from '../modules/api-dal-interface';
 import {ByteConversionUtilities} from '../utilities/byte-conversion-utilities'
 import {ApiTargetsAndSources} from '../constants';
-import {parseSetAllLedsWith32BitMaskRequest} from "./v1.0/command-parsers/0x1A-io/0x1A-set-all-leds-with-32-bit-mask-command-parser";
+import {parseSetAllLedsWith32BitMaskRequest} from './v1.0/command-parsers/0x1A-io/0x1A-set-all-leds-with-32-bit-mask-command-parser';
 
 
 export class LedControlRouter extends RouterBase {
     private static readonly _routerName: string = 'LedControl';
 
+    private static readonly _targetId: number = 0x01;
+
     private static readonly _deviceId: number = 0x1A;
     private static readonly _deviceName: string = 'Io (0x1A)';
     private static readonly _setAllLEDsWith32BitMaskCommandId: number = 0x1A;
     private static readonly _setAllLEDsWith32BitMaskCommandName: string = 'Set All LEDs with 32 bit Mask';
-
+    private static readonly _colors: Colors = { red: [0xFF, 0x00, 0x00], green: [0x00, 0xFF, 0x00], blue: [0x00, 0x00, 0xFF],
+        off: [0x00, 0x00, 0x00], white: [0xFF, 0xFF, 0xFF], yellow: [0xFF, 0x90, 0x00], purple: [0xFF, 0x00, 0xFF],
+        orange: [0xFF, 0x20, 0x00], pink: [0xFF, 0x66, 0xB2]
+    };
 
     constructor(apiDal: IApiDal, configuration: IConfiguration) {
         super(LedControlRouter._routerName, apiDal, configuration);
@@ -54,11 +59,11 @@ export class LedControlRouter extends RouterBase {
     }
 
     public getAvailableLedGroups(request: Request, response: Response) {
-        response.status(200).json(Object.keys(LedGroups).filter(k => typeof LedGroups[k as any] === "number"));
+        response.status(200).json(Object.keys(LedGroups).filter(k => typeof LedGroups[k as any] === 'number'));
     }
 
     public getAvailableColors(request: Request, response: Response) {
-        response.status(200).json(Array.from(Object.keys(colors)));
+        response.status(200).json(Array.from(Object.keys(LedControlRouter._colors)));
     }
 
     public turnLedsOff(request: Request, response: Response) {
@@ -67,16 +72,14 @@ export class LedControlRouter extends RouterBase {
 
         let ledBrightnessValues: Array<number> = [];
         for(let i=0; i<10; i++){
-            for(let colorValue of colors.off)
+            for(let colorValue of LedControlRouter._colors.off)
                 ledBrightnessValues.push(colorValue);
         }
 
         let dataRawBytes: Array<number> = parseSetAllLedsWith32BitMaskRequest({'ledGroup': ledGroup, 'ledBrightnessValues': ledBrightnessValues});
-
-        let targetId: number = 0x01;
-
+        
         let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-            targetId, ApiTargetsAndSources.serviceSource,
+            LedControlRouter._targetId, ApiTargetsAndSources.serviceSource,
             LedControlRouter._deviceId, LedControlRouter._deviceName,
             LedControlRouter._setAllLEDsWith32BitMaskCommandId, LedControlRouter._setAllLEDsWith32BitMaskCommandName,
             dataRawBytes
@@ -84,7 +87,7 @@ export class LedControlRouter extends RouterBase {
 
         apiCommandMessage.generateMessageRawBytes();
         this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-            response.status(200).json("OK");
+            response.status(200).json('OK');
 
 
         }).catch(reason => {
@@ -106,18 +109,14 @@ export class LedControlRouter extends RouterBase {
             return;
         }
 
-        let ledGroup: string = LedGroups[request.body.ledGroup];
-        console.log(`led group: ${ledGroup}`);
+        let ledGroup: number = parseInt(LedGroups[request.body.ledGroup]);
 
-        let ledBrightnessValues: Array<number> = [parseInt(request.body.R), parseInt(request.body.G), parseInt(request.body.B)];
-        console.log(`led brightnessvalues: ${ledBrightnessValues}`);
+        let ledBrightnessValues: Array<number> = [request.body.R, request.body.G, request.body.B];
 
         let dataRawBytes: Array<number> = parseSetAllLedsWith32BitMaskRequest({'ledGroup': ledGroup, 'ledBrightnessValues': ledBrightnessValues});
-
-        let targetId: number = 0x01;
-
+        
         let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-            targetId, ApiTargetsAndSources.serviceSource,
+            LedControlRouter._targetId, ApiTargetsAndSources.serviceSource,
             LedControlRouter._deviceId, LedControlRouter._deviceName,
             LedControlRouter._setAllLEDsWith32BitMaskCommandId, LedControlRouter._setAllLEDsWith32BitMaskCommandName,
             dataRawBytes
@@ -125,7 +124,7 @@ export class LedControlRouter extends RouterBase {
 
         apiCommandMessage.generateMessageRawBytes();
         this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-            response.status(200).json("OK");
+            response.status(200).json('OK');
 
 
         }).catch(reason => {
@@ -147,17 +146,13 @@ export class LedControlRouter extends RouterBase {
         }
 
         let ledGroup: string = LedGroups[request.body.ledGroup];
-        console.log(`led group: ${ledGroup}`);
 
-        let ledBrightnessValues: Array<number> = colors[request.body.color];
-        console.log(`led brightnessvalues: ${ledBrightnessValues}`);
+        let ledBrightnessValues: Array<number> = LedControlRouter._colors[request.body.color];
 
         let dataRawBytes: Array<number> = parseSetAllLedsWith32BitMaskRequest({'ledGroup': ledGroup, 'ledBrightnessValues': ledBrightnessValues});
-
-        let targetId: number = 0x01;
-
+        
         let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-            targetId, ApiTargetsAndSources.serviceSource,
+            LedControlRouter._targetId, ApiTargetsAndSources.serviceSource,
             LedControlRouter._deviceId, LedControlRouter._deviceName,
             LedControlRouter._setAllLEDsWith32BitMaskCommandId, LedControlRouter._setAllLEDsWith32BitMaskCommandName,
             dataRawBytes
@@ -165,7 +160,7 @@ export class LedControlRouter extends RouterBase {
 
         apiCommandMessage.generateMessageRawBytes();
         this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-            response.status(200).json("OK");
+            response.status(200).json('OK');
 
 
         }).catch(reason => {
@@ -189,18 +184,15 @@ export class LedControlRouter extends RouterBase {
         let ledGroup: number = LedGroups.all_lights;
 
         let ledBrightnessValues: Array<number> = [];
-
         for(let i=0; i<10; i++){
-            for(let colorValue of [parseInt(request.body.R), parseInt(request.body.G), parseInt(request.body.B)])
+            for(let colorValue of [request.body.R, request.body.G, request.body.B])
                 ledBrightnessValues.push(colorValue);
         }
 
         let dataRawBytes: Array<number> = parseSetAllLedsWith32BitMaskRequest({'ledGroup': ledGroup, 'ledBrightnessValues': ledBrightnessValues});
-
-        let targetId: number = 0x01;
-
+        
         let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-            targetId, ApiTargetsAndSources.serviceSource,
+            LedControlRouter._targetId, ApiTargetsAndSources.serviceSource,
             LedControlRouter._deviceId, LedControlRouter._deviceName,
             LedControlRouter._setAllLEDsWith32BitMaskCommandId, LedControlRouter._setAllLEDsWith32BitMaskCommandName,
             dataRawBytes
@@ -208,7 +200,7 @@ export class LedControlRouter extends RouterBase {
 
         apiCommandMessage.generateMessageRawBytes();
         this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-            response.status(200).json("OK");
+            response.status(200).json('OK');
 
 
         }).catch(reason => {
@@ -232,18 +224,15 @@ export class LedControlRouter extends RouterBase {
         let ledGroup: number = LedGroups.all_lights;
 
         let ledBrightnessValues: Array<number> = [];
-
         for(let i=0; i<10; i++){
-            for(let colorValue of colors[request.body.color])
+            for(let colorValue of LedControlRouter._colors[request.body.color])
                 ledBrightnessValues.push(colorValue);
         }
 
         let dataRawBytes: Array<number> = parseSetAllLedsWith32BitMaskRequest({'ledGroup': ledGroup, 'ledBrightnessValues': ledBrightnessValues});
-
-        let targetId: number = 0x01;
-
+        
         let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-            targetId, ApiTargetsAndSources.serviceSource,
+            LedControlRouter._targetId, ApiTargetsAndSources.serviceSource,
             LedControlRouter._deviceId, LedControlRouter._deviceName,
             LedControlRouter._setAllLEDsWith32BitMaskCommandId, LedControlRouter._setAllLEDsWith32BitMaskCommandName,
             dataRawBytes
@@ -251,7 +240,7 @@ export class LedControlRouter extends RouterBase {
 
         apiCommandMessage.generateMessageRawBytes();
         this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-            response.status(200).json("OK");
+            response.status(200).json('OK');
 
 
         }).catch(reason => {
@@ -272,23 +261,19 @@ export class LedControlRouter extends RouterBase {
             return;
         }
 
-        console.log(request.body);
         let ledGroup: number = 0;
         let ledBrightnessValues: Array<number> = [];
-
         for(let ledGroupRequested of request.body.ledGroups){
             ledGroup = ledGroup | parseInt(LedGroups[ledGroupRequested]);
 
-            for(let colorValue of [parseInt(request.body.R), parseInt(request.body.G), parseInt(request.body.B)])
+            for(let colorValue of [request.body.R, request.body.G, request.body.B])
                 ledBrightnessValues.push(colorValue);
         }
 
         let dataRawBytes: Array<number> = parseSetAllLedsWith32BitMaskRequest({'ledGroup': ledGroup, 'ledBrightnessValues': ledBrightnessValues});
-
-        let targetId: number = 0x01;
-
+        
         let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-            targetId, ApiTargetsAndSources.serviceSource,
+            LedControlRouter._targetId, ApiTargetsAndSources.serviceSource,
             LedControlRouter._deviceId, LedControlRouter._deviceName,
             LedControlRouter._setAllLEDsWith32BitMaskCommandId, LedControlRouter._setAllLEDsWith32BitMaskCommandName,
             dataRawBytes
@@ -296,7 +281,7 @@ export class LedControlRouter extends RouterBase {
 
         apiCommandMessage.generateMessageRawBytes();
         this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-            response.status(200).json("OK");
+            response.status(200).json('OK');
 
 
         }).catch(reason => {
@@ -316,24 +301,20 @@ export class LedControlRouter extends RouterBase {
 
             return;
         }
-
-        console.log(request.body);
+        
         let ledGroup: number = 0;
         let ledBrightnessValues: Array<number> = [];
-
         for(let ledGroupRequested of request.body.ledGroups){
             ledGroup = ledGroup | parseInt(LedGroups[ledGroupRequested]);
 
-            for(let colorValue of colors[request.body.color])
+            for(let colorValue of LedControlRouter._colors[request.body.color])
                 ledBrightnessValues.push(colorValue);
         }
 
         let dataRawBytes: Array<number> = parseSetAllLedsWith32BitMaskRequest({'ledGroup': ledGroup, 'ledBrightnessValues': ledBrightnessValues});
-
-        let targetId: number = 0x01;
-
+        
         let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-            targetId, ApiTargetsAndSources.serviceSource,
+            LedControlRouter._targetId, ApiTargetsAndSources.serviceSource,
             LedControlRouter._deviceId, LedControlRouter._deviceName,
             LedControlRouter._setAllLEDsWith32BitMaskCommandId, LedControlRouter._setAllLEDsWith32BitMaskCommandName,
             dataRawBytes
@@ -341,7 +322,7 @@ export class LedControlRouter extends RouterBase {
 
         apiCommandMessage.generateMessageRawBytes();
         this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-            response.status(200).json("OK");
+            response.status(200).json('OK');
 
 
         }).catch(reason => {
@@ -431,18 +412,6 @@ enum LedGroups {
     undercarriage_white = LedBitmasks.undercarriage_white
 
 }
-
-let colors: Colors = {
-    red: [0xFF, 0x00, 0x00],
-    green: [0x00, 0xFF, 0x00],
-    blue: [0x00, 0x00, 0xFF],
-    off: [0x00, 0x00, 0x00],
-    white: [0xFF, 0xFF, 0xFF],
-    yellow: [0xFF, 0x90, 0x00],
-    purple: [0xFF, 0x00, 0xFF],
-    orange: [0xFF, 0x20, 0x00],
-    pink: [0xFF, 0x66, 0xB2]
-};
 
 interface Colors {
     red: Array<number>,
