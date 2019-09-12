@@ -8,6 +8,7 @@ import {IConfiguration} from '../configuration';
 // route imports
 import * as v1dot0Router from './v1.0';
 import {GenericCommandRouter} from './generic-command-router';
+import {LedControlRouter} from './led-control-router';
 import {IApiDal} from '../modules/api-dal-interface';
 
 let logger: ILogger = createLogger('api index');
@@ -21,6 +22,10 @@ export function initializeRoutes(app: Application, apiDal: IApiDal, configuratio
     let genericCommandRouter = new GenericCommandRouter(apiDal, configuration)
     genericCommandRouter.initialize();
     app.use('/api/', genericCommandRouter.router);
+
+    let ledCommandRouter = new LedControlRouter(apiDal, configuration)
+    ledCommandRouter.initialize();
+    app.use('/api/', ledCommandRouter.router);
 }
 
 export function initializeCommandMappings(app: Application, apiDal: IApiDal, configuration: IConfiguration) {
