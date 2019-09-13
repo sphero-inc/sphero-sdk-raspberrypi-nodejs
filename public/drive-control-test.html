@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>>Led Controller Test</title>
+</head>
+<body>
+
+<h1>Led Controller Test</h1>
+<script>
+
+    let baseURL = `http://` + location.hostname + `:` + location.port + '/api/driveControl';
+
+    let time = 0;
+
+    let url = baseURL + `/reset_heading`;
+
+    fetch(url, {
+        method: 'PUT',
+        headers: {
+            'accept': 'application/json',
+        },
+    }).then(response => response.text().then((text) => console.log('/reset_heading response text: ' + text)));
+
+
+    setTimeout(() => {
+        url = baseURL + `/api/driveBackwardSeconds`;
+
+        let jsonBody = {
+            "speed": 64,
+            "heading": 0,
+            "seconds": 2,
+        };
+
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonBody)
+        }).then(response => response.text().then((text) => console.log('/driveBackwardSeconds response text: ' + text)));
+
+    }, time);
+
+    time += 2000;
+
+    setTimeout(() => {
+        url = baseURL + `/driveForwardSeconds`;
+
+        let jsonBody = {
+            "speed": 64,
+            "heading": 0,
+            "seconds": 2,
+        };
+
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonBody)
+        }).then(response => response.text().then((text) => console.log('/driveForwardSeconds response text: ' + text)));
+    }, time);
+
+    time += 2000;
+
+
+    setTimeout(() => {
+        url = baseURL + `/turnLeftDegrees`;
+
+        let jsonBody = {
+            "heading": 90,
+            "degrees": 90,
+        };
+
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/json'
+
+            },
+            body: JSON.stringify(jsonBody)
+
+        }).then(response => response.text().then((text) => console.log('/turnLeftDegrees response text: ' + text)));
+    }, time);
+
+    time += 2000;
+
+    setTimeout(() => {
+        url = baseURL + `/turnRightDegrees`;
+
+        let jsonBody = {
+            "heading": 90,
+            "degrees": 90,
+        };
+
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/json'
+
+            },
+            body: JSON.stringify(jsonBody)
+
+        }).then(response => response.text().then((text) => console.log('/turnRightDegrees response text: ' + text)));
+    }, time);
+
+    time += 2000;
+
+    setTimeout(() => {
+        url = baseURL + `/rollStart`;
+
+        let jsonBody = {
+            "speed": 64,
+            "heading": 90,
+        };
+
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/json'
+
+            },
+            body: JSON.stringify(jsonBody)
+
+        }).then(response => response.text().then((text) => console.log('/rollStart response text: ' + text)));
+    }, time);
+
+    time += 2000;
+
+    setTimeout(() => {
+        url = baseURL + `/rollStop`;
+
+        let jsonBody = {
+            "heading": 90,
+        };
+
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/json'
+
+            },
+            body: JSON.stringify(jsonBody)
+
+        }).then(response => response.text().then((text) => console.log('/rollStop response text: ' + text)));
+    }, time);
+
+    time += 2000;
+
+    setTimeout(() => {
+        url = baseURL + `/aimStart`;
+
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'accept': 'application/json',
+
+            },
+        }).then(response => response.text().then((text) => console.log('/aimStart response text: ' + text)));
+    }, time);
+
+    time += 2000;
+
+    setTimeout(() => {
+        url = baseURL + `/aimStop`;
+
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'accept': 'application/json',
+
+            },
+        }).then(response => response.text().then((text) => console.log('/aimStop response text: ' + text)));
+    }, time);
+
+    time += 2000;
+
+
+
+</script>
+</body>
+</html>
