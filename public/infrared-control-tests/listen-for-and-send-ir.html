@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Broadcast IR</title>
+</head>
+<body>
+
+<h1>Infrared control</h1>
+<script>
+    let baseURL = `http://` + location.hostname + `:` + location.port;
+
+    const socket = new WebSocket(`ws://` + location.hostname + `:` + location.port + '/stream');
+    socket.onopen = () => {
+        console.log("connected");
+        socket.send("hello server!");
+    };
+    socket.onmessage = (e) => {
+        console.log(e.data);
+    };
+
+    let baseURL = `http://` + location.hostname + `:` + location.port + '/api/infraredControl';
+
+    let url = baseURL + `/reset_heading`;
+
+    setTimeout(() => {
+        url = baseURL + `/listenForInfraredMessage`;
+
+        let jsonBody = {
+            "farCode": 1,
+            "nearCode": 0,
+        };
+
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonBody)
+        }).then(response => response.text().then((text) => console.log('/startInfraredBroadcasting response text: ' + text)));
+
+    }, 500);
+
+    setTimeout(() => {
+        url = baseURL + `/sendInfraredMessages`;
+
+        let jsonBody = {
+            "messages": [0, 1, 2, 3, 4, 5],
+            "strength": 64,
+        };
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonBody)
+        }).then(response => response.text().then((text) => console.log('/stopInfraredBroadcasting response text: ' + text)));
+
+    }, 4000);
+
+
+</script>
+</body>
+</html>

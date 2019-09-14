@@ -3,33 +3,18 @@ import {Request, Response} from 'express';
 
 // internal imports
 import {RouterBase} from './router-base';
-import {IApiCommandMessage, buildApiCommandMessageWithDefaultFlags} from '../models/api-command-message';
 import {IConfiguration} from '../configuration';
 import {IApiDal} from '../modules/api-dal-interface';
-import {ByteConversionUtilities} from '../utilities/byte-conversion-utilities'
-import {ApiTargetsAndSources} from '../constants';
-import {parseSetAllLedsWith32BitMaskRequest} from './v1.0/command-parsers/0x1A-io/0x1A-set-all-leds-with-32-bit-mask-command-parser';
+import {DriveControl} from "../modules/controls/drive-control";
 
+export class DriveControlRouter extends RouterBase {
+    private static readonly _routerName: string = 'DriveControl';
 
-export class LedControlRouter extends RouterBase {
-    private static readonly _routerName: string = 'LedControl';
-
-    private static readonly _targetId: number = 0x02;
-
-    private static readonly _deviceId: number = 0x16;
-    private static readonly _deviceName: string = 'Drive (0x16)';
-
-    private static readonly _resetYawcommandId: number = 0x06;
-    private static readonly _resetYawcommandName: number = "Reset yaw";
-
-    private static readonly _rawMotorsCommandId: number = 0x01;
-    private static readonly _rawMotorsCommandName: number = "Raw motors";
-
-    private static readonly _driveWithHeadingCommandId: number = 0x07;
-    private static readonly _driveWithHeadingCommandName: number = "Drive with heading";
+    private readonly _driveControl: DriveControl;
 
     constructor(apiDal: IApiDal, configuration: IConfiguration) {
-        super(LedControlRouter._routerName, apiDal, configuration);
+        super(DriveControlRouter._routerName, apiDal, configuration);
+        this._driveControl = new DriveControl(apiDal);
     }
 
     protected initializeRoutes(): void {
@@ -63,9 +48,14 @@ export class LedControlRouter extends RouterBase {
 
     public resetHeading(request: Request, response: Response) {
         try {
-            this._resetHeading();
-        } catch(e) {
-            response.status(errorCode).json({'error': e});
+            this._driveControl.resetHeading();
+        } catch(reason) {
+            let errorCode: number = 400;
+            let errorDetail: string = `Error in resetHeading: ${reason}`;
+
+            // this.routeError(request.path, request.method, errorCode, errorDetail);
+
+            response.status(errorCode).json({'error': errorDetail});
         }
     }
 
@@ -80,11 +70,12 @@ export class LedControlRouter extends RouterBase {
         }
 
         try {
-            this._timedDrive(request.body.speed, request.body.heading, 1, request.seconds);
-
-        } catch(e) {
+            this._driveControl.driveBackwardSeconds(request.body.speed, request.body.heading, request.body.seconds);
+        } catch(reason) {
             let errorCode: number = 400;
-            let errorDetail: string = `Error in driveWithHeading while sending API Command: ${e}`;
+            let errorDetail: string = `Error in driveBackwardSeconds: ${reason}`;
+
+            // this.routeError(request.path, request.method, errorCode, errorDetail);
 
             response.status(errorCode).json({'error': errorDetail});
         }
@@ -101,11 +92,12 @@ export class LedControlRouter extends RouterBase {
         }
 
         try {
-            this._timedDrive(request.body.speed, request.body.heading, 0, request.seconds);
-
-        } catch(e) {
+            this._driveControl.driveForwardSeconds(request.body.speed, request.body.heading, request.body.seconds);
+        } catch(reason) {
             let errorCode: number = 400;
-            let errorDetail: string = `Error in driveWithHeading while sending API Command: ${e}`;
+            let errorDetail: string = `Error in driveForwardSeconds: ${reason}`;
+
+            // this.routeError(request.path, request.method, errorCode, errorDetail);
 
             response.status(errorCode).json({'error': errorDetail});
         }
@@ -122,12 +114,14 @@ export class LedControlRouter extends RouterBase {
         }
 
         try {
-            this._driveWithHeading(0, (heading - amount) % 360, 0)
-        } catch (e) {
+            this._driveControl.turnLeftDegrees(request.body.heading, request.body.amount);
+        } catch (reason) {
             let errorCode: number = 400;
-            let errorDetail: string = `Error in driveWithHeading while sending API Command: ${e}`;
+            let errorDetail: string = `Error in turnLeftDegrees: ${reason}`;
 
-            response.status(errorCode).json({'error': e});
+            // this.routeError(request.path, request.method, errorCode, errorDetail);
+
+            response.status(errorCode).json({'error': errorDetail});
         }
     }
 
@@ -142,12 +136,14 @@ export class LedControlRouter extends RouterBase {
         }
 
         try {
-            this._driveWithHeading(0, (heading + amount) % 360, 0)
-        } catch (e) {
+            this._driveControl.turnLeftDegrees(request.body.heading, request.body.amount);
+        } catch (reason) {
             let errorCode: number = 400;
-            let errorDetail: string = `Error in driveWithHeading while sending API Command: ${e}`;
+            let errorDetail: string = `Error in turnRightDegrees: ${reason}`;
 
-            response.status(errorCode).json({'error': e});
+            // this.routeError(request.path, request.method, errorCode, errorDetail);
+
+            response.status(errorCode).json({'error': errorDetail});
         }
     }
 
@@ -160,29 +156,17 @@ export class LedControlRouter extends RouterBase {
             return;
         }
 
-        let flags: number = 0;
-
-        if (request.body.speed < 0)
-            flags = flags | DriveControlObserver.__drive_reverse_flag
-
-        let speed = Math.abs(request.body.speed);
-        if (speed > 255)
-            speed = 255
-
-        let heading: number = request.body.heading;
-        while(heading < 0)
-            heading += 360
-
-        heading = heading % 360
-
         try {
-            this._driveWithHeading(speed, heading, flags);
-        } catch(e){
+            this._driveControl.rollStart(request.body.speed, request.body.heading);
+        } catch (reason) {
             let errorCode: number = 400;
-            let errorDetail: string = `Error in driveWithHeading while sending API Command: ${reason}`;
+            let errorDetail: string = `Error in rollStart: ${reason}`;
+
+            // this.routeError(request.path, request.method, errorCode, errorDetail);
 
             response.status(errorCode).json({'error': errorDetail});
         }
+
     }
 
     public rollStop(request: Request, response: Response) {
@@ -195,72 +179,43 @@ export class LedControlRouter extends RouterBase {
             return;
         }
 
-        // TODO
-    }
-
-    public aimStart(request: Request, response: Response) {
-        // TODO
-    }
-
-    public aimStop(request: Request, response: Response) {
-
-        this._resetHeading();
-
-        // TODO
-
-    }
-
-    private _timedDrive(speed: number, heading: number, flags: number, seconds: number){
         try {
-            this._driveWithHeading(speed, heading, flags);
+            this._driveControl.rollStop(request.body.heading);
+        } catch (reason) {
+            let errorCode: number = 400;
+            let errorDetail: string = `Error in rollStop: ${reason}`;
 
-            setTimeout(() => {
-                this._driveWithHeading(0, heading, flags);
-            }, seconds * 1000);
-        } catch(e) {
-            throw new Error(e);
+            // this.routeError(request.path, request.method, errorCode, errorDetail);
+
+            response.status(errorCode).json({'error': errorDetail});
         }
     }
 
-    private _driveWithHeading(speed: number, heading: number, flags: number) {
-        let dataRawBytes: Array<number> = parseDriveWithHeadingRequest({'speed': speed, 'heading': heading, 'flags': flags});
-
-        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-            LedControlRouter._targetId, ApiTargetsAndSources.serviceSource,
-            LedControlRouter._deviceId, LedControlRouter._deviceName,
-            LedControlRouter._driveWithHeadingCommandId, LedControlRouter._driveWithHeadingCommandName,
-            dataRawBytes
-        );
-
-        apiCommandMessage.generateMessageRawBytes();
-        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-
-        }).catch(reason => {
+    public aimStart(request: Request, response: Response) {
+        try {
+            this._driveControl.aimStart();
+        } catch (reason) {
             let errorCode: number = 400;
-            let errorDetail: string = `Error in driveWithHeading while sending API Command: ${reason}`;
+            let errorDetail: string = `Error in aimStart: ${reason}`;
 
-            throw new Error(errorDetail)
-        });
+            // this.routeError(request.path, request.method, errorCode, errorDetail);
+
+            response.status(errorCode).json({'error': errorDetail});
+        }
     }
 
-    private _resetHeading() {
-        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-            LedControlRouter._targetId, ApiTargetsAndSources.serviceSource,
-            LedControlRouter._deviceId, LedControlRouter._deviceName,
-            LedControlRouter._resetYawcommandId, LedControlRouter._resetYawcommandName,
-            null
-        );
-
-        apiCommandMessage.generateMessageRawBytes();
-        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-            response.status(200).json("OK");
-
-        }).catch(reason => {
+    public aimStop(request: Request, response: Response) {
+        try {
+            this._driveControl.aimStop();
+        } catch (reason) {
             let errorCode: number = 400;
-            let errorDetail: string = `Error in resetYaw while sending API Command: ${reason}`;
+            let errorDetail: string = `Error in aimStop: ${reason}`;
 
-            throw new Error(errorDetail);
-        });
+            // this.routeError(request.path, request.method, errorCode, errorDetail);
+
+            response.status(errorCode).json({'error': errorDetail});
+        }
+
     }
 }
 

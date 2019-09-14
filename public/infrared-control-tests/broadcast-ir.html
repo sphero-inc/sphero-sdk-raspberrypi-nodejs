@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Broadcast IR</title>
+</head>
+<body>
+
+<h1>Infrared control</h1>
+<script>
+
+    let baseURL = `http://` + location.hostname + `:` + location.port + '/api/infraredControl';
+
+    let url = baseURL + `/reset_heading`;
+
+    setTimeout(() => {
+        url = baseURL + `/startInfraredBroadcasting`;
+
+        let jsonBody = {
+            "farCode": 1,
+            "nearCode": 0,
+        };
+
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonBody)
+        }).then(response => response.text().then((text) => console.log('/startInfraredBroadcasting response text: ' + text)));
+
+    }, 500);
+
+    setTimeout(() => {
+        url = baseURL + `/stopInfraredBroadcasting`;
+
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'accept': 'application/json',
+            },
+        }).then(response => response.text().then((text) => console.log('/stopInfraredBroadcasting response text: ' + text)));
+
+    }, 4000);
+
+
+</script>
+</body>
+</html>
