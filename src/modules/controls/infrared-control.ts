@@ -4,6 +4,7 @@ import {ApiTargetsAndSources} from '../../constants';
 import {parseStartRobotToRobotInfraredBroadcastingRequest} from "../../api/v1.0/command-parsers/0x18-sensor/0x27-start-robot-to-robot-infrared-broadcasting-command-parser";
 import {parseStartRobotToRobotInfraredFollowingRequest} from "../../api/v1.0/command-parsers/0x18-sensor/0x28-start-robot-to-robot-infrared-following-command-parser";
 import {parseEnableRobotInfraredMessageNotifyRequest} from "../../api/v1.0/command-parsers/0x18-sensor/0x3E-enable-robot-infrared-message-notify-command-parser";
+import {parseSendInfraredMessageRequest} from "../../api/v1.0/command-parsers/0x18-sensor/0x3F-send-infrared-message-command-parser";
 
 export class InfraredControl {
     private static readonly _targetId: number = 0x02;
@@ -138,7 +139,7 @@ export class InfraredControl {
     }
 
     private _sendSendInfraredMessageCommand(infraredCode: number, frontStrength: number, rearStrength: number, leftStrength: number, rightStrength: number) {
-        let dataRawBytes: Array<number> = parseStartRobotToRobotInfraredFollowingRequest({'infraredCode': infraredCode,
+        let dataRawBytes: Array<number> = parseSendInfraredMessageRequest({'infraredCode': infraredCode,
             'frontStrength': frontStrength, 'rearStrength': rearStrength, 'leftStrength': leftStrength, 'rightStrength': rightStrength});
 
         let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(

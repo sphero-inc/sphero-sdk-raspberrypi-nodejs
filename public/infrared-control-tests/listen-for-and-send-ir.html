@@ -7,8 +7,6 @@
 
 <h1>Infrared control</h1>
 <script>
-    let baseURL = `http://` + location.hostname + `:` + location.port;
-
     const socket = new WebSocket(`ws://` + location.hostname + `:` + location.port + '/stream');
     socket.onopen = () => {
         console.log("connected");
@@ -20,10 +18,8 @@
 
     let baseURL = `http://` + location.hostname + `:` + location.port + '/api/infraredControl';
 
-    let url = baseURL + `/reset_heading`;
-
     setTimeout(() => {
-        url = baseURL + `/enableRobotInfraredMessageNotify`;
+        let url = baseURL + `/enableRobotInfraredMessageNotify`;
 
         let jsonBody = {
             "isEnabled": true,
@@ -41,7 +37,7 @@
     }, 500);
 
     setTimeout(() => {
-        url = baseURL + `/sendInfraredMessages`;
+        let url = baseURL + `/sendInfraredMessages`;
 
         let jsonBody = {
             "messages": [0, 1],
@@ -56,7 +52,7 @@
             body: JSON.stringify(jsonBody)
         }).then(response => response.text().then((text) => console.log('/sendInfraredMessages response text: ' + text)));
 
-    }, 4000);
+    }, 500);
 
 
 </script>

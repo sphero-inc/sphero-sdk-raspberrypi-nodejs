@@ -18,22 +18,22 @@ export class InfraredControlRouter extends RouterBase {
     }
 
     protected initializeRoutes(): void {
-        this.router.route('/startInfraredBroadcasting')
+        this.router.route('/infraredControl/startInfraredBroadcasting')
             .put((request: Request, response: Response) => this.startInfraredBroadcasting(request, response));
 
-        this.router.route('/stopInfraredBroadcasting')
+        this.router.route('/infraredControl/stopInfraredBroadcasting')
             .put((request: Request, response: Response) => this.stopInfraredBroadcasting(request, response));
 
-        this.router.route('/startInfraredFollowing')
+        this.router.route('/infraredControl/startInfraredFollowing')
             .put((request: Request, response: Response) => this.startInfraredFollowing(request, response));
 
-        this.router.route('/stopInfraredFollowing')
+        this.router.route('/infraredControl/stopInfraredFollowing')
             .put((request: Request, response: Response) => this.stopInfraredFollowing(request, response));
 
-        this.router.route('/sendInfraredMessages')
+        this.router.route('/infraredControl/sendInfraredMessages')
             .put((request: Request, response: Response) => this.sendInfraredMessages(request, response));
 
-        this.router.route('/enableRobotInfraredMessageNotify')
+        this.router.route('/infraredControl/enableRobotInfraredMessageNotify')
             .put((request: Request, response: Response) => this.enableRobotInfraredMessageNotify(request, response));
     }
 
