@@ -3,8 +3,8 @@
 // Device ID (DID):         0x1A
 // Device Name:             io
 // Device Description:      
-// Command Count:           4
+// Command Count:           22
 // Source File:             0x1A-user_io.json
-// Timestamp:               02/20/2019 @ 00:37:18.334692 (UTC)
+// Timestamp:               09/09/2019 @ 18:44:43.848708 (UTC)
 // ************************************************************
 

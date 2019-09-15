@@ -10,10 +10,8 @@
 
     let baseURL = `http://` + location.hostname + `:` + location.port + '/api/infraredControl';
 
-    let url = baseURL + `/reset_heading`;
-
     setTimeout(() => {
-        url = baseURL + `/startInfraredBroadcasting`;
+        let url = baseURL + `/startInfraredBroadcasting`;
 
         let jsonBody = {
             "farCode": 1,
@@ -32,7 +30,7 @@
     }, 500);
 
     setTimeout(() => {
-        url = baseURL + `/stopInfraredBroadcasting`;
+        let url = baseURL + `/stopInfraredBroadcasting`;
 
         fetch(url, {
             method: 'PUT',

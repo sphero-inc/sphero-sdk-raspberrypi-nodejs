@@ -23,11 +23,10 @@
     let url = baseURL + `/reset_heading`;
 
     setTimeout(() => {
-        url = baseURL + `/listenForInfraredMessage`;
+        url = baseURL + `/enableRobotInfraredMessageNotify`;
 
         let jsonBody = {
-            "farCode": 1,
-            "nearCode": 0,
+            "isEnabled": true,
         };
 
         fetch(url, {
@@ -37,7 +36,7 @@
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(jsonBody)
-        }).then(response => response.text().then((text) => console.log('/startInfraredBroadcasting response text: ' + text)));
+        }).then(response => response.text().then((text) => console.log('/enableRobotInfraredMessageNotify response text: ' + text)));
 
     }, 500);
 
@@ -45,7 +44,7 @@
         url = baseURL + `/sendInfraredMessages`;
 
         let jsonBody = {
-            "messages": [0, 1, 2, 3, 4, 5],
+            "messages": [0, 1],
             "strength": 64,
         };
         fetch(url, {
@@ -55,7 +54,7 @@
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(jsonBody)
-        }).then(response => response.text().then((text) => console.log('/stopInfraredBroadcasting response text: ' + text)));
+        }).then(response => response.text().then((text) => console.log('/sendInfraredMessages response text: ' + text)));
 
     }, 4000);
 

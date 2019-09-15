@@ -8,9 +8,10 @@ import {IConfiguration} from '../configuration';
 // route imports
 import * as v1dot0Router from './v1.0';
 import {GenericCommandRouter} from './generic-command-router';
-import {LedControlRouter} from './led-control-router';
+import {LedControlRouter} from './controls-routers/led-control-router';
 import {IApiDal} from '../modules/api-dal-interface';
-import {DriveControlRouter} from "./drive-control-router";
+import {DriveControlRouter} from "./controls-routers/drive-control-router";
+import {InfraredControlRouter} from "./controls-routers/infrared-control-router";
 
 let logger: ILogger = createLogger('api index');
 
@@ -31,6 +32,10 @@ export function initializeRoutes(app: Application, apiDal: IApiDal, configuratio
     let driveControlRouter = new DriveControlRouter(apiDal, configuration);
     driveControlRouter.initialize();
     app.use('/api/', driveControlRouter.router);
+
+    let infraredControlRouter = new InfraredControlRouter(apiDal, configuration);
+    infraredControlRouter.initialize();
+    app.use('/api/', infraredControlRouter.router);
 }
 
 export function initializeCommandMappings(app: Application, apiDal: IApiDal, configuration: IConfiguration) {

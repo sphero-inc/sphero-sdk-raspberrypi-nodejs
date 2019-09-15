@@ -1,7 +1,7 @@
 import {IApiCommandMessage, buildApiCommandMessageWithDefaultFlags} from '../../models/api-command-message';
 import {IApiDal} from '../api-dal-interface';
 import {ApiTargetsAndSources} from '../../constants';
-import {parseSetAllLedsWith32BitMaskRequest} from "../../api/v1.0/command-parsers/0x1A-io/0x1A-set-all-leds-with-32-bit-mask-command-parser";
+import {parseSetAllLedsRequest} from "../../api/v1.0/command-parsers/0x1A-io/0x1A-set-all-leds-command-parser";
 
 export class LedControl {
     private static readonly _targetId: number = 0x01;
@@ -89,7 +89,7 @@ export class LedControl {
     }
 
     private _sendAllLEDsWith32BitMaskCommand(ledGroup: number, ledBrightnessValues: Array<number>) {
-        let dataRawBytes: Array<number> = parseSetAllLedsWith32BitMaskRequest({'ledGroup': ledGroup, 'ledBrightnessValues': ledBrightnessValues});
+        let dataRawBytes: Array<number> = parseSetAllLedsRequest({'ledGroup': ledGroup, 'ledBrightnessValues': ledBrightnessValues});
 
         let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
             LedControl._targetId, ApiTargetsAndSources.serviceSource,

@@ -3,8 +3,8 @@
 // Device ID (DID):         0x19
 // Device Name:             connection
 // Device Description:      
-// Command Count:           2
+// Command Count:           3
 // Source File:             0x19-peer_connection.json
-// Timestamp:               02/20/2019 @ 00:37:18.335587 (UTC)
+// Timestamp:               09/09/2019 @ 18:44:43.849002 (UTC)
 // ************************************************************
 

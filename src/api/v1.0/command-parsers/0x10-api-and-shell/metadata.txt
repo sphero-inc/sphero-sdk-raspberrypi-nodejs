@@ -3,8 +3,8 @@
 // Device ID (DID):         0x10
 // Device Name:             api_and_shell
 // Device Description:      
-// Command Count:           6
+// Command Count:           1
 // Source File:             0x10-api_and_shell.json
-// Timestamp:               02/20/2019 @ 00:37:18.334400 (UTC)
+// Timestamp:               09/09/2019 @ 18:44:43.848619 (UTC)
 // ************************************************************
 
