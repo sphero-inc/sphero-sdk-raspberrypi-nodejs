@@ -5,7 +5,7 @@ import {Request, Response} from 'express';
 import {RouterBase} from '../router-base';
 import {IConfiguration} from '../../configuration';
 import {IApiDal} from '../../modules/api-dal-interface';
-import {InfraredControl} from "../../modules/controls/infrared-control";
+import {InfraredControl} from '../../modules/controls/infrared-control';
 
 export class InfraredControlRouter extends RouterBase {
     private static readonly _routerName: string = 'InfraredControl';

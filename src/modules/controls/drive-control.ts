@@ -1,8 +1,8 @@
 import {IApiCommandMessage, buildApiCommandMessageWithDefaultFlags} from '../../models/api-command-message';
 import {IApiDal} from '../api-dal-interface';
 import {ApiTargetsAndSources} from '../../constants';
-import {parseDriveWithHeadingRequest} from "../../api/v1.0/command-parsers/0x16-drive/0x07-drive-with-heading-command-parser";
-import {LedControl} from "./led-control";
+import {parseDriveWithHeadingRequest} from '../../api/v1.0/command-parsers/0x16-drive/0x07-drive-with-heading-command-parser';
+import {LedControl} from './led-control';
 import Timer = NodeJS.Timer;
 
 export class DriveControl {
@@ -12,13 +12,13 @@ export class DriveControl {
     private static readonly _deviceName: string = 'Drive (0x16)';
 
     private static readonly _resetYawCommandId: number = 0x06;
-    private static readonly _resetYawCommandName: string = "Reset yaw";
+    private static readonly _resetYawCommandName: string = 'Reset yaw';
 
     private static readonly _rawMotorsCommandId: number = 0x01;
-    private static readonly _rawMotorsCommandName: string = "Raw motors";
+    private static readonly _rawMotorsCommandName: string = 'Raw motors';
 
     private static readonly _driveWithHeadingCommandId: number = 0x07;
-    private static readonly _driveWithHeadingCommandName: string = "Drive with heading";
+    private static readonly _driveWithHeadingCommandName: string = 'Drive with heading';
 
     private static readonly _driveNoFlag = 0x00;
     private static readonly _driveReverseFlag = 0x01;

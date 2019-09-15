@@ -43,10 +43,10 @@
         url = baseURL + `/setLedRgb`;
 
         let jsonBody = {
-            "ledGroup": "headlight_left",
-            "R": 0,
-            "G": 255,
-            "B": 0
+            'ledGroup': 'headlight_left',
+            'R': 0,
+            'G': 255,
+            'B': 0
         };
 
         fetch(url, {
@@ -66,8 +66,8 @@
         url = baseURL + `/setLedColor`;
 
         let jsonBody = {
-            "ledGroup": "headlight_right",
-            "color": "blue"
+            'ledGroup': 'headlight_right',
+            'color': 'blue'
         };
 
         fetch(url, {
@@ -87,9 +87,9 @@
         url = baseURL + `/setAllLedsRgb`;
 
         let jsonBody = {
-            "R": 255,
-            "G": 0,
-            "B": 0
+            'R': 255,
+            'G': 0,
+            'B': 0
         };
 
         fetch(url, {
@@ -109,7 +109,7 @@
         url = baseURL + `/setAllLedsColor`;
 
         let jsonBody = {
-            "color": "blue",
+            'color': 'blue',
         };
 
         fetch(url, {
@@ -129,10 +129,10 @@
         url = baseURL + `/setMultipleLedsRgb`;
 
         let jsonBody = {
-            "ledGroups": ["headlight_right", "headlight_left"],
-            "R": 0,
-            "G": 255,
-            "B": 0
+            'ledGroups': ['headlight_right', 'headlight_left'],
+            'R': 0,
+            'G': 255,
+            'B': 0
         };
 
         fetch(url, {
@@ -152,8 +152,8 @@
         url = baseURL + `/setMultipleLedsColor`;
 
         let jsonBody = {
-            "ledGroups": ["headlight_right", "headlight_left"],
-            "color": "blue",
+            'ledGroups': ['headlight_right', 'headlight_left'],
+            'color': 'blue',
         };
 
         fetch(url, {

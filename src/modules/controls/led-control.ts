@@ -1,7 +1,7 @@
 import {IApiCommandMessage, buildApiCommandMessageWithDefaultFlags} from '../../models/api-command-message';
 import {IApiDal} from '../api-dal-interface';
 import {ApiTargetsAndSources} from '../../constants';
-import {parseSetAllLedsRequest} from "../../api/v1.0/command-parsers/0x1A-io/0x1A-set-all-leds-command-parser";
+import {parseSetAllLedsRequest} from '../../api/v1.0/command-parsers/0x1A-io/0x1A-set-all-leds-command-parser';
 
 export class LedControl {
     private static readonly _targetId: number = 0x01;
@@ -25,7 +25,7 @@ export class LedControl {
      * the only way. See https://github.com/Microsoft/TypeScript/issues/17198.
      */
     public getAvailableLedGroups(): Array<string> {
-        return Object.keys(LedGroups).filter(k => typeof LedGroups[k as any] === "number");
+        return Object.keys(LedGroups).filter(k => typeof LedGroups[k as any] === 'number');
     }
 
     public getAvailableColors(): Array<string> {

@@ -5,7 +5,7 @@ import {Request, Response} from 'express';
 import {RouterBase} from '../router-base';
 import {IConfiguration} from '../../configuration';
 import {IApiDal} from '../../modules/api-dal-interface';
-import {LedControl} from "../../modules/controls/led-control";
+import {LedControl} from '../../modules/controls/led-control';
 
 
 export class LedControlRouter extends RouterBase {

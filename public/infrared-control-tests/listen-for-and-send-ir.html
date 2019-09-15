@@ -9,8 +9,8 @@
 <script>
     const socket = new WebSocket(`ws://` + location.hostname + `:` + location.port + '/stream');
     socket.onopen = () => {
-        console.log("connected");
-        socket.send("hello server!");
+        console.log('connected');
+        socket.send('hello server!');
     };
     socket.onmessage = (e) => {
         console.log(e.data);
@@ -22,7 +22,7 @@
         let url = baseURL + `/enableRobotInfraredMessageNotify`;
 
         let jsonBody = {
-            "isEnabled": true,
+            'isEnabled': true,
         };
 
         fetch(url, {
@@ -40,8 +40,8 @@
         let url = baseURL + `/sendInfraredMessages`;
 
         let jsonBody = {
-            "messages": [0, 1],
-            "strength": 64,
+            'messages': [0, 1],
+            'strength': 64,
         };
         fetch(url, {
             method: 'PUT',

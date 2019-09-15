@@ -5,7 +5,7 @@ import {Request, Response} from 'express';
 import {RouterBase} from '../router-base';
 import {IConfiguration} from '../../configuration';
 import {IApiDal} from '../../modules/api-dal-interface';
-import {DriveControl} from "../../modules/controls/drive-control";
+import {DriveControl} from '../../modules/controls/drive-control';
 
 export class DriveControlRouter extends RouterBase {
     private static readonly _routerName: string = 'DriveControl';

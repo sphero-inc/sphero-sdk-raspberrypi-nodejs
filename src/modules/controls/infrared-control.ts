@@ -1,10 +1,10 @@
 import {IApiCommandMessage, buildApiCommandMessageWithDefaultFlags} from '../../models/api-command-message';
 import {IApiDal} from '../api-dal-interface';
 import {ApiTargetsAndSources} from '../../constants';
-import {parseStartRobotToRobotInfraredBroadcastingRequest} from "../../api/v1.0/command-parsers/0x18-sensor/0x27-start-robot-to-robot-infrared-broadcasting-command-parser";
-import {parseStartRobotToRobotInfraredFollowingRequest} from "../../api/v1.0/command-parsers/0x18-sensor/0x28-start-robot-to-robot-infrared-following-command-parser";
-import {parseEnableRobotInfraredMessageNotifyRequest} from "../../api/v1.0/command-parsers/0x18-sensor/0x3E-enable-robot-infrared-message-notify-command-parser";
-import {parseSendInfraredMessageRequest} from "../../api/v1.0/command-parsers/0x18-sensor/0x3F-send-infrared-message-command-parser";
+import {parseStartRobotToRobotInfraredBroadcastingRequest} from '../../api/v1.0/command-parsers/0x18-sensor/0x27-start-robot-to-robot-infrared-broadcasting-command-parser';
+import {parseStartRobotToRobotInfraredFollowingRequest} from '../../api/v1.0/command-parsers/0x18-sensor/0x28-start-robot-to-robot-infrared-following-command-parser';
+import {parseEnableRobotInfraredMessageNotifyRequest} from '../../api/v1.0/command-parsers/0x18-sensor/0x3E-enable-robot-infrared-message-notify-command-parser';
+import {parseSendInfraredMessageRequest} from '../../api/v1.0/command-parsers/0x18-sensor/0x3F-send-infrared-message-command-parser';
 
 export class InfraredControl {
     private static readonly _targetId: number = 0x02;
@@ -13,22 +13,22 @@ export class InfraredControl {
     private static readonly _deviceName: string = 'Sensor (0x18)';
 
     private static readonly _startInfraredBroadcastingCommandId: number = 0x27;
-    private static readonly _startInfraredBroadcastingCommandName: string = "Start Robot to Robot Infrared Broadcasting";
+    private static readonly _startInfraredBroadcastingCommandName: string = 'Start Robot to Robot Infrared Broadcasting';
 
     private static readonly _stopInfraredBroadcastingCommandId: number = 0x09;
-    private static readonly _stopInfraredBroadcastingCommandName: string = "Stop Robot to Robot Infrared Broadcasting";
+    private static readonly _stopInfraredBroadcastingCommandName: string = 'Stop Robot to Robot Infrared Broadcasting';
 
     private static readonly _startInfraredFollowingCommandId: number = 0x28;
-    private static readonly _startInfraredFollowingCommandName: string = "Start Robot to Robot Infrared Following";
+    private static readonly _startInfraredFollowingCommandName: string = 'Start Robot to Robot Infrared Following';
 
     private static readonly _stopInfraredFollowingCommandId: number = 0x32;
-    private static readonly _stopInfraredFollowingCommandName: string = "Stop Robot to Robot Infrared Following";
+    private static readonly _stopInfraredFollowingCommandName: string = 'Stop Robot to Robot Infrared Following';
 
     private static readonly _sendRobotToRobotInfraredMessageCommandId: number = 0x3F;
-    private static readonly _sendRobotToRobotInfraredMessageCommandName: string = "Send Robot to Robot Infrared Message";
+    private static readonly _sendRobotToRobotInfraredMessageCommandName: string = 'Send Robot to Robot Infrared Message';
 
     private static readonly _enableRobotInfraredMessageNotifyCommandId: number = 0x3E;
-    private static readonly _enableRobotInfraredMessageNotifyCommandName: string = "Enable/Disable Robot Infrared Message Async";
+    private static readonly _enableRobotInfraredMessageNotifyCommandName: string = 'Enable/Disable Robot Infrared Message Async';
 
     private readonly _apiDal: IApiDal;
 
