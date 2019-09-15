@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Turn</title>
+</head>
+<body>
+
+<h1>Drive Control</h1>
+<script>
+
+    let baseURL = `http://` + location.hostname + `:` + location.port + '/api/driveControl';
+
+    let url = baseURL + `/resetHeading`;
+
+    fetch(url, {
+        method: 'PUT',
+        headers: {
+            'accept': 'application/json',
+        },
+    }).then(response => response.text().then((text) => console.log('/resetHeading response text: ' + text)));
+
+
+    setTimeout(() => {
+        url = baseURL + `/turnLeftDegrees`;
+
+        let jsonBody = {
+            "heading": 0,
+            "amount": 90,
+        };
+
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/json'
+
+            },
+            body: JSON.stringify(jsonBody)
+
+        }).then(response => response.text().then((text) => console.log('/turnLeftDegrees response text: ' + text)));
+    }, 500);
+
+    setTimeout(() => {
+        url = baseURL + `/turnRightDegrees`;
+
+        let jsonBody = {
+            "heading": 0,
+            "amount": 90,
+        };
+
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/json'
+
+            },
+            body: JSON.stringify(jsonBody)
+
+        }).then(response => response.text().then((text) => console.log('/turnRightDegrees response text: ' + text)));
+    }, 3000);
+
+</script>
+</body>
+</html>

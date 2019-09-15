@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Drive Regular</title>
+</head>
+<body>
+
+<h1>Drive Control</h1>
+<script>
+
+    let baseURL = `http://` + location.hostname + `:` + location.port + '/api/driveControl';
+
+    let url = baseURL + `/resetHeading`;
+
+    fetch(url, {
+        method: 'PUT',
+        headers: {
+            'accept': 'application/json',
+        },
+    }).then(response => response.text().then((text) => console.log('/reset_heading response text: ' + text)));
+
+
+    setTimeout(() => {
+        url = baseURL + `/driveBackwardSeconds`;
+
+        let jsonBody = {
+            "speed": 64,
+            "heading": 0,
+            "seconds": 4.0,
+        };
+
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonBody)
+        }).then(response => response.text().then((text) => console.log('/driveBackwardSeconds response text: ' + text)));
+
+    }, 500);
+
+    setTimeout(() => {
+        url = baseURL + `/driveForwardSeconds`;
+
+        let jsonBody = {
+            "speed": 64,
+            "heading": 0,
+            "seconds": 4.0,
+        };
+
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonBody)
+        }).then(response => response.text().then((text) => console.log('/driveForwardSeconds response text: ' + text)));
+    }, 5000);
+
+</script>
+</body>
+</html>

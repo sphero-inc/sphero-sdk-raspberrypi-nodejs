@@ -18,37 +18,38 @@ export class DriveControlRouter extends RouterBase {
     }
 
     protected initializeRoutes(): void {
-        this.router.route('/resetHeading')
+        this.router.route('/driveControl/resetHeading')
             .put((request: Request, response: Response) => this.resetHeading(request, response));
 
-        this.router.route('/driveBackwardSeconds')
+        this.router.route('/driveControl/driveBackwardSeconds')
             .put((request: Request, response: Response) => this.driveBackwardSeconds(request, response));
 
-        this.router.route('/driveForwardSeconds')
+        this.router.route('/driveControl/driveForwardSeconds')
             .put((request: Request, response: Response) => this.driveForwardSeconds(request, response));
 
-        this.router.route('/turnLeftDegrees')
+        this.router.route('/driveControl/turnLeftDegrees')
             .put((request: Request, response: Response) => this.turnLeftDegrees(request, response));
 
-        this.router.route('/turnRightDegrees')
+        this.router.route('/driveControl/turnRightDegrees')
             .put((request: Request, response: Response) => this.turnRightDegrees(request, response));
 
-        this.router.route('/rollStart')
+        this.router.route('/driveControl/rollStart')
             .put((request: Request, response: Response) => this.rollStart(request, response));
 
-        this.router.route('/rollStop')
+        this.router.route('/driveControl/rollStop')
             .put((request: Request, response: Response) => this.rollStop(request, response));
 
-        this.router.route('/aimStart')
+        this.router.route('/driveControl/aimStart')
             .put((request: Request, response: Response) => this.aimStart(request, response));
 
-        this.router.route('/aimStop')
+        this.router.route('/driveControl/aimStop')
             .put((request: Request, response: Response) => this.aimStop(request, response));
     }
 
     public resetHeading(request: Request, response: Response) {
         try {
             this._driveControl.resetHeading();
+            response.sendStatus(200);
         } catch(reason) {
             let errorCode: number = 400;
             let errorDetail: string = `Error in resetHeading: ${reason}`;
@@ -71,6 +72,7 @@ export class DriveControlRouter extends RouterBase {
 
         try {
             this._driveControl.driveBackwardSeconds(request.body.speed, request.body.heading, request.body.seconds);
+            response.sendStatus(200);
         } catch(reason) {
             let errorCode: number = 400;
             let errorDetail: string = `Error in driveBackwardSeconds: ${reason}`;
@@ -93,6 +95,7 @@ export class DriveControlRouter extends RouterBase {
 
         try {
             this._driveControl.driveForwardSeconds(request.body.speed, request.body.heading, request.body.seconds);
+            response.sendStatus(200);
         } catch(reason) {
             let errorCode: number = 400;
             let errorDetail: string = `Error in driveForwardSeconds: ${reason}`;
@@ -115,6 +118,7 @@ export class DriveControlRouter extends RouterBase {
 
         try {
             this._driveControl.turnLeftDegrees(request.body.heading, request.body.amount);
+            response.sendStatus(200);
         } catch (reason) {
             let errorCode: number = 400;
             let errorDetail: string = `Error in turnLeftDegrees: ${reason}`;
@@ -136,7 +140,8 @@ export class DriveControlRouter extends RouterBase {
         }
 
         try {
-            this._driveControl.turnLeftDegrees(request.body.heading, request.body.amount);
+            this._driveControl.turnRightDegrees(request.body.heading, request.body.amount);
+            response.sendStatus(200);
         } catch (reason) {
             let errorCode: number = 400;
             let errorDetail: string = `Error in turnRightDegrees: ${reason}`;
@@ -158,6 +163,7 @@ export class DriveControlRouter extends RouterBase {
 
         try {
             this._driveControl.rollStart(request.body.speed, request.body.heading);
+            response.sendStatus(200);
         } catch (reason) {
             let errorCode: number = 400;
             let errorDetail: string = `Error in rollStart: ${reason}`;
@@ -181,6 +187,7 @@ export class DriveControlRouter extends RouterBase {
 
         try {
             this._driveControl.rollStop(request.body.heading);
+            response.sendStatus(200);
         } catch (reason) {
             let errorCode: number = 400;
             let errorDetail: string = `Error in rollStop: ${reason}`;
@@ -194,6 +201,7 @@ export class DriveControlRouter extends RouterBase {
     public aimStart(request: Request, response: Response) {
         try {
             this._driveControl.aimStart();
+            response.sendStatus(200);
         } catch (reason) {
             let errorCode: number = 400;
             let errorDetail: string = `Error in aimStart: ${reason}`;
@@ -207,6 +215,7 @@ export class DriveControlRouter extends RouterBase {
     public aimStop(request: Request, response: Response) {
         try {
             this._driveControl.aimStop();
+            response.sendStatus(200);
         } catch (reason) {
             let errorCode: number = 400;
             let errorDetail: string = `Error in aimStop: ${reason}`;

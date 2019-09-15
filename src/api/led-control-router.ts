@@ -19,31 +19,31 @@ export class LedControlRouter extends RouterBase {
     }
 
     protected initializeRoutes(): void {
-        this.router.route('/getAvailableLedGroups')
+        this.router.route('/ledControl/getAvailableLedGroups')
             .get((request: Request, response: Response) => this.getAvailableLedGroups(request, response));
 
-        this.router.route('/getAvailableColors')
+        this.router.route('/ledControl/getAvailableColors')
             .get((request: Request, response: Response) => this.getAvailableColors(request, response));
 
-        this.router.route('/turnLedsOff')
+        this.router.route('/ledControl/turnLedsOff')
             .put((request: Request, response: Response) => this.turnLedsOff(request, response));
 
-        this.router.route('/setLedRgb')
+        this.router.route('/ledControl/setLedRgb')
             .put((request: Request, response: Response) => this.setLedRgb(request, response));
 
-        this.router.route('/setLedColor')
+        this.router.route('/ledControl/setLedColor')
             .put((request: Request, response: Response) => this.setLedColor(request, response));
 
-        this.router.route('/setAllLedsRgb')
+        this.router.route('/ledControl/setAllLedsRgb')
             .put((request: Request, response: Response) => this.setAllLedsRgb(request, response));
 
-        this.router.route('/setAllLedsColor')
+        this.router.route('/ledControl/setAllLedsColor')
             .put((request: Request, response: Response) => this.setAllLedsColor(request, response));
 
-        this.router.route('/setMultipleLedsRgb')
+        this.router.route('/ledControl/setMultipleLedsRgb')
             .put((request: Request, response: Response) => this.setMultipleLedsRgb(request, response));
 
-        this.router.route('/setMultipleLedsColor')
+        this.router.route('/ledControl/setMultipleLedsColor')
             .put((request: Request, response: Response) => this.setMultipleLedsColor(request, response));
     }
 

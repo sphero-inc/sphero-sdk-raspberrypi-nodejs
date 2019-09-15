@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Roll Start and Stop</title>
+</head>
+<body>
+
+<h1>Drive Control</h1>
+<script>
+
+    let baseURL = `http://` + location.hostname + `:` + location.port + '/api/driveControl';
+
+    setTimeout(() => {
+        url = baseURL + `/rollStart`;
+
+        let jsonBody = {
+            "speed": 64,
+            "heading": 90,
+        };
+
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/json'
+
+            },
+            body: JSON.stringify(jsonBody)
+
+        }).then(response => response.text().then((text) => console.log('/rollStart response text: ' + text)));
+    }, 500);
+
+    setTimeout(() => {
+        url = baseURL + `/rollStop`;
+
+        let jsonBody = {
+            "heading": 90,
+        };
+
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/json'
+
+            },
+            body: JSON.stringify(jsonBody)
+
+        }).then(response => response.text().then((text) => console.log('/rollStop response text: ' + text)));
+    }, 2000);
+
+</script>
+</body>
+</html>
