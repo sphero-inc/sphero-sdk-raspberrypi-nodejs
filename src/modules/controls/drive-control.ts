@@ -3,6 +3,7 @@ import {IApiDal} from '../api-dal-interface';
 import {ApiTargetsAndSources} from '../../constants';
 import {parseDriveWithHeadingRequest} from "../../api/v1.0/command-parsers/0x16-drive/0x07-drive-with-heading-command-parser";
 import {LedControl} from "./led-control";
+import Timer = NodeJS.Timer;
 
 export class DriveControl {
     private static readonly _targetId: number = 0x02;
@@ -43,11 +44,11 @@ export class DriveControl {
     }
 
     public turnLeftDegrees(heading: number, amount: number) {
-        this._sendDriveWithHeadingCommand(0, (heading - amount) % 360, DriveControl._driveNoFlag)
+        this._sendDriveWithHeadingCommand(0, mod(heading - amount, 360), DriveControl._driveNoFlag)
     }
 
     public turnRightDegrees(heading: number, amount: number) {
-        this._sendDriveWithHeadingCommand(0, (heading + amount) % 360, DriveControl._driveNoFlag)
+        this._sendDriveWithHeadingCommand(0, mod(heading + amount, 360), DriveControl._driveNoFlag)
     }
 
     public rollStart(speed: number, heading: number) {
@@ -59,6 +60,7 @@ export class DriveControl {
     }
 
     public aimStart() {
+        this._ledController.turnLedsOff();
         this._ledController.setMultipleLedsColor(['headlight_left', 'headlight_right'], 'blue');
     }
 
@@ -68,18 +70,21 @@ export class DriveControl {
     }
 
     private _timedDrive(speed: number, heading: number, flags: number, seconds: number){
-        this._sendDriveWithHeadingCommand(speed, heading, flags);
+        let intervalTimer: Timer = setInterval(() => {
+            this._sendDriveWithHeadingCommand(speed, heading, flags);
+        }, 100);
 
         setTimeout(() => {
+            clearInterval(intervalTimer);
             this._sendDriveWithHeadingCommand(0, heading, flags);
         }, seconds * 1000);
     }
 
     private _rollDrive(speed: number, heading: number) {
-        let flags: number = 0;
+        let flags: number = DriveControl._driveNoFlag;
 
         if (speed < 0)
-            flags = flags | DriveControl._driveReverseFlag;
+            flags = DriveControl._driveReverseFlag;
 
         speed = Math.abs(speed);
         if (speed > 255)
@@ -131,6 +136,10 @@ export class DriveControl {
             throw new Error(errorDetail);
         });
     }
+}
+
+function mod(n: number, m: number): number {
+    return ((n % m) + m) % m;
 }
 
 

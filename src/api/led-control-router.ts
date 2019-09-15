@@ -19,31 +19,31 @@ export class LedControlRouter extends RouterBase {
     }
 
     protected initializeRoutes(): void {
-        this.router.route('/getAvailableLedGroups')
+        this.router.route('/ledControl/getAvailableLedGroups')
             .get((request: Request, response: Response) => this.getAvailableLedGroups(request, response));
 
-        this.router.route('/getAvailableColors')
+        this.router.route('/ledControl/getAvailableColors')
             .get((request: Request, response: Response) => this.getAvailableColors(request, response));
 
-        this.router.route('/turnLedsOff')
+        this.router.route('/ledControl/turnLedsOff')
             .put((request: Request, response: Response) => this.turnLedsOff(request, response));
 
-        this.router.route('/setLedRgb')
+        this.router.route('/ledControl/setLedRgb')
             .put((request: Request, response: Response) => this.setLedRgb(request, response));
 
-        this.router.route('/setLedColor')
+        this.router.route('/ledControl/setLedColor')
             .put((request: Request, response: Response) => this.setLedColor(request, response));
 
-        this.router.route('/setAllLedsRgb')
+        this.router.route('/ledControl/setAllLedsRgb')
             .put((request: Request, response: Response) => this.setAllLedsRgb(request, response));
 
-        this.router.route('/setAllLedsColor')
+        this.router.route('/ledControl/setAllLedsColor')
             .put((request: Request, response: Response) => this.setAllLedsColor(request, response));
 
-        this.router.route('/setMultipleLedsRgb')
+        this.router.route('/ledControl/setMultipleLedsRgb')
             .put((request: Request, response: Response) => this.setMultipleLedsRgb(request, response));
 
-        this.router.route('/setMultipleLedsColor')
+        this.router.route('/ledControl/setMultipleLedsColor')
             .put((request: Request, response: Response) => this.setMultipleLedsColor(request, response));
     }
 
@@ -60,6 +60,7 @@ export class LedControlRouter extends RouterBase {
     public turnLedsOff(request: Request, response: Response) {
         try {
             this._ledControl.turnLedsOff();
+            response.sendStatus(200);
         } catch(reason) {
             let errorCode: number = 400;
             let errorDetail: string = `Error in resetHeading: ${reason}`;
@@ -73,6 +74,7 @@ export class LedControlRouter extends RouterBase {
     public setLedRgb(request: Request, response: Response) {
         try {
             this._ledControl.setLedRgb(request.body.ledGroup, request.body.R, request.body.G, request.body.B);
+            response.sendStatus(200);
         } catch(reason) {
             let errorCode: number = 400;
             let errorDetail: string = `Error in resetHeading: ${reason}`;
@@ -86,6 +88,7 @@ export class LedControlRouter extends RouterBase {
     public setLedColor(request: Request, response: Response) {
         try {
             this._ledControl.setLedColor(request.body.ledGroup, request.body.color);
+            response.sendStatus(200);
         } catch(reason) {
             let errorCode: number = 400;
             let errorDetail: string = `Error in resetHeading: ${reason}`;
@@ -99,6 +102,7 @@ export class LedControlRouter extends RouterBase {
     public setAllLedsRgb(request: Request, response: Response) {
         try {
             this._ledControl.setAllLedsRgb(request.body.R, request.body.G, request.body.B);
+            response.sendStatus(200);
         } catch(reason) {
             let errorCode: number = 400;
             let errorDetail: string = `Error in resetHeading: ${reason}`;
@@ -112,6 +116,7 @@ export class LedControlRouter extends RouterBase {
     public setAllLedsColor(request: Request, response: Response) {
         try {
             this._ledControl.setAllLedsColor(request.body.color);
+            response.sendStatus(200);
         } catch(reason) {
             let errorCode: number = 400;
             let errorDetail: string = `Error in resetHeading: ${reason}`;
@@ -125,6 +130,7 @@ export class LedControlRouter extends RouterBase {
     public setMultipleLedsRgb(request: Request, response: Response) {
         try {
             this._ledControl.setMultipleLedsRgb(request.body.ledGroups, request.body.R, request.body.G, request.body.B);
+            response.sendStatus(200);
         } catch(reason) {
             let errorCode: number = 400;
             let errorDetail: string = `Error in resetHeading: ${reason}`;
@@ -138,6 +144,7 @@ export class LedControlRouter extends RouterBase {
     public setMultipleLedsColor(request: Request, response: Response) {
         try {
             this._ledControl.setMultipleLedsColor(request.body.ledGroups, request.body.color);
+            response.sendStatus(200);
         } catch(reason) {
             let errorCode: number = 400;
             let errorDetail: string = `Error in resetHeading: ${reason}`;
