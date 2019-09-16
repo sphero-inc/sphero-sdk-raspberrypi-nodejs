@@ -8,10 +8,10 @@ import {IConfiguration} from '../configuration';
 // route imports
 import * as v1dot0Router from './v1.0';
 import {GenericCommandRouter} from './generic-command-router';
-import {LedControlRouter} from './controls-routers/led-control-router';
+import {LedControlRouter} from './control-routers/led-control-router';
 import {IApiDal} from '../modules/api-dal-interface';
-import {DriveControlRouter} from "./controls-routers/drive-control-router";
-import {InfraredControlRouter} from "./controls-routers/infrared-control-router";
+import {DriveControlRouter} from "./control-routers/drive-control-router";
+import {InfraredControlRouter} from "./control-routers/infrared-control-router";
 
 let logger: ILogger = createLogger('api index');
 

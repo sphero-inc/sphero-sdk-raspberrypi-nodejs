@@ -1,0 +1,380 @@
+{
+  "paths": {
+    "/driveControl/resetHeading": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": [
+          "driveControl"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "",
+        "consumes": [
+          "application/json"
+        ],
+        "description": ""
+      },
+    },
+    "/driveControl/driveBackwardSeconds": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": [
+          "driveControl"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "",
+        "consumes": [
+          "application/json"
+        ],
+        "description": ""
+      },
+      "parameters": [
+        {
+          "schema": {
+            "required": [
+              "speed",
+              "heading",
+              "seconds"
+            ],
+            "type": "object",
+            "properties": {
+              "speed": {
+                "type": "integer"
+              },
+              "heading": {
+                "type": "integer"
+              },
+              "seconds": {
+                "type": "integer"
+              }
+            }
+          },
+          "required": true,
+          "name": "body",
+          "in": "body"
+        }
+      ]
+    },
+    "/driveControl/driveForwardSeconds": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": [
+          "driveControl"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "",
+        "consumes": [
+          "application/json"
+        ],
+        "description": ""
+      },
+      "parameters": [
+        {
+          "schema": {
+            "required": [
+              "speed",
+              "heading",
+              "seconds"
+            ],
+            "type": "object",
+            "properties": {
+              "speed": {
+                "type": "integer"
+              },
+              "heading": {
+                "type": "integer"
+              },
+              "seconds": {
+                "type": "integer"
+              }
+            }
+          },
+          "required": true,
+          "name": "body",
+          "in": "body"
+        }
+      ]
+    },
+    "/driveControl/turnLeftDegrees": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": [
+          "driveControl"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "",
+        "consumes": [
+          "application/json"
+        ],
+        "description": ""
+      },
+      "parameters": [
+        {
+          "schema": {
+            "required": [
+              "heading",
+              "amount"
+            ],
+            "type": "object",
+            "properties": {
+              "heading": {
+                "type": "integer"
+              },
+              "amount": {
+                "type": "integer"
+              }
+            }
+          },
+          "required": true,
+          "name": "body",
+          "in": "body"
+        }
+      ]
+    },
+    "/driveControl/turnRightDegrees": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": [
+          "driveControl"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "",
+        "consumes": [
+          "application/json"
+        ],
+        "description": ""
+      },
+      "parameters": [
+        {
+          "schema": {
+            "required": [
+              "heading",
+              "amount"
+            ],
+            "type": "object",
+            "properties": {
+              "heading": {
+                "type": "integer"
+              },
+              "amount": {
+                "type": "integer"
+              }
+            }
+          },
+          "required": true,
+          "name": "body",
+          "in": "body"
+        }
+      ]
+    },
+    "/driveControl/rollStart": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": [
+          "driveControl"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "",
+        "consumes": [
+          "application/json"
+        ],
+        "description": ""
+      },
+      "parameters": [
+        {
+          "schema": {
+            "required": [
+              "speed",
+              "heading"
+            ],
+            "type": "object",
+            "properties": {
+              "speed": {
+                "type": "string"
+              },
+              "heading": {
+                "type": "string"
+              },
+            }
+          },
+          "required": true,
+          "name": "body",
+          "in": "body"
+        }
+      ]
+    },
+    "/driveControl/rollStop": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": [
+          "driveControl"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "",
+        "consumes": [
+          "application/json"
+        ],
+        "description": ""
+      },
+      "parameters": [
+        {
+          "schema": {
+            "required": [
+              "heading"
+            ],
+            "type": "object",
+            "properties": {
+              "heading": {
+                "type": "string"
+              },
+            }
+          },
+          "required": true,
+          "name": "body",
+          "in": "body"
+        }
+      ]
+    },
+    "/driveControl/aimStart": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": [
+          "driveControl"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "",
+        "consumes": [
+          "application/json"
+        ],
+        "description": ""
+      }
+    },
+    "/driveControl/aimStop": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": [
+          "driveControl"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "",
+        "consumes": [
+          "application/json"
+        ],
+        "description": ""
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "driveControl",
+      "description": ""
+    }
+  ]
+}

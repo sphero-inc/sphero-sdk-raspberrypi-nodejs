@@ -7,7 +7,7 @@ import {Server as HttpServer} from 'http';
 import * as WebSocket from 'ws';
 
 const swaggerUi = require('swagger-ui-express');
-import swaggerDocument = require('../api/v1.0/swagger.json');
+import {buildSwaggerDoc} from "../utilities/merge-swagger-specs";
 
 // internal imports
 import apiRouter = require('../api/');
@@ -77,6 +77,7 @@ export class App {
         this.expressApp.use(express.static(path.join(process.cwd(), 'public')));
 
         // more options --> https://github.com/scottie1984/swagger-ui-express
+        let swaggerDocument: object = buildSwaggerDoc();
         this.expressApp.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
         // explore using this
