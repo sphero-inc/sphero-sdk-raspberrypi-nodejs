@@ -4,7 +4,7 @@
       "put": {
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "OK"
           },
           "404": {
             "description": "Resource not found"
@@ -35,7 +35,7 @@
             "type": "object",
             "properties": {
               "farCode": {
-                "type": "integer",
+                "type": "integer"
               },
               "nearCode": {
                 "type": "integer"
@@ -78,7 +78,7 @@
       "put": {
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "OK"
           },
           "404": {
             "description": "Resource not found"
@@ -109,7 +109,7 @@
             "type": "object",
             "properties": {
               "farCode": {
-                "type": "integer",
+                "type": "integer"
               },
               "nearCode": {
                 "type": "integer"
@@ -146,7 +146,7 @@
           "application/json"
         ],
         "description": ""
-      },
+      }
     },
     "/infraredControl/sendInfraredMessages": {
       "put": {
@@ -184,7 +184,7 @@
             "properties": {
               "messages": {
                 "type": "array",
-                "items":{
+                "items": {
                   "type": "integer"
                 }
               },
@@ -198,51 +198,51 @@
           "in": "body"
         }
       ]
-    }
-  },
-  "/infraredControl/enableRobotInfraredMessageNotify": {
-    "put": {
-      "responses": {
-        "200": {
-          "description": "OK"
-        },
-        "404": {
-          "description": "Resource not found"
-        },
-        "400": {
-          "description": "Bad request"
-        }
-      },
-      "tags": [
-        "InfraredControl"
-      ],
-      "produces": [
-        "application/json"
-      ],
-      "summary": "",
-      "consumes": [
-        "application/json"
-      ],
-      "description": ""
     },
-    "parameters": [
-      {
-        "schema": {
-          "required": [
-            "isEnabled"
-          ],
-          "type": "object",
-          "properties": {
-            "isEnabled": {
-              "type": "boolean"
-            }
+    "/infraredControl/enableRobotInfraredMessageNotify": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "400": {
+            "description": "Bad request"
           }
         },
-        "required": true,
-        "name": "body",
-        "in": "body"
-      }
-    ]
+        "tags": [
+          "InfraredControl"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "",
+        "consumes": [
+          "application/json"
+        ],
+        "description": ""
+      },
+      "parameters": [
+        {
+          "schema": {
+            "required": [
+              "isEnabled"
+            ],
+            "type": "object",
+            "properties": {
+              "isEnabled": {
+                "type": "boolean"
+              }
+            }
+          },
+          "required": true,
+          "name": "body",
+          "in": "body"
+        }
+      ]
+    }
   },
   "tags": [
     {

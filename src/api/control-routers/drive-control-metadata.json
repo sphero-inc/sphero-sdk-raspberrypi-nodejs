@@ -261,10 +261,10 @@
             "type": "object",
             "properties": {
               "speed": {
-                "type": "string"
+                "type": "integer"
               },
               "heading": {
-                "type": "string"
+                "type": "integer"
               },
             }
           },
@@ -308,7 +308,7 @@
             "type": "object",
             "properties": {
               "heading": {
-                "type": "string"
+                "type": "integer"
               },
             }
           },
