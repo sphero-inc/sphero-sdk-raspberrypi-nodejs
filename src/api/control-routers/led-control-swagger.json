@@ -126,22 +126,22 @@
           "schema": {
             "required": [
               "ledGroup",
-              "R",
-              "G",
-              "B"
+              "red",
+              "green",
+              "blue"
             ],
             "type": "object",
             "properties": {
               "ledGroup": {
                 "type": "string"
               },
-              "R": {
+              "red": {
                 "type": "integer"
               },
-              "G": {
+              "green": {
                 "type": "integer"
               },
-              "B": {
+              "blue": {
                 "type": "integer"
               }
             }
@@ -191,7 +191,7 @@
               },
               "color": {
                 "type": "string"
-              },
+              }
             }
           },
           "required": true,
@@ -230,9 +230,9 @@
           "schema": {
             "required": [
               "ledGroups",
-              "R",
-              "G",
-              "B"
+              "red",
+              "green",
+              "blue"
             ],
             "type": "object",
             "properties": {
@@ -242,13 +242,13 @@
                   "type": "string"
                 }
               },
-              "R": {
+              "red": {
                 "type": "integer"
               },
-              "G": {
+              "green": {
                 "type": "integer"
               },
-              "B": {
+              "blue": {
                 "type": "integer"
               }
             }
@@ -301,7 +301,7 @@
               },
               "color": {
                 "type": "string"
-              },
+              }
             }
           },
           "required": true,
@@ -339,19 +339,19 @@
         {
           "schema": {
             "required": [
-              "R",
-              "G",
-              "B"
+              "red",
+              "green",
+              "blue"
             ],
             "type": "object",
             "properties": {
-              "R": {
+              "red": {
                 "type": "integer"
               },
-              "G": {
+              "green": {
                 "type": "integer"
               },
-              "B": {
+              "blue": {
                 "type": "integer"
               }
             }
@@ -397,7 +397,7 @@
             "properties": {
               "color": {
                 "type": "string"
-              },
+              }
             }
           },
           "required": true,

@@ -1,9 +1,10 @@
-import {IApiCommandMessage, buildApiCommandMessageWithDefaultFlags} from '../../models/api-command-message';
-import {IApiDal} from '../api-dal-interface';
-import {ApiTargetsAndSources} from '../../constants';
-import {parseDriveWithHeadingRequest} from '../../api/v1.0/command-parsers/0x16-drive/0x07-drive-with-heading-command-parser';
-import {LedControl} from './led-control';
+import {IApiCommandMessage, buildApiCommandMessageWithDefaultFlags} from '../../../models/api-command-message';
+import {IApiDal} from '../../api-dal-interface';
+import {ApiTargetsAndSources} from '../../../constants';
+import {parseDriveWithHeadingRequest} from '../../../api/v1.0/command-parsers/0x16-drive/0x07-drive-with-heading-command-parser';
+import {LedControl, LedGroups, Colors} from './led-control';
 import Timer = NodeJS.Timer;
+import {MathUtilities} from "../../../utilities/math-utilities";
 
 export class DriveControl {
     private static readonly _targetId: number = 0x02;
@@ -44,11 +45,11 @@ export class DriveControl {
     }
 
     public turnLeftDegrees(heading: number, amount: number) {
-        this._sendDriveWithHeadingCommand(0, mod(heading - amount, 360), DriveControl._driveNoFlag)
+        this._sendDriveWithHeadingCommand(0, MathUtilities.mod(heading - amount, 360), DriveControl._driveNoFlag)
     }
 
     public turnRightDegrees(heading: number, amount: number) {
-        this._sendDriveWithHeadingCommand(0, mod(heading + amount, 360), DriveControl._driveNoFlag)
+        this._sendDriveWithHeadingCommand(0, MathUtilities.mod(heading + amount, 360), DriveControl._driveNoFlag)
     }
 
     public rollStart(speed: number, heading: number) {
@@ -111,10 +112,6 @@ export class DriveControl {
         apiCommandMessage.generateMessageRawBytes();
         this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
             // TODO log response
-        }).catch(reason => {
-            let errorDetail: string = `Error in driveBackwardSeconds: ${reason}`;
-
-            throw new Error(errorDetail);
         });
     }
 
@@ -130,16 +127,10 @@ export class DriveControl {
         this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
             // TODO log response
 
-        }).catch(reason => {
-            let errorDetail: string = `Error in driveBackwardSeconds: ${reason}`;
-
-            throw new Error(errorDetail);
         });
     }
 }
 
-function mod(n: number, m: number): number {
-    return ((n % m) + m) % m;
-}
+
 
 

@@ -5,7 +5,7 @@ import {Request, Response} from 'express';
 import {RouterBase} from '../router-base';
 import {IConfiguration} from '../../configuration';
 import {IApiDal} from '../../modules/api-dal-interface';
-import {LedControl} from '../../modules/controls/led-control';
+import {LedControl} from '../../modules/controls/v1.0/led-control';
 
 
 export class LedControlRouter extends RouterBase {
@@ -63,7 +63,7 @@ export class LedControlRouter extends RouterBase {
             response.sendStatus(200);
         } catch(reason) {
             let errorCode: number = 400;
-            let errorDetail: string = `Error in resetHeading: ${reason}`;
+            let errorDetail: string = `Error in turnLedsOff: ${reason}`;
 
             // this.routeError(request.path, request.method, errorCode, errorDetail);
 
@@ -73,11 +73,11 @@ export class LedControlRouter extends RouterBase {
 
     public setLedRgb(request: Request, response: Response) {
         try {
-            this._ledControl.setLedRgb(request.body.ledGroup, request.body.R, request.body.G, request.body.B);
+            this._ledControl.setLedRgb(request.body.ledGroup, request.body.red, request.body.green, request.body.blue);
             response.sendStatus(200);
         } catch(reason) {
             let errorCode: number = 400;
-            let errorDetail: string = `Error in resetHeading: ${reason}`;
+            let errorDetail: string = `Error in setLedRgb: ${reason}`;
 
             // this.routeError(request.path, request.method, errorCode, errorDetail);
 
@@ -91,7 +91,7 @@ export class LedControlRouter extends RouterBase {
             response.sendStatus(200);
         } catch(reason) {
             let errorCode: number = 400;
-            let errorDetail: string = `Error in resetHeading: ${reason}`;
+            let errorDetail: string = `Error in setLedColor: ${reason}`;
 
             // this.routeError(request.path, request.method, errorCode, errorDetail);
 
@@ -101,11 +101,11 @@ export class LedControlRouter extends RouterBase {
 
     public setAllLedsRgb(request: Request, response: Response) {
         try {
-            this._ledControl.setAllLedsRgb(request.body.R, request.body.G, request.body.B);
+            this._ledControl.setAllLedsRgb(request.body.red, request.body.green, request.body.blue);
             response.sendStatus(200);
         } catch(reason) {
             let errorCode: number = 400;
-            let errorDetail: string = `Error in resetHeading: ${reason}`;
+            let errorDetail: string = `Error in setAllLedsRgb: ${reason}`;
 
             // this.routeError(request.path, request.method, errorCode, errorDetail);
 
@@ -119,7 +119,7 @@ export class LedControlRouter extends RouterBase {
             response.sendStatus(200);
         } catch(reason) {
             let errorCode: number = 400;
-            let errorDetail: string = `Error in resetHeading: ${reason}`;
+            let errorDetail: string = `Error in setAllLedsColor: ${reason}`;
 
             // this.routeError(request.path, request.method, errorCode, errorDetail);
 
@@ -129,11 +129,11 @@ export class LedControlRouter extends RouterBase {
 
     public setMultipleLedsRgb(request: Request, response: Response) {
         try {
-            this._ledControl.setMultipleLedsRgb(request.body.ledGroups, request.body.R, request.body.G, request.body.B);
+            this._ledControl.setMultipleLedsRgb(request.body.ledGroups, request.body.red, request.body.green, request.body.blue);
             response.sendStatus(200);
         } catch(reason) {
             let errorCode: number = 400;
-            let errorDetail: string = `Error in resetHeading: ${reason}`;
+            let errorDetail: string = `Error in setMultipleLedsRgb: ${reason}`;
 
             // this.routeError(request.path, request.method, errorCode, errorDetail);
 
@@ -147,7 +147,7 @@ export class LedControlRouter extends RouterBase {
             response.sendStatus(200);
         } catch(reason) {
             let errorCode: number = 400;
-            let errorDetail: string = `Error in resetHeading: ${reason}`;
+            let errorDetail: string = `Error in setMultipleLedsColor: ${reason}`;
 
             // this.routeError(request.path, request.method, errorCode, errorDetail);
 

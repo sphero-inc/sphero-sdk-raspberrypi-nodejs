@@ -1,7 +1,7 @@
 let swaggerMainDocument: SwaggerObject = require('../api/v1.0/swagger.json');
-let ledControlSwagger: SwaggerObject = require('../api/control-routers/led-control-metadata.json');
-let driveControlSwagger: SwaggerObject = require('../api/control-routers/drive-control-metadata.json');
-let infraredControlSwagger: SwaggerObject = require('../api/control-routers/infrared-control-metadata.json');
+let ledControlSwagger: SwaggerObject = require('../api/control-routers/led-control-swagger.json');
+let driveControlSwagger: SwaggerObject = require('../api/control-routers/drive-control-swagger.json');
+let infraredControlSwagger: SwaggerObject = require('../api/control-routers/infrared-control-swagger.json');
 
 
 

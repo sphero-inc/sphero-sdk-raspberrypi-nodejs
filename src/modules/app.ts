@@ -7,7 +7,7 @@ import {Server as HttpServer} from 'http';
 import * as WebSocket from 'ws';
 
 const swaggerUi = require('swagger-ui-express');
-import {buildSwaggerDoc} from "../utilities/merge-swagger-specs";
+import {buildSwaggerDoc} from '../utilities/merge-swagger-specs';
 
 // internal imports
 import apiRouter = require('../api/');

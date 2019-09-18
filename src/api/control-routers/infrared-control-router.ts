@@ -5,7 +5,7 @@ import {Request, Response} from 'express';
 import {RouterBase} from '../router-base';
 import {IConfiguration} from '../../configuration';
 import {IApiDal} from '../../modules/api-dal-interface';
-import {InfraredControl} from '../../modules/controls/infrared-control';
+import {InfraredControl} from '../../modules/controls/v1.0/infrared-control';
 
 export class InfraredControlRouter extends RouterBase {
     private static readonly _routerName: string = 'InfraredControl';
@@ -52,7 +52,7 @@ export class InfraredControlRouter extends RouterBase {
             response.sendStatus(200);
         } catch(reason) {
             let errorCode: number = 400;
-            let errorDetail: string = `Error in resetHeading: ${reason}`;
+            let errorDetail: string = `Error in startInfraredBroadcasting: ${reason}`;
 
             // this.routeError(request.path, request.method, errorCode, errorDetail);
 
@@ -66,7 +66,7 @@ export class InfraredControlRouter extends RouterBase {
             response.sendStatus(200);
         } catch(reason) {
             let errorCode: number = 400;
-            let errorDetail: string = `Error in resetHeading: ${reason}`;
+            let errorDetail: string = `Error in stopInfraredBroadcasting: ${reason}`;
 
             // this.routeError(request.path, request.method, errorCode, errorDetail);
 
@@ -89,7 +89,7 @@ export class InfraredControlRouter extends RouterBase {
             response.sendStatus(200);
         } catch(reason) {
             let errorCode: number = 400;
-            let errorDetail: string = `Error in resetHeading: ${reason}`;
+            let errorDetail: string = `Error in startInfraredFollowing: ${reason}`;
 
             // this.routeError(request.path, request.method, errorCode, errorDetail);
 
@@ -103,7 +103,7 @@ export class InfraredControlRouter extends RouterBase {
             response.sendStatus(200);
         } catch(reason) {
             let errorCode: number = 400;
-            let errorDetail: string = `Error in resetHeading: ${reason}`;
+            let errorDetail: string = `Error in stopInfraredFollowing: ${reason}`;
 
             // this.routeError(request.path, request.method, errorCode, errorDetail);
 
@@ -126,7 +126,7 @@ export class InfraredControlRouter extends RouterBase {
             response.sendStatus(200);
         } catch(reason) {
             let errorCode: number = 400;
-            let errorDetail: string = `Error in resetHeading: ${reason}`;
+            let errorDetail: string = `Error in sendInfraredMessages: ${reason}`;
 
             // this.routeError(request.path, request.method, errorCode, errorDetail);
 
@@ -149,7 +149,7 @@ export class InfraredControlRouter extends RouterBase {
             response.sendStatus(200);
         } catch(reason) {
             let errorCode: number = 400;
-            let errorDetail: string = `Error in resetHeading: ${reason}`;
+            let errorDetail: string = `Error in enableRobotInfraredMessageNotify: ${reason}`;
 
             // this.routeError(request.path, request.method, errorCode, errorDetail);
 
