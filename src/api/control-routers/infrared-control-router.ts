@@ -33,8 +33,8 @@ export class InfraredControlRouter extends RouterBase {
         this.router.route('/infraredControl/sendInfraredMessages')
             .put((request: Request, response: Response) => this.sendInfraredMessages(request, response));
 
-        this.router.route('/infraredControl/enableRobotInfraredMessageNotify')
-            .put((request: Request, response: Response) => this.enableRobotInfraredMessageNotify(request, response));
+        this.router.route('/infraredControl/listenForInfraredMessages')
+            .put((request: Request, response: Response) => this.listenForInfraredMessages(request, response));
     }
 
     public startInfraredBroadcasting(request: Request, response: Response) {
@@ -134,7 +134,7 @@ export class InfraredControlRouter extends RouterBase {
         }
     }
 
-    public enableRobotInfraredMessageNotify(request: Request, response: Response) {
+    public listenForInfraredMessages(request: Request, response: Response) {
         if (!request.body) {
             let errorCode: number = 400;
             let errorDetail: string = 'Payload is required!';
@@ -145,7 +145,7 @@ export class InfraredControlRouter extends RouterBase {
         }
 
         try {
-            this._infraredControl.enableRobotInfraredMessageNotify(request.body.isEnabled);
+            this._infraredControl.listenForInfraredMessages(request.body.isEnabled);
             response.sendStatus(200);
         } catch(reason) {
             let errorCode: number = 400;

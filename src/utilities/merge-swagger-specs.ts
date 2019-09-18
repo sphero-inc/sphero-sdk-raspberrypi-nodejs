@@ -1,27 +1,32 @@
-let swaggerMainDocument: SwaggerObject = require('../api/v1.0/swagger.json');
-let ledControlSwagger: SwaggerObject = require('../api/control-routers/led-control-swagger.json');
-let driveControlSwagger: SwaggerObject = require('../api/control-routers/drive-control-swagger.json');
-let infraredControlSwagger: SwaggerObject = require('../api/control-routers/infrared-control-swagger.json');
+import mainDocumentSwaggerJSON = require('../api/v1.0/swagger.json');
+import ledControlSwaggerJSON = require('../api/control-routers/led-control-swagger.json');
+import driveControlSwaggerJSON = require('../api/control-routers/drive-control-swagger.json');
+import infraredControlSwaggerJSON = require('../api/control-routers/infrared-control-swagger.json');
 
 
 
 export function buildSwaggerDoc(): object {
+    let mainDocumentSwagger: SwaggerObject = mainDocumentSwaggerJSON;
+    let ledControlSwagger: SwaggerObject = ledControlSwaggerJSON;
+    let driveControlSwagger: SwaggerObject = driveControlSwaggerJSON;
+    let infraredControlSwagger: SwaggerObject = infraredControlSwaggerJSON;
+
     let swaggerObjects: Array<SwaggerObject> = [ledControlSwagger, driveControlSwagger,
         infraredControlSwagger];
 
     for(let swaggerObject of swaggerObjects) {
 
         for(let path in swaggerObject.paths){
-            swaggerMainDocument.paths[path] = swaggerObject.paths[path];
+            mainDocumentSwagger.paths[path] = swaggerObject.paths[path];
         }
 
         for(let tag of swaggerObject.tags){
-            swaggerMainDocument.tags.push(tag);
+            mainDocumentSwagger.tags.push(tag);
         }
 
     }
 
-    return swaggerMainDocument;
+    return mainDocumentSwagger;
 }
 
 interface SwaggerObject {

@@ -58,7 +58,7 @@ export class InfraredControl {
         }
     }
 
-    public enableRobotInfraredMessageNotify(isEnabled: boolean) {
+    public listenForInfraredMessages(isEnabled: boolean) {
         this._sendEnableRobotInfraredMessageNotifyCommand(isEnabled);
     }
 
