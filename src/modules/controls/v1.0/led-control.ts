@@ -25,11 +25,11 @@ export class LedControl {
      * the only way. See https://github.com/Microsoft/TypeScript/issues/17198.
      */
     public getAvailableLedGroups(): Array<string> {
-        return Array.from(Object.keys(LedGroups));
+        return LedGroups.ledGroupNames;
     }
 
     public getAvailableColors(): Array<string> {
-        return Array.from(Object.keys(Colors));
+        return Colors.colorNames;
     }
 
     public turnLedsOff(): void {

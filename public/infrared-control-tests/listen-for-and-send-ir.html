@@ -16,10 +16,10 @@
         console.log(e.data);
     };
 
-    let baseURL = `http://` + location.hostname + `:` + location.port + '/api/infraredControl';
+    let baseURL = `http://` + location.hostname + `:` + location.port + '/api/v1.0/infraredControl';
 
     setTimeout(() => {
-        let url = baseURL + `/enableRobotInfraredMessageNotify`;
+        let url = baseURL + `/listenForInfraredMessages`;
 
         let jsonBody = {
             'isEnabled': true,
