@@ -62,12 +62,12 @@ export class DriveControl {
 
     public aimStart() {
         this._ledController.turnLedsOff();
-        this._ledController.setMultipleLedsColor(['headlight_left', 'headlight_right'], 'blue');
+        this._ledController.setMultipleLedsColor(LedGroups.aimLedGroup, Colors.blue);
     }
 
     public aimStop() {
         this._sendResetHeadingCommand();
-        this._ledController.setMultipleLedsColor(['headlight_left', 'headlight_right'], 'off');
+        this._ledController.setMultipleLedsColor(LedGroups.aimLedGroup, Colors.off);
     }
 
     private _timedDrive(speed: number, heading: number, flags: number, seconds: number){
