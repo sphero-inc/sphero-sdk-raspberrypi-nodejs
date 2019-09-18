@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+
+</head>
+<body>
+    <h1>Sensor Streaming</h1>
+    <script>
+        let url = "ws://10.211.2.2:2010/stream";
+        const socket = new WebSocket(url);
+        socket.onopen = () => {
+            console.log("connected");
+            socket.send("hello server");
+        };
+        socket.onmessage = (e) => {
+            console.log(e.data);
+        };
+    </script>
+</body>
+</html>
+

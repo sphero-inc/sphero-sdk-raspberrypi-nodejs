@@ -1,0 +1,124 @@
+{
+  "paths":{
+    "/sensorControl/getAvailableSensorsToStream": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "required": [
+                "sensors"
+              ],
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": [
+          "SensorControl"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "",
+        "consumes": [
+          "application/json"
+        ],
+        "description": ""
+      },
+    },
+    "/sensorControl/startStreaming": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": [
+          "SensorControl"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "",
+        "consumes": [
+          "application/json"
+        ],
+        "description": ""
+      },
+      "parameters": [
+        {
+          "schema": {
+            "required": [
+              "sensors",
+              "interval"
+            ],
+            "type": "object",
+            "properties": {
+              "sensors": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "interval": {
+                "type": "integer"
+              }
+            }
+          },
+          "required": true,
+          "name": "body",
+          "in": "body"
+        }
+      ]
+    },
+    "/sensorControl/stopStreaming": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": [
+          "SensorControl"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "",
+        "consumes": [
+          "application/json"
+        ],
+        "description": ""
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "SensorControl",
+      "description": ""
+    }
+  ]
+}
+
+

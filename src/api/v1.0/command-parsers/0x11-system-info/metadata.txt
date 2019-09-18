@@ -3,8 +3,8 @@
 // Device ID (DID):         0x11
 // Device Name:             system_info
 // Device Description:      
-// Command Count:           22
+// Command Count:           16
 // Source File:             0x11-system_info.json
-// Timestamp:               02/20/2019 @ 00:37:18.335737 (UTC)
+// Timestamp:               08/30/2019 @ 02:27:36.809038 (UTC)
 // ************************************************************
 
