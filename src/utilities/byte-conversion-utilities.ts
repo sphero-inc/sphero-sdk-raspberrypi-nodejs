@@ -1,4 +1,8 @@
 export class ByteConversionUtilities {
+
+    public static normalize(value: number, min: number, max: number, newMin: number, newMax: number): number {
+        return ( ( (value - min ) / (max - min) ) * ( newMax - newMin ) ) + newMin;
+    }
     public static numberToByteArray(value: number, size: number) {
         let bytes: Array<number> = [];
 

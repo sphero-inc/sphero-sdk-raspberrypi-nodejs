@@ -5,9 +5,7 @@ import * as cors from 'cors';
 import * as bodyParser from 'body-parser';
 import {Server as HttpServer} from 'http';
 import * as WebSocket from 'ws';
-
 const swaggerUi = require('swagger-ui-express');
-import {buildSwaggerDoc} from '../utilities/merge-swagger-specs';
 
 // internal imports
 import apiRouter = require('../api/');
@@ -17,6 +15,7 @@ import dateTimeUtilities = require('../utilities/date-time-utilities');
 import {IApiDal} from './api-dal-interface';
 import {IApiMessageLite} from '../models/api-message-lite';
 import * as path from 'path';
+import {buildSwaggerDoc} from "../utilities/merge-swagger-specs";
 
 let logger: ILogger = createLogger('app');
 

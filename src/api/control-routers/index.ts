@@ -10,6 +10,7 @@ import {IApiDal} from '../../modules/api-dal-interface';
 import {DriveControlRouter} from "./drive-control-router";
 import {InfraredControlRouter} from "./infrared-control-router";
 import {LedControlRouter} from './led-control-router';
+import {SensorStreamingControlRouter} from "./sensor-streaming-control-router";
 import {RouterBase} from "../router-base";
 let logger: ILogger = createLogger('api index');
 
@@ -20,6 +21,7 @@ export function initializeRoutes(app: Application, apiDal: IApiDal, configuratio
     initializeRoute(app, new LedControlRouter(apiDal, configuration));
     initializeRoute(app, new InfraredControlRouter(apiDal, configuration));
     initializeRoute(app, new DriveControlRouter(apiDal, configuration));
+    initializeRoute(app, new SensorStreamingControlRouter(apiDal, configuration));
 }
 
 function initializeRoute(app: Application, controlRouter: RouterBase) {

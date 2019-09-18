@@ -1,9 +1,9 @@
 
 export interface ICommandParserFactory {
 
-    addParser(deviceId: number, commandId: number, commandParserHandler: ICommandParserHandler): void;
+    addParser(processorId: number, deviceId: number, commandId: number, commandParserHandler: ICommandParserHandler): void;
 
-    getParser(deviceId: number, commandId: number): ICommandParserHandler | null
+    getParser(processorId: number, deviceId: number, commandId: number): ICommandParserHandler | null
 
 
 }
@@ -19,14 +19,14 @@ class CommandParserFactory implements ICommandParserFactory {
         this._commandParserMapping = new Map<string, ICommandParserHandler>();
     }
 
-    public addParser(deviceId: number, commandId: number, commandParserHandler: ICommandParserHandler): void {
-        let key: string = this.getMapKey(deviceId, commandId);
+    public addParser(sourceId: number, deviceId: number, commandId: number, commandParserHandler: ICommandParserHandler): void {
+        let key: string = this.getMapKey(sourceId, deviceId, commandId);
 
         this._commandParserMapping.set(key, commandParserHandler);
     }
 
-    public getParser(deviceId: number, commandId: number): ICommandParserHandler | null {
-        let key: string = this.getMapKey(deviceId, commandId);
+    public getParser(sourceId: number, deviceId: number, commandId: number): ICommandParserHandler | null {
+        let key: string = this.getMapKey(sourceId, deviceId, commandId);
 
         let commandParserHandler: ICommandParserHandler | undefined | null = null;
         if (this._commandParserMapping.has(key)) {
@@ -36,8 +36,8 @@ class CommandParserFactory implements ICommandParserFactory {
         return !commandParserHandler ? null : commandParserHandler;
     }
 
-    private getMapKey(deviceId: number, commandId: number): string {
-        return `${deviceId}, ${commandId}`;
+    private getMapKey(sourceId: number, deviceId: number, commandId: number): string {
+        return `${sourceId}, ${deviceId}, ${commandId}`;
     }
 }
 

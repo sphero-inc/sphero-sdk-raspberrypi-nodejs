@@ -23,7 +23,7 @@ export interface IApiDal {
 
     sendCommandToClientHandler: (message: IApiMessageLite) => void;
 
-    getCommandParserHandler: (deviceId: number, commandId: number) => ICommandParserHandler | null;
+    getCommandParserHandler: (sourceId: number, deviceId: number, commandId: number) => ICommandParserHandler | null;
 }
 
 export abstract class ApiDalBase implements IApiDal {
@@ -53,5 +53,5 @@ export abstract class ApiDalBase implements IApiDal {
 
     public sendCommandToClientHandler: (message: IApiMessageLite) => void;
 
-    public getCommandParserHandler: (deviceId: number, commandId: number) => ICommandParserHandler | null;
+    public getCommandParserHandler: (sourceId: number, deviceId: number, commandId: number) => ICommandParserHandler | null;
 }

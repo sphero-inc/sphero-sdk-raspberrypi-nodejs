@@ -3,7 +3,7 @@
 // Device ID (DID):         0x18
 // Device Name:             sensor
 // Device Description:      
-// Command Count:           22
+// Command Count:           30
 // Source File:             0x18-sensors.json
 // ************************************************************
 
@@ -54,11 +54,23 @@ import {
     parseEnableColorDetectionRequest
 } from './command-parsers/0x18-sensor/0x38-enable-color-detection-command-parser'
 import {
+    parseConfigureStreamingServiceRequest
+} from './command-parsers/0x18-sensor/0x39-configure-streaming-service-command-parser'
+import {
+    parseStartStreamingServiceRequest
+} from './command-parsers/0x18-sensor/0x3A-start-streaming-service-command-parser'
+import {
     parseEnableRobotInfraredMessageNotifyRequest
 } from './command-parsers/0x18-sensor/0x3E-enable-robot-infrared-message-notify-command-parser'
 import {
     parseSendInfraredMessageRequest
 } from './command-parsers/0x18-sensor/0x3F-send-infrared-message-command-parser'
+import {
+    parseConfigureSensitivityBasedCollisionDetectionRequest
+} from './command-parsers/0x18-sensor/0x47-configure-sensitivity-based-collision-detection-command-parser'
+import {
+    parseEnableSensitivityBasedCollisionDetectionNotifyRequest
+} from './command-parsers/0x18-sensor/0x48-enable-sensitivity-based-collision-detection-notify-command-parser'
 
 
 export class SensorDeviceRouter extends DeviceRouterBase {
@@ -150,6 +162,26 @@ export class SensorDeviceRouter extends DeviceRouterBase {
                 this.enableColorDetection(request, response));
         this.registerCommand(0x38, 'EnableColorDetection');
         
+        this.router.route('/sensor/configureStreamingService/:targetId')
+            .put((request: Request, response: Response) =>
+                this.configureStreamingService(request, response));
+        this.registerCommand(0x39, 'ConfigureStreamingService');
+        
+        this.router.route('/sensor/startStreamingService/:targetId')
+            .put((request: Request, response: Response) =>
+                this.startStreamingService(request, response));
+        this.registerCommand(0x3A, 'StartStreamingService');
+        
+        this.router.route('/sensor/stopStreamingService/:targetId')
+            .put((request: Request, response: Response) =>
+                this.stopStreamingService(request, response));
+        this.registerCommand(0x3B, 'StopStreamingService');
+        
+        this.router.route('/sensor/clearStreamingService/:targetId')
+            .put((request: Request, response: Response) =>
+                this.clearStreamingService(request, response));
+        this.registerCommand(0x3C, 'ClearStreamingService');
+        
         this.router.route('/sensor/enableRobotInfraredMessageNotify/:targetId')
             .put((request: Request, response: Response) =>
                 this.enableRobotInfraredMessageNotify(request, response));
@@ -159,6 +191,17 @@ export class SensorDeviceRouter extends DeviceRouterBase {
             .put((request: Request, response: Response) =>
                 this.sendInfraredMessage(request, response));
         this.registerCommand(0x3F, 'SendInfraredMessage');
+        
+        this.router.route('/sensor/configureSensitivityBasedCollisionDetection/:targetId')
+            .put((request: Request, response: Response) =>
+                this.configureSensitivityBasedCollisionDetection(request, response));
+        this.registerCommand(0x47, 'ConfigureSensitivityBasedCollisionDetection');
+        
+        this.router.route('/sensor/enableSensitivityBasedCollisionDetectionNotify/:targetId')
+            .put((request: Request, response: Response) =>
+                this.enableSensitivityBasedCollisionDetectionNotify(request, response));
+        this.registerCommand(0x48, 'EnableSensitivityBasedCollisionDetectionNotify');
+        
     }
     
     public enableGyroMaxNotify(request: Request, response: Response) {
@@ -1166,6 +1209,260 @@ export class SensorDeviceRouter extends DeviceRouterBase {
         });
     }
     
+    public configureStreamingService(request: Request, response: Response) {
+        // DID: 0x18 | CID: 0x39 | TID(s): 1, 2
+        
+        let commandId: number = 0x39;
+        let commandName: string = this.getCommandName(commandId);
+        
+        if (!request.params.targetId) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'targetId is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        if (!request.body) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'Payload is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        let dataRawBytes: Array<number> = parseConfigureStreamingServiceRequest(request.body);
+        
+        let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+        let sourceId: number = ApiTargetsAndSources.serviceSource;
+        
+        this.logRequest(request.path, request.method,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            sourceId, targetId,
+            JSON.stringify(request.body)
+        );
+        
+        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+            targetId, ApiTargetsAndSources.serviceSource,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            dataRawBytes
+        );
+        
+        apiCommandMessage.generateMessageRawBytes();
+        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+            // No outputs...
+            
+            this.logResponse(request.path, request.method,
+                SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+                commandId, commandName,
+                sourceId, targetId,
+                ''
+            );
+            
+            response.sendStatus(200);
+        }).catch(reason => {
+            let errorCode: number = 400;
+            let errorDetail: string = `Error in configureStreamingService while sending API Command: ${reason}`;
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+        });
+    }
+    
+    public startStreamingService(request: Request, response: Response) {
+        // DID: 0x18 | CID: 0x3A | TID(s): 1, 2
+        
+        let commandId: number = 0x3A;
+        let commandName: string = this.getCommandName(commandId);
+        
+        if (!request.params.targetId) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'targetId is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        if (!request.body) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'Payload is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        let dataRawBytes: Array<number> = parseStartStreamingServiceRequest(request.body);
+        
+        let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+        let sourceId: number = ApiTargetsAndSources.serviceSource;
+        
+        this.logRequest(request.path, request.method,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            sourceId, targetId,
+            JSON.stringify(request.body)
+        );
+        
+        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+            targetId, ApiTargetsAndSources.serviceSource,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            dataRawBytes
+        );
+        
+        apiCommandMessage.generateMessageRawBytes();
+        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+            // No outputs...
+            
+            this.logResponse(request.path, request.method,
+                SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+                commandId, commandName,
+                sourceId, targetId,
+                ''
+            );
+            
+            response.sendStatus(200);
+        }).catch(reason => {
+            let errorCode: number = 400;
+            let errorDetail: string = `Error in startStreamingService while sending API Command: ${reason}`;
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+        });
+    }
+    
+    public stopStreamingService(request: Request, response: Response) {
+        // DID: 0x18 | CID: 0x3B | TID(s): 1, 2
+        
+        let commandId: number = 0x3B;
+        let commandName: string = this.getCommandName(commandId);
+        
+        if (!request.params.targetId) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'targetId is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        // No inputs...
+        
+        let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+        let sourceId: number = ApiTargetsAndSources.serviceSource;
+        
+        this.logRequest(request.path, request.method,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            sourceId, targetId,
+            ''
+        );
+        
+        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+            targetId, ApiTargetsAndSources.serviceSource,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            null
+        );
+        
+        apiCommandMessage.generateMessageRawBytes();
+        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+            // No outputs...
+            
+            this.logResponse(request.path, request.method,
+                SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+                commandId, commandName,
+                sourceId, targetId,
+                ''
+            );
+            
+            response.sendStatus(200);
+        }).catch(reason => {
+            let errorCode: number = 400;
+            let errorDetail: string = `Error in stopStreamingService while sending API Command: ${reason}`;
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+        });
+    }
+    
+    public clearStreamingService(request: Request, response: Response) {
+        // DID: 0x18 | CID: 0x3C | TID(s): 1, 2
+        
+        let commandId: number = 0x3C;
+        let commandName: string = this.getCommandName(commandId);
+        
+        if (!request.params.targetId) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'targetId is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        // No inputs...
+        
+        let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+        let sourceId: number = ApiTargetsAndSources.serviceSource;
+        
+        this.logRequest(request.path, request.method,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            sourceId, targetId,
+            ''
+        );
+        
+        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+            targetId, ApiTargetsAndSources.serviceSource,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            null
+        );
+        
+        apiCommandMessage.generateMessageRawBytes();
+        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+            // No outputs...
+            
+            this.logResponse(request.path, request.method,
+                SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+                commandId, commandName,
+                sourceId, targetId,
+                ''
+            );
+            
+            response.sendStatus(200);
+        }).catch(reason => {
+            let errorCode: number = 400;
+            let errorDetail: string = `Error in clearStreamingService while sending API Command: ${reason}`;
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+        });
+    }
+    
     public enableRobotInfraredMessageNotify(request: Request, response: Response) {
         // DID: 0x18 | CID: 0x3E | TID(s): 2
         
@@ -1303,4 +1600,143 @@ export class SensorDeviceRouter extends DeviceRouterBase {
             response.status(errorCode).json({'error': errorDetail});
         });
     }
+    
+    public configureSensitivityBasedCollisionDetection(request: Request, response: Response) {
+        // DID: 0x18 | CID: 0x47 | TID(s): 2
+        
+        let commandId: number = 0x47;
+        let commandName: string = this.getCommandName(commandId);
+        
+        if (!request.params.targetId) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'targetId is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        if (!request.body) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'Payload is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        let dataRawBytes: Array<number> = parseConfigureSensitivityBasedCollisionDetectionRequest(request.body);
+        
+        let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+        let sourceId: number = ApiTargetsAndSources.serviceSource;
+        
+        this.logRequest(request.path, request.method,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            sourceId, targetId,
+            JSON.stringify(request.body)
+        );
+        
+        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+            targetId, ApiTargetsAndSources.serviceSource,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            dataRawBytes
+        );
+        
+        apiCommandMessage.generateMessageRawBytes();
+        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+            // No outputs...
+            
+            this.logResponse(request.path, request.method,
+                SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+                commandId, commandName,
+                sourceId, targetId,
+                ''
+            );
+            
+            response.sendStatus(200);
+        }).catch(reason => {
+            let errorCode: number = 400;
+            let errorDetail: string = `Error in configureSensitivityBasedCollisionDetection while sending API Command: ${reason}`;
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+        });
+    }
+    
+    public enableSensitivityBasedCollisionDetectionNotify(request: Request, response: Response) {
+        // DID: 0x18 | CID: 0x48 | TID(s): 2
+        
+        let commandId: number = 0x48;
+        let commandName: string = this.getCommandName(commandId);
+        
+        if (!request.params.targetId) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'targetId is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        if (!request.body) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'Payload is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        let dataRawBytes: Array<number> = parseEnableSensitivityBasedCollisionDetectionNotifyRequest(request.body);
+        
+        let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+        let sourceId: number = ApiTargetsAndSources.serviceSource;
+        
+        this.logRequest(request.path, request.method,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            sourceId, targetId,
+            JSON.stringify(request.body)
+        );
+        
+        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+            targetId, ApiTargetsAndSources.serviceSource,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            dataRawBytes
+        );
+        
+        apiCommandMessage.generateMessageRawBytes();
+        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+            // No outputs...
+            
+            this.logResponse(request.path, request.method,
+                SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+                commandId, commandName,
+                sourceId, targetId,
+                ''
+            );
+            
+            response.sendStatus(200);
+        }).catch(reason => {
+            let errorCode: number = 400;
+            let errorDetail: string = `Error in enableSensitivityBasedCollisionDetectionNotify while sending API Command: ${reason}`;
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+        });
+    }
+    
 }

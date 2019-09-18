@@ -23,6 +23,8 @@ import {parseGyroMaxNotifyResponse} from './command-parsers/0x18-sensor/0x10-gyr
 import {parseMagnetometerNorthYawNotifyResponse} from './command-parsers/0x18-sensor/0x26-magnetometer-north-yaw-notify-command-parser';
 import {parseRobotToRobotInfraredMessageReceivedNotifyResponse} from './command-parsers/0x18-sensor/0x2C-robot-to-robot-infrared-message-received-notify-command-parser';
 import {parseColorDetectionNotifyResponse} from './command-parsers/0x18-sensor/0x36-color-detection-notify-command-parser';
+import {parseStreamingServiceDataNotifyResponse} from './command-parsers/0x18-sensor/0x3D-streaming-service-data-notify-command-parser';
+import {parseSensitivityBasedCollisionDetectedNotifyResponse} from './command-parsers/0x18-sensor/0x49-sensitivity-based-collision-detected-notify-command-parser';
 import {parseBatteryVoltageStateChangeNotifyResponse} from './command-parsers/0x13-power/0x1C-battery-voltage-state-change-notify-command-parser';
 import {parseSosMessageNotifyResponse} from './command-parsers/0x11-system-info/0x3E-sos-message-notify-command-parser';
 
@@ -49,16 +51,19 @@ function initializeRoute(app: Application, deviceRouter: DeviceRouterBase) {
 export function registerCommandParserFactory(app: Application, apiDal: IApiDal, configuration: IConfiguration) {
     let commandParserFactory = getCommandParserFactory();
     
-    commandParserFactory.addParser(0x1A, 0x3F, parseCompressedFramePlayerAnimationCompleteNotifyResponse);
-    commandParserFactory.addParser(0x18, 0x10, parseGyroMaxNotifyResponse);
-    commandParserFactory.addParser(0x18, 0x26, parseMagnetometerNorthYawNotifyResponse);
-    commandParserFactory.addParser(0x18, 0x2C, parseRobotToRobotInfraredMessageReceivedNotifyResponse);
-    commandParserFactory.addParser(0x18, 0x36, parseColorDetectionNotifyResponse);
-    commandParserFactory.addParser(0x13, 0x1C, parseBatteryVoltageStateChangeNotifyResponse);
-    commandParserFactory.addParser(0x11, 0x3E, parseSosMessageNotifyResponse);
+    commandParserFactory.addParser(1, 0x1A, 0x3F, parseCompressedFramePlayerAnimationCompleteNotifyResponse);
+    commandParserFactory.addParser(2, 0x18, 0x10, parseGyroMaxNotifyResponse);
+    commandParserFactory.addParser(2, 0x18, 0x26, parseMagnetometerNorthYawNotifyResponse);
+    commandParserFactory.addParser(2, 0x18, 0x2C, parseRobotToRobotInfraredMessageReceivedNotifyResponse);
+    commandParserFactory.addParser(1, 0x18, 0x36, parseColorDetectionNotifyResponse);
+    commandParserFactory.addParser(1, 0x18, 0x3D, parseStreamingServiceDataNotifyResponse);
+    commandParserFactory.addParser(2, 0x18, 0x3D, parseStreamingServiceDataNotifyResponse);
+    commandParserFactory.addParser(2, 0x18, 0x49, parseSensitivityBasedCollisionDetectedNotifyResponse);
+    commandParserFactory.addParser(1, 0x13, 0x1C, parseBatteryVoltageStateChangeNotifyResponse);
+    commandParserFactory.addParser(1, 0x11, 0x3E, parseSosMessageNotifyResponse);
     
-    apiDal.getCommandParserHandler = (deviceId: number, commandId: number): ICommandParserHandler | null => {
-        return commandParserFactory.getParser(deviceId, commandId);
+    apiDal.getCommandParserHandler = (sourceId: number, deviceId: number, commandId: number): ICommandParserHandler | null => {
+        return commandParserFactory.getParser(sourceId, deviceId, commandId);
     }
 }
 

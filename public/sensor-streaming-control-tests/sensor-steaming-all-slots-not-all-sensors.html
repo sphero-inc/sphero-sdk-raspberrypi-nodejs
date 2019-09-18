@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ALL SLOTS NOT ALL SENSORS</title>
+</head>
+<body>
+
+<h1>Sensor Streaming</h1>
+<script>
+    let baseURL = `http://` + location.hostname + `:` + location.port;
+
+    const socket = new WebSocket(`ws://` + location.hostname + `:` + location.port + '/stream');
+    socket.onopen = () => {
+        console.log("connected");
+        socket.send("hello server!");
+    };
+    socket.onmessage = (e) => {
+        console.log(e.data);
+    };
+
+    /* Get sensors list */
+    let url = baseURL + `/api/sensorControl/getAvailableSensorsToStream`;
+
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            'accept': 'application/json',
+        },
+    }).then(response => response.text().then((text) => console.log('Request response text: ' + text)));
+
+
+    setTimeout(() => {
+        /* Start sensors streaming */
+        let sensors = ["Quaternion", "IMU", "ColorDetection","Locator","Velocity","Speed","CoreTime","AmbientLight"];
+        console.log(`Sensors to stream: ${sensors}`);
+        url = baseURL + `/api/sensorControl/startSensorStreaming`;
+        let jsonBody = {
+            "interval": 500,
+            "sensors": sensors
+        };
+
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonBody)
+        }).then(response => response.text().then((text) => console.log('Request response text: ' + text)));
+    }, 1000);
+
+    setTimeout(() => {
+        /* Stop sensors streaming */
+        url = baseURL + `/api/sensorControl/stopSensorStreaming`;
+
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'accept': 'application/json',
+            },
+        }).then(response => response.text().then((text) => console.log('Request response text: ' + text)));
+    }, 3000);
+
+
+</script>
+</body>
+</html>

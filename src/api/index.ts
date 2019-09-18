@@ -10,7 +10,6 @@ import * as v1dot0Router from './v1.0';
 import * as v1dot0ControlRouter from './control-routers'
 import {GenericCommandRouter} from './generic-command-router';
 import {IApiDal} from '../modules/api-dal-interface';
-
 let logger: ILogger = createLogger('api index');
 
 
