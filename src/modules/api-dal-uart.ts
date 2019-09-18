@@ -25,7 +25,7 @@ class ApiDalUart extends ApiDalBase {
 
     public sendCommandToClientHandler: (message: IApiMessageLite) => void;
 
-    public getCommandParserHandler: (deviceId: number, commandId: number) => ICommandParserHandler | null;
+    public getCommandParserHandler: (sourceId: number, deviceId: number, commandId: number) => ICommandParserHandler | null;
 
     public get type(): ApiDalTypes {
         return ApiDalTypes.Uart;
@@ -44,7 +44,7 @@ class ApiDalUart extends ApiDalBase {
 
             // Check if message is command from robot (e.g. an async)
             if(apiMessage.isCommand && !apiMessage.isResponse){
-                let commandParserHandler: ICommandParserHandler | null = this.getCommandParserHandler(apiMessage.deviceId, apiMessage.commandId);
+                let commandParserHandler: ICommandParserHandler | null = this.getCommandParserHandler(apiMessage.sourceId, apiMessage.deviceId, apiMessage.commandId);
                 if (!commandParserHandler) {
                     logger.warning('Unable to retrieve command parser for given command.');
                     return;

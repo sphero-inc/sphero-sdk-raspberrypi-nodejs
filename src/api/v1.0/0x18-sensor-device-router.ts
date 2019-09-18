@@ -3,7 +3,7 @@
 // Device ID (DID):         0x18
 // Device Name:             sensor
 // Device Description:      
-// Command Count:           23
+// Command Count:           30
 // Source File:             0x18-sensors.json
 // ************************************************************
 
@@ -21,1279 +21,1722 @@ import {ApiTargetsAndSources} from '../../constants';
 
 // command parsers
 import {
-	parseSetSensorStreamingMaskRequest
-} from './command-parsers/0x18-sensor/0x00-set-sensor-streaming-mask-command-parser'
-import {
-	parseGetSensorStreamingMaskResponse,
-	IGetSensorStreamingMaskResponse
-} from './command-parsers/0x18-sensor/0x01-get-sensor-streaming-mask-command-parser'
-import {
-	parseGetEncoderCountsResponse,
-	IGetEncoderCountsResponse
-} from './command-parsers/0x18-sensor/0x09-get-encoder-counts-command-parser'
-import {
-	parseGetEulerAnglesResponse,
-	IGetEulerAnglesResponse
-} from './command-parsers/0x18-sensor/0x0A-get-euler-angles-command-parser'
-import {
-	parseGetGyroDegreesPerSecondResponse,
-	IGetGyroDegreesPerSecondResponse
-} from './command-parsers/0x18-sensor/0x0B-get-gyro-degrees-per-second-command-parser'
-import {
-	parseSetExtendedSensorStreamingMaskRequest
-} from './command-parsers/0x18-sensor/0x0C-set-extended-sensor-streaming-mask-command-parser'
-import {
-	parseGetExtendedSensorStreamingMaskResponse,
-	IGetExtendedSensorStreamingMaskResponse
-} from './command-parsers/0x18-sensor/0x0D-get-extended-sensor-streaming-mask-command-parser'
-import {
-	parseGetRightsideupnessResponse,
-	IGetRightsideupnessResponse
-} from './command-parsers/0x18-sensor/0x0E-get-rightsideupness-command-parser'
-import {
-	parseEnableGyroMaxNotifyRequest
+    parseEnableGyroMaxNotifyRequest
 } from './command-parsers/0x18-sensor/0x0F-enable-gyro-max-notify-command-parser'
 import {
-	parseGetBotToBotInfraredReadingsResponse,
-	IGetBotToBotInfraredReadingsResponse
+    parseSetLocatorFlagsRequest
+} from './command-parsers/0x18-sensor/0x17-set-locator-flags-command-parser'
+import {
+    parseGetBotToBotInfraredReadingsResponse,
+    IGetBotToBotInfraredReadingsResponse
 } from './command-parsers/0x18-sensor/0x22-get-bot-to-bot-infrared-readings-command-parser'
 import {
-	parseStartRobotToRobotInfraredBroadcastingRequest
+    parseGetRgbcSensorValuesResponse,
+    IGetRgbcSensorValuesResponse
+} from './command-parsers/0x18-sensor/0x23-get-rgbc-sensor-values-command-parser'
+import {
+    parseStartRobotToRobotInfraredBroadcastingRequest
 } from './command-parsers/0x18-sensor/0x27-start-robot-to-robot-infrared-broadcasting-command-parser'
 import {
-	parseStartRobotToRobotInfraredFollowingRequest
+    parseStartRobotToRobotInfraredFollowingRequest
 } from './command-parsers/0x18-sensor/0x28-start-robot-to-robot-infrared-following-command-parser'
 import {
-	parseSendRobotToRobotInfraredMessageRequest
-} from './command-parsers/0x18-sensor/0x2A-send-robot-to-robot-infrared-message-command-parser'
+    parseGetAmbientLightSensorValueResponse,
+    IGetAmbientLightSensorValueResponse
+} from './command-parsers/0x18-sensor/0x30-get-ambient-light-sensor-value-command-parser'
 import {
-	parseListenForRobotToRobotInfraredMessageRequest
-} from './command-parsers/0x18-sensor/0x2B-listen-for-robot-to-robot-infrared-message-command-parser'
+    parseStartRobotToRobotInfraredEvadingRequest
+} from './command-parsers/0x18-sensor/0x33-start-robot-to-robot-infrared-evading-command-parser'
 import {
-	parseGetMagnetometerChipIdResponse,
-	IGetMagnetometerChipIdResponse
-} from './command-parsers/0x18-sensor/0x2D-get-magnetometer-chip-id-command-parser'
+    parseEnableColorDetectionNotifyRequest
+} from './command-parsers/0x18-sensor/0x35-enable-color-detection-notify-command-parser'
+import {
+    parseEnableColorDetectionRequest
+} from './command-parsers/0x18-sensor/0x38-enable-color-detection-command-parser'
+import {
+    parseConfigureStreamingServiceRequest
+} from './command-parsers/0x18-sensor/0x39-configure-streaming-service-command-parser'
+import {
+    parseStartStreamingServiceRequest
+} from './command-parsers/0x18-sensor/0x3A-start-streaming-service-command-parser'
+import {
+    parseEnableRobotInfraredMessageNotifyRequest
+} from './command-parsers/0x18-sensor/0x3E-enable-robot-infrared-message-notify-command-parser'
+import {
+    parseSendInfraredMessageRequest
+} from './command-parsers/0x18-sensor/0x3F-send-infrared-message-command-parser'
+import {
+    parseConfigureSensitivityBasedCollisionDetectionRequest
+} from './command-parsers/0x18-sensor/0x47-configure-sensitivity-based-collision-detection-command-parser'
+import {
+    parseEnableSensitivityBasedCollisionDetectionNotifyRequest
+} from './command-parsers/0x18-sensor/0x48-enable-sensitivity-based-collision-detection-notify-command-parser'
 
 
 export class SensorDeviceRouter extends DeviceRouterBase {
-	private static readonly _deviceId: number = 0x18;
-	private static readonly _deviceName: string = 'Sensor (0x18)';
-	
-	constructor(apiDal: IApiDal, configuration: IConfiguration) {
-		super(SensorDeviceRouter._deviceName, apiDal, configuration, SensorDeviceRouter._deviceId);
-	}
-	
-	protected initializeRoutes(): void {
-		this.router.route('/sensor/setSensorStreamingMask/:targetId')
-			.put((request: Request, response: Response) =>
-				this.setSensorStreamingMask(request, response));
-		this.registerCommand(0x00, 'SetSensorStreamingMask');
-		
-		this.router.route('/sensor/getSensorStreamingMask/:targetId')
-			.get((request: Request, response: Response) =>
-				this.getSensorStreamingMask(request, response));
-		this.registerCommand(0x01, 'GetSensorStreamingMask');
-		
-		this.router.route('/sensor/getEncoderCounts/:targetId')
-			.get((request: Request, response: Response) =>
-				this.getEncoderCounts(request, response));
-		this.registerCommand(0x09, 'GetEncoderCounts');
-		
-		this.router.route('/sensor/getEulerAngles/:targetId')
-			.get((request: Request, response: Response) =>
-				this.getEulerAngles(request, response));
-		this.registerCommand(0x0A, 'GetEulerAngles');
-		
-		this.router.route('/sensor/getGyroDegreesPerSecond/:targetId')
-			.get((request: Request, response: Response) =>
-				this.getGyroDegreesPerSecond(request, response));
-		this.registerCommand(0x0B, 'GetGyroDegreesPerSecond');
-		
-		this.router.route('/sensor/setExtendedSensorStreamingMask/:targetId')
-			.put((request: Request, response: Response) =>
-				this.setExtendedSensorStreamingMask(request, response));
-		this.registerCommand(0x0C, 'SetExtendedSensorStreamingMask');
-		
-		this.router.route('/sensor/getExtendedSensorStreamingMask/:targetId')
-			.get((request: Request, response: Response) =>
-				this.getExtendedSensorStreamingMask(request, response));
-		this.registerCommand(0x0D, 'GetExtendedSensorStreamingMask');
-		
-		this.router.route('/sensor/getRightsideupness/:targetId')
-			.get((request: Request, response: Response) =>
-				this.getRightsideupness(request, response));
-		this.registerCommand(0x0E, 'GetRightsideupness');
-		
-		this.router.route('/sensor/enableGyroMaxNotify/:targetId')
-			.put((request: Request, response: Response) =>
-				this.enableGyroMaxNotify(request, response));
-		this.registerCommand(0x0F, 'EnableGyroMaxNotify');
-		
-		this.router.route('/sensor/getBotToBotInfraredReadings/:targetId')
-			.get((request: Request, response: Response) =>
-				this.getBotToBotInfraredReadings(request, response));
-		this.registerCommand(0x22, 'GetBotToBotInfraredReadings');
-		
-		this.router.route('/sensor/magnetometerCalibrateToNorth/:targetId')
-			.put((request: Request, response: Response) =>
-				this.magnetometerCalibrateToNorth(request, response));
-		this.registerCommand(0x25, 'MagnetometerCalibrateToNorth');
-		
-		this.router.route('/sensor/startRobotToRobotInfraredBroadcasting/:targetId')
-			.put((request: Request, response: Response) =>
-				this.startRobotToRobotInfraredBroadcasting(request, response));
-		this.registerCommand(0x27, 'StartRobotToRobotInfraredBroadcasting');
-		
-		this.router.route('/sensor/startRobotToRobotInfraredFollowing/:targetId')
-			.put((request: Request, response: Response) =>
-				this.startRobotToRobotInfraredFollowing(request, response));
-		this.registerCommand(0x28, 'StartRobotToRobotInfraredFollowing');
-		
-		this.router.route('/sensor/stopRobotToRobotInfraredBroadcasting/:targetId')
-			.put((request: Request, response: Response) =>
-				this.stopRobotToRobotInfraredBroadcasting(request, response));
-		this.registerCommand(0x29, 'StopRobotToRobotInfraredBroadcasting');
-		
-		this.router.route('/sensor/sendRobotToRobotInfraredMessage/:targetId')
-			.put((request: Request, response: Response) =>
-				this.sendRobotToRobotInfraredMessage(request, response));
-		this.registerCommand(0x2A, 'SendRobotToRobotInfraredMessage');
-		
-		this.router.route('/sensor/listenForRobotToRobotInfraredMessage/:targetId')
-			.put((request: Request, response: Response) =>
-				this.listenForRobotToRobotInfraredMessage(request, response));
-		this.registerCommand(0x2B, 'ListenForRobotToRobotInfraredMessage');
-		
-		this.router.route('/sensor/getMagnetometerChipId/:targetId')
-			.get((request: Request, response: Response) =>
-				this.getMagnetometerChipId(request, response));
-		this.registerCommand(0x2D, 'GetMagnetometerChipId');
-		
-		this.router.route('/sensor/runInfraredSelfTest/:targetId')
-			.put((request: Request, response: Response) =>
-				this.runInfraredSelfTest(request, response));
-		this.registerCommand(0x2E, 'RunInfraredSelfTest');
-		
-	}
-	
-	public setSensorStreamingMask(request: Request, response: Response) {
-		// DID: 0x18 | CID: 0x00 | TID(s): 2
-		let commandId: number = 0x00;
-		let commandName: string = this.getCommandName(commandId);
-		
-		if (!request.params.targetId) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'targetId is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		if (!request.body) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'Payload is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		let dataRawBytes: Array<number> = parseSetSensorStreamingMaskRequest(request.body);
-		
-		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
-		let sourceId: number = ApiTargetsAndSources.serviceSource;
-		
-		this.logRequest(request.path, request.method,
-			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-			commandId, commandName,
-			sourceId, targetId,
-			JSON.stringify(request.body)
-		);
-		
-		let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-			targetId, ApiTargetsAndSources.serviceSource,
-			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-			commandId, commandName,
-			dataRawBytes
-		);
-		
-		apiCommandMessage.generateMessageRawBytes();
-		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-			// No outputs...
-			
-			this.logResponse(request.path, request.method,
-				SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-				commandId, commandName,
-				sourceId, targetId,
-				''
-			);
-			
-			response.sendStatus(200);
-		}).catch(reason => {
-			let errorCode: number = 400;
-			let errorDetail: string = `Error in setSensorStreamingMask while sending API Command: ${reason}`;
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-		});
-	}
-	
-	public getSensorStreamingMask(request: Request, response: Response) {
-		// DID: 0x18 | CID: 0x01 | TID(s): 2
-		
-		let commandId: number = 0x01;
-		let commandName: string = this.getCommandName(commandId);
-		
-		if (!request.params.targetId) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'targetId is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		// No inputs...
-		
-		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
-		let sourceId: number = ApiTargetsAndSources.serviceSource;
-		
-		this.logRequest(request.path, request.method,
-			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-			commandId, commandName,
-			sourceId, targetId,
-			''
-		);
-		
-		let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-			targetId, ApiTargetsAndSources.serviceSource,
-			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-			commandId, commandName,
-			null
-		);
-		
-		apiCommandMessage.generateMessageRawBytes();
-		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-			let responsePayload: IGetSensorStreamingMaskResponse = parseGetSensorStreamingMaskResponse(apiResponseMessage.dataRawBytes);
-			
-			this.logResponse(request.path, request.method,
-				SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-				commandId, commandName,
-				sourceId, targetId,
-				JSON.stringify(responsePayload)
-			);
-			
-			response.status(200).json(responsePayload);
-		}).catch(reason => {
-			let errorCode: number = 400;
-			let errorDetail: string = `Error in getSensorStreamingMask while sending API Command: ${reason}`;
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-		});
-	}
-	
-	public getEncoderCounts(request: Request, response: Response) {
-		// DID: 0x18 | CID: 0x09 | TID(s): 2
-		
-		let commandId: number = 0x09;
-		let commandName: string = this.getCommandName(commandId);
-		
-		if (!request.params.targetId) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'targetId is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		// No inputs...
-		
-		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
-		let sourceId: number = ApiTargetsAndSources.serviceSource;
-		
-		this.logRequest(request.path, request.method,
-			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-			commandId, commandName,
-			sourceId, targetId,
-			''
-		);
-		
-		let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-			targetId, ApiTargetsAndSources.serviceSource,
-			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-			commandId, commandName,
-			null
-		);
-		
-		apiCommandMessage.generateMessageRawBytes();
-		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-			let responsePayload: IGetEncoderCountsResponse = parseGetEncoderCountsResponse(apiResponseMessage.dataRawBytes);
-			
-			this.logResponse(request.path, request.method,
-				SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-				commandId, commandName,
-				sourceId, targetId,
-				JSON.stringify(responsePayload)
-			);
-			
-			response.status(200).json(responsePayload);
-		}).catch(reason => {
-			let errorCode: number = 400;
-			let errorDetail: string = `Error in getEncoderCounts while sending API Command: ${reason}`;
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-		});
-	}
-	
-	public getEulerAngles(request: Request, response: Response) {
-		// DID: 0x18 | CID: 0x0A | TID(s): 2
-		
-		let commandId: number = 0x0A;
-		let commandName: string = this.getCommandName(commandId);
-		
-		if (!request.params.targetId) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'targetId is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		// No inputs...
-		
-		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
-		let sourceId: number = ApiTargetsAndSources.serviceSource;
-		
-		this.logRequest(request.path, request.method,
-			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-			commandId, commandName,
-			sourceId, targetId,
-			''
-		);
-		
-		let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-			targetId, ApiTargetsAndSources.serviceSource,
-			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-			commandId, commandName,
-			null
-		);
-		
-		apiCommandMessage.generateMessageRawBytes();
-		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-			let responsePayload: IGetEulerAnglesResponse = parseGetEulerAnglesResponse(apiResponseMessage.dataRawBytes);
-			
-			this.logResponse(request.path, request.method,
-				SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-				commandId, commandName,
-				sourceId, targetId,
-				JSON.stringify(responsePayload)
-			);
-			
-			response.status(200).json(responsePayload);
-		}).catch(reason => {
-			let errorCode: number = 400;
-			let errorDetail: string = `Error in getEulerAngles while sending API Command: ${reason}`;
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-		});
-	}
-	
-	public getGyroDegreesPerSecond(request: Request, response: Response) {
-		// DID: 0x18 | CID: 0x0B | TID(s): 2
-		
-		let commandId: number = 0x0B;
-		let commandName: string = this.getCommandName(commandId);
-		
-		if (!request.params.targetId) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'targetId is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		// No inputs...
-		
-		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
-		let sourceId: number = ApiTargetsAndSources.serviceSource;
-		
-		this.logRequest(request.path, request.method,
-			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-			commandId, commandName,
-			sourceId, targetId,
-			''
-		);
-		
-		let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-			targetId, ApiTargetsAndSources.serviceSource,
-			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-			commandId, commandName,
-			null
-		);
-		
-		apiCommandMessage.generateMessageRawBytes();
-		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-			let responsePayload: IGetGyroDegreesPerSecondResponse = parseGetGyroDegreesPerSecondResponse(apiResponseMessage.dataRawBytes);
-			
-			this.logResponse(request.path, request.method,
-				SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-				commandId, commandName,
-				sourceId, targetId,
-				JSON.stringify(responsePayload)
-			);
-			
-			response.status(200).json(responsePayload);
-		}).catch(reason => {
-			let errorCode: number = 400;
-			let errorDetail: string = `Error in getGyroDegreesPerSecond while sending API Command: ${reason}`;
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-		});
-	}
-	
-	public setExtendedSensorStreamingMask(request: Request, response: Response) {
-		// DID: 0x18 | CID: 0x0C | TID(s): 2
-		
-		let commandId: number = 0x0C;
-		let commandName: string = this.getCommandName(commandId);
-		
-		if (!request.params.targetId) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'targetId is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		if (!request.body) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'Payload is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		let dataRawBytes: Array<number> = parseSetExtendedSensorStreamingMaskRequest(request.body);
-		
-		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
-		let sourceId: number = ApiTargetsAndSources.serviceSource;
-		
-		this.logRequest(request.path, request.method,
-			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-			commandId, commandName,
-			sourceId, targetId,
-			JSON.stringify(request.body)
-		);
-		
-		let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-			targetId, ApiTargetsAndSources.serviceSource,
-			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-			commandId, commandName,
-			dataRawBytes
-		);
-		
-		apiCommandMessage.generateMessageRawBytes();
-		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-			// No outputs...
-			
-			this.logResponse(request.path, request.method,
-				SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-				commandId, commandName,
-				sourceId, targetId,
-				''
-			);
-			
-			response.sendStatus(200);
-		}).catch(reason => {
-			let errorCode: number = 400;
-			let errorDetail: string = `Error in setExtendedSensorStreamingMask while sending API Command: ${reason}`;
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-		});
-	}
-	
-	public getExtendedSensorStreamingMask(request: Request, response: Response) {
-		// DID: 0x18 | CID: 0x0D | TID(s): 2
-		
-		let commandId: number = 0x0D;
-		let commandName: string = this.getCommandName(commandId);
-		
-		if (!request.params.targetId) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'targetId is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		// No inputs...
-		
-		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
-		let sourceId: number = ApiTargetsAndSources.serviceSource;
-		
-		this.logRequest(request.path, request.method,
-			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-			commandId, commandName,
-			sourceId, targetId,
-			''
-		);
-		
-		let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-			targetId, ApiTargetsAndSources.serviceSource,
-			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-			commandId, commandName,
-			null
-		);
-		
-		apiCommandMessage.generateMessageRawBytes();
-		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-			let responsePayload: IGetExtendedSensorStreamingMaskResponse = parseGetExtendedSensorStreamingMaskResponse(apiResponseMessage.dataRawBytes);
-			
-			this.logResponse(request.path, request.method,
-				SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-				commandId, commandName,
-				sourceId, targetId,
-				JSON.stringify(responsePayload)
-			);
-			
-			response.status(200).json(responsePayload);
-		}).catch(reason => {
-			let errorCode: number = 400;
-			let errorDetail: string = `Error in getExtendedSensorStreamingMask while sending API Command: ${reason}`;
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-		});
-	}
-	
-	public getRightsideupness(request: Request, response: Response) {
-		// DID: 0x18 | CID: 0x0E | TID(s): 2
-		
-		let commandId: number = 0x0E;
-		let commandName: string = this.getCommandName(commandId);
-		
-		if (!request.params.targetId) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'targetId is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		// No inputs...
-		
-		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
-		let sourceId: number = ApiTargetsAndSources.serviceSource;
-		
-		this.logRequest(request.path, request.method,
-			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-			commandId, commandName,
-			sourceId, targetId,
-			''
-		);
-		
-		let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-			targetId, ApiTargetsAndSources.serviceSource,
-			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-			commandId, commandName,
-			null
-		);
-		
-		apiCommandMessage.generateMessageRawBytes();
-		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-			let responsePayload: IGetRightsideupnessResponse = parseGetRightsideupnessResponse(apiResponseMessage.dataRawBytes);
-			
-			this.logResponse(request.path, request.method,
-				SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-				commandId, commandName,
-				sourceId, targetId,
-				JSON.stringify(responsePayload)
-			);
-			
-			response.status(200).json(responsePayload);
-		}).catch(reason => {
-			let errorCode: number = 400;
-			let errorDetail: string = `Error in getRightsideupness while sending API Command: ${reason}`;
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-		});
-	}
-	
-	public enableGyroMaxNotify(request: Request, response: Response) {
-		// DID: 0x18 | CID: 0x0F | TID(s): 2
-		
-		let commandId: number = 0x0F;
-		let commandName: string = this.getCommandName(commandId);
-		
-		if (!request.params.targetId) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'targetId is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		if (!request.body) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'Payload is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		let dataRawBytes: Array<number> = parseEnableGyroMaxNotifyRequest(request.body);
-		
-		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
-		let sourceId: number = ApiTargetsAndSources.serviceSource;
-		
-		this.logRequest(request.path, request.method,
-			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-			commandId, commandName,
-			sourceId, targetId,
-			JSON.stringify(request.body)
-		);
-		
-		let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-			targetId, ApiTargetsAndSources.serviceSource,
-			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-			commandId, commandName,
-			dataRawBytes
-		);
-		
-		apiCommandMessage.generateMessageRawBytes();
-		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-			// No outputs...
-			
-			this.logResponse(request.path, request.method,
-				SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-				commandId, commandName,
-				sourceId, targetId,
-				''
-			);
-			
-			response.sendStatus(200);
-		}).catch(reason => {
-			let errorCode: number = 400;
-			let errorDetail: string = `Error in enableGyroMaxNotify while sending API Command: ${reason}`;
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-		});
-	}
-	
-	public getBotToBotInfraredReadings(request: Request, response: Response) {
-		// DID: 0x18 | CID: 0x22 | TID(s): 2
-		
-		let commandId: number = 0x22;
-		let commandName: string = this.getCommandName(commandId);
-		
-		if (!request.params.targetId) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'targetId is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		// No inputs...
-		
-		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
-		let sourceId: number = ApiTargetsAndSources.serviceSource;
-		
-		this.logRequest(request.path, request.method,
-			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-			commandId, commandName,
-			sourceId, targetId,
-			''
-		);
-		
-		let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-			targetId, ApiTargetsAndSources.serviceSource,
-			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-			commandId, commandName,
-			null
-		);
-		
-		apiCommandMessage.generateMessageRawBytes();
-		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-			let responsePayload: IGetBotToBotInfraredReadingsResponse = parseGetBotToBotInfraredReadingsResponse(apiResponseMessage.dataRawBytes);
-			
-			this.logResponse(request.path, request.method,
-				SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-				commandId, commandName,
-				sourceId, targetId,
-				JSON.stringify(responsePayload)
-			);
-			
-			response.status(200).json(responsePayload);
-		}).catch(reason => {
-			let errorCode: number = 400;
-			let errorDetail: string = `Error in getBotToBotInfraredReadings while sending API Command: ${reason}`;
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-		});
-	}
-	
-	public magnetometerCalibrateToNorth(request: Request, response: Response) {
-		// DID: 0x18 | CID: 0x25 | TID(s): 2
-		
-		let commandId: number = 0x25;
-		let commandName: string = this.getCommandName(commandId);
-		
-		if (!request.params.targetId) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'targetId is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		// No inputs...
-		
-		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
-		let sourceId: number = ApiTargetsAndSources.serviceSource;
-		
-		this.logRequest(request.path, request.method,
-			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-			commandId, commandName,
-			sourceId, targetId,
-			''
-		);
-		
-		let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-			targetId, ApiTargetsAndSources.serviceSource,
-			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-			commandId, commandName,
-			null
-		);
-		
-		apiCommandMessage.generateMessageRawBytes();
-		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-			// No outputs...
-			
-			this.logResponse(request.path, request.method,
-				SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-				commandId, commandName,
-				sourceId, targetId,
-				''
-			);
-			
-			response.sendStatus(200);
-		}).catch(reason => {
-			let errorCode: number = 400;
-			let errorDetail: string = `Error in magnetometerCalibrateToNorth while sending API Command: ${reason}`;
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-		});
-	}
-	
-	public startRobotToRobotInfraredBroadcasting(request: Request, response: Response) {
-		// DID: 0x18 | CID: 0x27 | TID(s): 2
-		
-		let commandId: number = 0x27;
-		let commandName: string = this.getCommandName(commandId);
-		
-		if (!request.params.targetId) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'targetId is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		if (!request.body) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'Payload is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		let dataRawBytes: Array<number> = parseStartRobotToRobotInfraredBroadcastingRequest(request.body);
-		
-		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
-		let sourceId: number = ApiTargetsAndSources.serviceSource;
-		
-		this.logRequest(request.path, request.method,
-			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-			commandId, commandName,
-			sourceId, targetId,
-			JSON.stringify(request.body)
-		);
-		
-		let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-			targetId, ApiTargetsAndSources.serviceSource,
-			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-			commandId, commandName,
-			dataRawBytes
-		);
-		
-		apiCommandMessage.generateMessageRawBytes();
-		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-			// No outputs...
-			
-			this.logResponse(request.path, request.method,
-				SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-				commandId, commandName,
-				sourceId, targetId,
-				''
-			);
-			
-			response.sendStatus(200);
-		}).catch(reason => {
-			let errorCode: number = 400;
-			let errorDetail: string = `Error in startRobotToRobotInfraredBroadcasting while sending API Command: ${reason}`;
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-		});
-	}
-	
-	public startRobotToRobotInfraredFollowing(request: Request, response: Response) {
-		// DID: 0x18 | CID: 0x28 | TID(s): 2
-		
-		let commandId: number = 0x28;
-		let commandName: string = this.getCommandName(commandId);
-		
-		if (!request.params.targetId) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'targetId is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		if (!request.body) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'Payload is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		let dataRawBytes: Array<number> = parseStartRobotToRobotInfraredFollowingRequest(request.body);
-		
-		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
-		let sourceId: number = ApiTargetsAndSources.serviceSource;
-		
-		this.logRequest(request.path, request.method,
-			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-			commandId, commandName,
-			sourceId, targetId,
-			JSON.stringify(request.body)
-		);
-		
-		let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-			targetId, ApiTargetsAndSources.serviceSource,
-			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-			commandId, commandName,
-			dataRawBytes
-		);
-		
-		apiCommandMessage.generateMessageRawBytes();
-		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-			// No outputs...
-			
-			this.logResponse(request.path, request.method,
-				SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-				commandId, commandName,
-				sourceId, targetId,
-				''
-			);
-			
-			response.sendStatus(200);
-		}).catch(reason => {
-			let errorCode: number = 400;
-			let errorDetail: string = `Error in startRobotToRobotInfraredFollowing while sending API Command: ${reason}`;
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-		});
-	}
-	
-	public stopRobotToRobotInfraredBroadcasting(request: Request, response: Response) {
-		// DID: 0x18 | CID: 0x29 | TID(s): 2
-		
-		let commandId: number = 0x29;
-		let commandName: string = this.getCommandName(commandId);
-		
-		if (!request.params.targetId) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'targetId is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		// No inputs...
-		
-		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
-		let sourceId: number = ApiTargetsAndSources.serviceSource;
-		
-		this.logRequest(request.path, request.method,
-			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-			commandId, commandName,
-			sourceId, targetId,
-			''
-		);
-		
-		let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-			targetId, ApiTargetsAndSources.serviceSource,
-			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-			commandId, commandName,
-			null
-		);
-		
-		apiCommandMessage.generateMessageRawBytes();
-		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-			// No outputs...
-			
-			this.logResponse(request.path, request.method,
-				SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-				commandId, commandName,
-				sourceId, targetId,
-				''
-			);
-			
-			response.sendStatus(200);
-		}).catch(reason => {
-			let errorCode: number = 400;
-			let errorDetail: string = `Error in stopRobotToRobotInfraredBroadcasting while sending API Command: ${reason}`;
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-		});
-	}
-	
-	public sendRobotToRobotInfraredMessage(request: Request, response: Response) {
-		// DID: 0x18 | CID: 0x2A | TID(s): 2
-		
-		let commandId: number = 0x2A;
-		let commandName: string = this.getCommandName(commandId);
-		
-		if (!request.params.targetId) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'targetId is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		if (!request.body) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'Payload is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		let dataRawBytes: Array<number> = parseSendRobotToRobotInfraredMessageRequest(request.body);
-		
-		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
-		let sourceId: number = ApiTargetsAndSources.serviceSource;
-		
-		this.logRequest(request.path, request.method,
-			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-			commandId, commandName,
-			sourceId, targetId,
-			JSON.stringify(request.body)
-		);
-		
-		let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-			targetId, ApiTargetsAndSources.serviceSource,
-			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-			commandId, commandName,
-			dataRawBytes
-		);
-		
-		apiCommandMessage.generateMessageRawBytes();
-		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-			// No outputs...
-			
-			this.logResponse(request.path, request.method,
-				SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-				commandId, commandName,
-				sourceId, targetId,
-				''
-			);
-			
-			response.sendStatus(200);
-		}).catch(reason => {
-			let errorCode: number = 400;
-			let errorDetail: string = `Error in sendRobotToRobotInfraredMessage while sending API Command: ${reason}`;
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-		});
-	}
-	
-	public listenForRobotToRobotInfraredMessage(request: Request, response: Response) {
-		// DID: 0x18 | CID: 0x2B | TID(s): 2
-		
-		let commandId: number = 0x2B;
-		let commandName: string = this.getCommandName(commandId);
-		
-		if (!request.params.targetId) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'targetId is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		if (!request.body) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'Payload is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		let dataRawBytes: Array<number> = parseListenForRobotToRobotInfraredMessageRequest(request.body);
-		
-		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
-		let sourceId: number = ApiTargetsAndSources.serviceSource;
-		
-		this.logRequest(request.path, request.method,
-			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-			commandId, commandName,
-			sourceId, targetId,
-			JSON.stringify(request.body)
-		);
-		
-		let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-			targetId, ApiTargetsAndSources.serviceSource,
-			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-			commandId, commandName,
-			dataRawBytes
-		);
-		
-		apiCommandMessage.generateMessageRawBytes();
-		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-			// No outputs...
-			
-			this.logResponse(request.path, request.method,
-				SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-				commandId, commandName,
-				sourceId, targetId,
-				''
-			);
-			
-			response.sendStatus(200);
-		}).catch(reason => {
-			let errorCode: number = 400;
-			let errorDetail: string = `Error in listenForRobotToRobotInfraredMessage while sending API Command: ${reason}`;
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-		});
-	}
-	
-	public getMagnetometerChipId(request: Request, response: Response) {
-		// DID: 0x18 | CID: 0x2D | TID(s): 2
-		
-		let commandId: number = 0x2D;
-		let commandName: string = this.getCommandName(commandId);
-		
-		if (!request.params.targetId) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'targetId is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		// No inputs...
-		
-		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
-		let sourceId: number = ApiTargetsAndSources.serviceSource;
-		
-		this.logRequest(request.path, request.method,
-			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-			commandId, commandName,
-			sourceId, targetId,
-			''
-		);
-		
-		let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-			targetId, ApiTargetsAndSources.serviceSource,
-			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-			commandId, commandName,
-			null
-		);
-		
-		apiCommandMessage.generateMessageRawBytes();
-		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-			let responsePayload: IGetMagnetometerChipIdResponse = parseGetMagnetometerChipIdResponse(apiResponseMessage.dataRawBytes);
-			
-			this.logResponse(request.path, request.method,
-				SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-				commandId, commandName,
-				sourceId, targetId,
-				JSON.stringify(responsePayload)
-			);
-			
-			response.status(200).json(responsePayload);
-		}).catch(reason => {
-			let errorCode: number = 400;
-			let errorDetail: string = `Error in getMagnetometerChipId while sending API Command: ${reason}`;
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-		});
-	}
-	
-	public runInfraredSelfTest(request: Request, response: Response) {
-		// DID: 0x18 | CID: 0x2E | TID(s): 2
-		
-		let commandId: number = 0x2E;
-		let commandName: string = this.getCommandName(commandId);
-		
-		if (!request.params.targetId) {
-			let errorCode: number = 400;
-			let errorDetail: string = 'targetId is required!';
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-			
-			return;
-		}
-		
-		// No inputs...
-		
-		let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
-		let sourceId: number = ApiTargetsAndSources.serviceSource;
-		
-		this.logRequest(request.path, request.method,
-			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-			commandId, commandName,
-			sourceId, targetId,
-			''
-		);
-		
-		let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-			targetId, ApiTargetsAndSources.serviceSource,
-			SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-			commandId, commandName,
-			null
-		);
-		
-		apiCommandMessage.generateMessageRawBytes();
-		this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-			// No outputs...
-			
-			this.logResponse(request.path, request.method,
-				SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-				commandId, commandName,
-				sourceId, targetId,
-				''
-			);
-			
-			response.sendStatus(200);
-		}).catch(reason => {
-			let errorCode: number = 400;
-			let errorDetail: string = `Error in runInfraredSelfTest while sending API Command: ${reason}`;
-			
-			this.routeError(request.path, request.method, errorCode, errorDetail);
-			
-			response.status(errorCode).json({'error': errorDetail});
-		});
-	}
-	
+    private static readonly _deviceId: number = 0x18;
+    private static readonly _deviceName: string = 'Sensor (0x18)';
+    
+    constructor(apiDal: IApiDal, configuration: IConfiguration) {
+        super(SensorDeviceRouter._deviceName, apiDal, configuration, SensorDeviceRouter._deviceId);
+    }
+    
+    protected initializeRoutes(): void {
+        this.router.route('/sensor/enableGyroMaxNotify/:targetId')
+            .put((request: Request, response: Response) =>
+                this.enableGyroMaxNotify(request, response));
+        this.registerCommand(0x0F, 'EnableGyroMaxNotify');
+        
+        this.router.route('/sensor/resetLocatorXAndY/:targetId')
+            .put((request: Request, response: Response) =>
+                this.resetLocatorXAndY(request, response));
+        this.registerCommand(0x13, 'ResetLocatorXAndY');
+        
+        this.router.route('/sensor/setLocatorFlags/:targetId')
+            .put((request: Request, response: Response) =>
+                this.setLocatorFlags(request, response));
+        this.registerCommand(0x17, 'SetLocatorFlags');
+        
+        this.router.route('/sensor/getBotToBotInfraredReadings/:targetId')
+            .get((request: Request, response: Response) =>
+                this.getBotToBotInfraredReadings(request, response));
+        this.registerCommand(0x22, 'GetBotToBotInfraredReadings');
+        
+        this.router.route('/sensor/getRgbcSensorValues/:targetId')
+            .get((request: Request, response: Response) =>
+                this.getRgbcSensorValues(request, response));
+        this.registerCommand(0x23, 'GetRgbcSensorValues');
+        
+        this.router.route('/sensor/magnetometerCalibrateToNorth/:targetId')
+            .put((request: Request, response: Response) =>
+                this.magnetometerCalibrateToNorth(request, response));
+        this.registerCommand(0x25, 'MagnetometerCalibrateToNorth');
+        
+        this.router.route('/sensor/startRobotToRobotInfraredBroadcasting/:targetId')
+            .put((request: Request, response: Response) =>
+                this.startRobotToRobotInfraredBroadcasting(request, response));
+        this.registerCommand(0x27, 'StartRobotToRobotInfraredBroadcasting');
+        
+        this.router.route('/sensor/startRobotToRobotInfraredFollowing/:targetId')
+            .put((request: Request, response: Response) =>
+                this.startRobotToRobotInfraredFollowing(request, response));
+        this.registerCommand(0x28, 'StartRobotToRobotInfraredFollowing');
+        
+        this.router.route('/sensor/stopRobotToRobotInfraredBroadcasting/:targetId')
+            .put((request: Request, response: Response) =>
+                this.stopRobotToRobotInfraredBroadcasting(request, response));
+        this.registerCommand(0x29, 'StopRobotToRobotInfraredBroadcasting');
+        
+        this.router.route('/sensor/getAmbientLightSensorValue/:targetId')
+            .get((request: Request, response: Response) =>
+                this.getAmbientLightSensorValue(request, response));
+        this.registerCommand(0x30, 'GetAmbientLightSensorValue');
+        
+        this.router.route('/sensor/stopRobotToRobotInfraredFollowing/:targetId')
+            .put((request: Request, response: Response) =>
+                this.stopRobotToRobotInfraredFollowing(request, response));
+        this.registerCommand(0x32, 'StopRobotToRobotInfraredFollowing');
+        
+        this.router.route('/sensor/startRobotToRobotInfraredEvading/:targetId')
+            .put((request: Request, response: Response) =>
+                this.startRobotToRobotInfraredEvading(request, response));
+        this.registerCommand(0x33, 'StartRobotToRobotInfraredEvading');
+        
+        this.router.route('/sensor/stopRobotToRobotInfraredEvading/:targetId')
+            .put((request: Request, response: Response) =>
+                this.stopRobotToRobotInfraredEvading(request, response));
+        this.registerCommand(0x34, 'StopRobotToRobotInfraredEvading');
+        
+        this.router.route('/sensor/enableColorDetectionNotify/:targetId')
+            .put((request: Request, response: Response) =>
+                this.enableColorDetectionNotify(request, response));
+        this.registerCommand(0x35, 'EnableColorDetectionNotify');
+        
+        this.router.route('/sensor/getCurrentDetectedColorReading/:targetId')
+            .put((request: Request, response: Response) =>
+                this.getCurrentDetectedColorReading(request, response));
+        this.registerCommand(0x37, 'GetCurrentDetectedColorReading');
+        
+        this.router.route('/sensor/enableColorDetection/:targetId')
+            .put((request: Request, response: Response) =>
+                this.enableColorDetection(request, response));
+        this.registerCommand(0x38, 'EnableColorDetection');
+        
+        this.router.route('/sensor/configureStreamingService/:targetId')
+            .put((request: Request, response: Response) =>
+                this.configureStreamingService(request, response));
+        this.registerCommand(0x39, 'ConfigureStreamingService');
+        
+        this.router.route('/sensor/startStreamingService/:targetId')
+            .put((request: Request, response: Response) =>
+                this.startStreamingService(request, response));
+        this.registerCommand(0x3A, 'StartStreamingService');
+        
+        this.router.route('/sensor/stopStreamingService/:targetId')
+            .put((request: Request, response: Response) =>
+                this.stopStreamingService(request, response));
+        this.registerCommand(0x3B, 'StopStreamingService');
+        
+        this.router.route('/sensor/clearStreamingService/:targetId')
+            .put((request: Request, response: Response) =>
+                this.clearStreamingService(request, response));
+        this.registerCommand(0x3C, 'ClearStreamingService');
+        
+        this.router.route('/sensor/enableRobotInfraredMessageNotify/:targetId')
+            .put((request: Request, response: Response) =>
+                this.enableRobotInfraredMessageNotify(request, response));
+        this.registerCommand(0x3E, 'EnableRobotInfraredMessageNotify');
+        
+        this.router.route('/sensor/sendInfraredMessage/:targetId')
+            .put((request: Request, response: Response) =>
+                this.sendInfraredMessage(request, response));
+        this.registerCommand(0x3F, 'SendInfraredMessage');
+        
+        this.router.route('/sensor/configureSensitivityBasedCollisionDetection/:targetId')
+            .put((request: Request, response: Response) =>
+                this.configureSensitivityBasedCollisionDetection(request, response));
+        this.registerCommand(0x47, 'ConfigureSensitivityBasedCollisionDetection');
+        
+        this.router.route('/sensor/enableSensitivityBasedCollisionDetectionNotify/:targetId')
+            .put((request: Request, response: Response) =>
+                this.enableSensitivityBasedCollisionDetectionNotify(request, response));
+        this.registerCommand(0x48, 'EnableSensitivityBasedCollisionDetectionNotify');
+        
+    }
+    
+    public enableGyroMaxNotify(request: Request, response: Response) {
+        // DID: 0x18 | CID: 0x0F | TID(s): 2
+        
+        let commandId: number = 0x0F;
+        let commandName: string = this.getCommandName(commandId);
+        
+        if (!request.params.targetId) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'targetId is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        if (!request.body) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'Payload is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        let dataRawBytes: Array<number> = parseEnableGyroMaxNotifyRequest(request.body);
+        
+        let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+        let sourceId: number = ApiTargetsAndSources.serviceSource;
+        
+        this.logRequest(request.path, request.method,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            sourceId, targetId,
+            JSON.stringify(request.body)
+        );
+        
+        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+            targetId, ApiTargetsAndSources.serviceSource,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            dataRawBytes
+        );
+        
+        apiCommandMessage.generateMessageRawBytes();
+        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+            // No outputs...
+            
+            this.logResponse(request.path, request.method,
+                SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+                commandId, commandName,
+                sourceId, targetId,
+                ''
+            );
+            
+            response.sendStatus(200);
+        }).catch(reason => {
+            let errorCode: number = 400;
+            let errorDetail: string = `Error in enableGyroMaxNotify while sending API Command: ${reason}`;
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+        });
+    }
+    
+    public resetLocatorXAndY(request: Request, response: Response) {
+        // DID: 0x18 | CID: 0x13 | TID(s): 2
+        
+        let commandId: number = 0x13;
+        let commandName: string = this.getCommandName(commandId);
+        
+        if (!request.params.targetId) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'targetId is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        // No inputs...
+        
+        let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+        let sourceId: number = ApiTargetsAndSources.serviceSource;
+        
+        this.logRequest(request.path, request.method,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            sourceId, targetId,
+            ''
+        );
+        
+        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+            targetId, ApiTargetsAndSources.serviceSource,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            null
+        );
+        
+        apiCommandMessage.generateMessageRawBytes();
+        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+            // No outputs...
+            
+            this.logResponse(request.path, request.method,
+                SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+                commandId, commandName,
+                sourceId, targetId,
+                ''
+            );
+            
+            response.sendStatus(200);
+        }).catch(reason => {
+            let errorCode: number = 400;
+            let errorDetail: string = `Error in resetLocatorXAndY while sending API Command: ${reason}`;
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+        });
+    }
+    
+    public setLocatorFlags(request: Request, response: Response) {
+        // DID: 0x18 | CID: 0x17 | TID(s): 2
+        
+        let commandId: number = 0x17;
+        let commandName: string = this.getCommandName(commandId);
+        
+        if (!request.params.targetId) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'targetId is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        if (!request.body) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'Payload is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        let dataRawBytes: Array<number> = parseSetLocatorFlagsRequest(request.body);
+        
+        let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+        let sourceId: number = ApiTargetsAndSources.serviceSource;
+        
+        this.logRequest(request.path, request.method,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            sourceId, targetId,
+            JSON.stringify(request.body)
+        );
+        
+        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+            targetId, ApiTargetsAndSources.serviceSource,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            dataRawBytes
+        );
+        
+        apiCommandMessage.generateMessageRawBytes();
+        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+            // No outputs...
+            
+            this.logResponse(request.path, request.method,
+                SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+                commandId, commandName,
+                sourceId, targetId,
+                ''
+            );
+            
+            response.sendStatus(200);
+        }).catch(reason => {
+            let errorCode: number = 400;
+            let errorDetail: string = `Error in setLocatorFlags while sending API Command: ${reason}`;
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+        });
+    }
+    
+    public getBotToBotInfraredReadings(request: Request, response: Response) {
+        // DID: 0x18 | CID: 0x22 | TID(s): 2
+        
+        let commandId: number = 0x22;
+        let commandName: string = this.getCommandName(commandId);
+        
+        if (!request.params.targetId) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'targetId is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        // No inputs...
+        
+        let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+        let sourceId: number = ApiTargetsAndSources.serviceSource;
+        
+        this.logRequest(request.path, request.method,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            sourceId, targetId,
+            ''
+        );
+        
+        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+            targetId, ApiTargetsAndSources.serviceSource,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            null
+        );
+        
+        apiCommandMessage.generateMessageRawBytes();
+        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+            let responsePayload: IGetBotToBotInfraredReadingsResponse = parseGetBotToBotInfraredReadingsResponse(apiResponseMessage.dataRawBytes);
+            
+            this.logResponse(request.path, request.method,
+                SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+                commandId, commandName,
+                sourceId, targetId,
+                JSON.stringify(responsePayload)
+            );
+            
+            response.status(200).json(responsePayload);
+        }).catch(reason => {
+            let errorCode: number = 400;
+            let errorDetail: string = `Error in getBotToBotInfraredReadings while sending API Command: ${reason}`;
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+        });
+    }
+    
+    public getRgbcSensorValues(request: Request, response: Response) {
+        // DID: 0x18 | CID: 0x23 | TID(s): 1
+        
+        let commandId: number = 0x23;
+        let commandName: string = this.getCommandName(commandId);
+        
+        if (!request.params.targetId) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'targetId is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        // No inputs...
+        
+        let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+        let sourceId: number = ApiTargetsAndSources.serviceSource;
+        
+        this.logRequest(request.path, request.method,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            sourceId, targetId,
+            ''
+        );
+        
+        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+            targetId, ApiTargetsAndSources.serviceSource,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            null
+        );
+        
+        apiCommandMessage.generateMessageRawBytes();
+        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+            let responsePayload: IGetRgbcSensorValuesResponse = parseGetRgbcSensorValuesResponse(apiResponseMessage.dataRawBytes);
+            
+            this.logResponse(request.path, request.method,
+                SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+                commandId, commandName,
+                sourceId, targetId,
+                JSON.stringify(responsePayload)
+            );
+            
+            response.status(200).json(responsePayload);
+        }).catch(reason => {
+            let errorCode: number = 400;
+            let errorDetail: string = `Error in getRgbcSensorValues while sending API Command: ${reason}`;
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+        });
+    }
+    
+    public magnetometerCalibrateToNorth(request: Request, response: Response) {
+        // DID: 0x18 | CID: 0x25 | TID(s): 2
+        
+        let commandId: number = 0x25;
+        let commandName: string = this.getCommandName(commandId);
+        
+        if (!request.params.targetId) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'targetId is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        // No inputs...
+        
+        let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+        let sourceId: number = ApiTargetsAndSources.serviceSource;
+        
+        this.logRequest(request.path, request.method,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            sourceId, targetId,
+            ''
+        );
+        
+        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+            targetId, ApiTargetsAndSources.serviceSource,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            null
+        );
+        
+        apiCommandMessage.generateMessageRawBytes();
+        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+            // No outputs...
+            
+            this.logResponse(request.path, request.method,
+                SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+                commandId, commandName,
+                sourceId, targetId,
+                ''
+            );
+            
+            response.sendStatus(200);
+        }).catch(reason => {
+            let errorCode: number = 400;
+            let errorDetail: string = `Error in magnetometerCalibrateToNorth while sending API Command: ${reason}`;
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+        });
+    }
+    
+    public startRobotToRobotInfraredBroadcasting(request: Request, response: Response) {
+        // DID: 0x18 | CID: 0x27 | TID(s): 2
+        
+        let commandId: number = 0x27;
+        let commandName: string = this.getCommandName(commandId);
+        
+        if (!request.params.targetId) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'targetId is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        if (!request.body) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'Payload is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        let dataRawBytes: Array<number> = parseStartRobotToRobotInfraredBroadcastingRequest(request.body);
+        
+        let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+        let sourceId: number = ApiTargetsAndSources.serviceSource;
+        
+        this.logRequest(request.path, request.method,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            sourceId, targetId,
+            JSON.stringify(request.body)
+        );
+        
+        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+            targetId, ApiTargetsAndSources.serviceSource,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            dataRawBytes
+        );
+        
+        apiCommandMessage.generateMessageRawBytes();
+        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+            // No outputs...
+            
+            this.logResponse(request.path, request.method,
+                SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+                commandId, commandName,
+                sourceId, targetId,
+                ''
+            );
+            
+            response.sendStatus(200);
+        }).catch(reason => {
+            let errorCode: number = 400;
+            let errorDetail: string = `Error in startRobotToRobotInfraredBroadcasting while sending API Command: ${reason}`;
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+        });
+    }
+    
+    public startRobotToRobotInfraredFollowing(request: Request, response: Response) {
+        // DID: 0x18 | CID: 0x28 | TID(s): 2
+        
+        let commandId: number = 0x28;
+        let commandName: string = this.getCommandName(commandId);
+        
+        if (!request.params.targetId) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'targetId is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        if (!request.body) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'Payload is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        let dataRawBytes: Array<number> = parseStartRobotToRobotInfraredFollowingRequest(request.body);
+        
+        let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+        let sourceId: number = ApiTargetsAndSources.serviceSource;
+        
+        this.logRequest(request.path, request.method,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            sourceId, targetId,
+            JSON.stringify(request.body)
+        );
+        
+        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+            targetId, ApiTargetsAndSources.serviceSource,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            dataRawBytes
+        );
+        
+        apiCommandMessage.generateMessageRawBytes();
+        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+            // No outputs...
+            
+            this.logResponse(request.path, request.method,
+                SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+                commandId, commandName,
+                sourceId, targetId,
+                ''
+            );
+            
+            response.sendStatus(200);
+        }).catch(reason => {
+            let errorCode: number = 400;
+            let errorDetail: string = `Error in startRobotToRobotInfraredFollowing while sending API Command: ${reason}`;
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+        });
+    }
+    
+    public stopRobotToRobotInfraredBroadcasting(request: Request, response: Response) {
+        // DID: 0x18 | CID: 0x29 | TID(s): 2
+        
+        let commandId: number = 0x29;
+        let commandName: string = this.getCommandName(commandId);
+        
+        if (!request.params.targetId) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'targetId is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        // No inputs...
+        
+        let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+        let sourceId: number = ApiTargetsAndSources.serviceSource;
+        
+        this.logRequest(request.path, request.method,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            sourceId, targetId,
+            ''
+        );
+        
+        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+            targetId, ApiTargetsAndSources.serviceSource,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            null
+        );
+        
+        apiCommandMessage.generateMessageRawBytes();
+        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+            // No outputs...
+            
+            this.logResponse(request.path, request.method,
+                SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+                commandId, commandName,
+                sourceId, targetId,
+                ''
+            );
+            
+            response.sendStatus(200);
+        }).catch(reason => {
+            let errorCode: number = 400;
+            let errorDetail: string = `Error in stopRobotToRobotInfraredBroadcasting while sending API Command: ${reason}`;
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+        });
+    }
+    
+    public getAmbientLightSensorValue(request: Request, response: Response) {
+        // DID: 0x18 | CID: 0x30 | TID(s): 1
+        
+        let commandId: number = 0x30;
+        let commandName: string = this.getCommandName(commandId);
+        
+        if (!request.params.targetId) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'targetId is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        // No inputs...
+        
+        let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+        let sourceId: number = ApiTargetsAndSources.serviceSource;
+        
+        this.logRequest(request.path, request.method,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            sourceId, targetId,
+            ''
+        );
+        
+        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+            targetId, ApiTargetsAndSources.serviceSource,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            null
+        );
+        
+        apiCommandMessage.generateMessageRawBytes();
+        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+            let responsePayload: IGetAmbientLightSensorValueResponse = parseGetAmbientLightSensorValueResponse(apiResponseMessage.dataRawBytes);
+            
+            this.logResponse(request.path, request.method,
+                SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+                commandId, commandName,
+                sourceId, targetId,
+                JSON.stringify(responsePayload)
+            );
+            
+            response.status(200).json(responsePayload);
+        }).catch(reason => {
+            let errorCode: number = 400;
+            let errorDetail: string = `Error in getAmbientLightSensorValue while sending API Command: ${reason}`;
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+        });
+    }
+    
+    public stopRobotToRobotInfraredFollowing(request: Request, response: Response) {
+        // DID: 0x18 | CID: 0x32 | TID(s): 2
+        
+        let commandId: number = 0x32;
+        let commandName: string = this.getCommandName(commandId);
+        
+        if (!request.params.targetId) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'targetId is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        // No inputs...
+        
+        let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+        let sourceId: number = ApiTargetsAndSources.serviceSource;
+        
+        this.logRequest(request.path, request.method,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            sourceId, targetId,
+            ''
+        );
+        
+        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+            targetId, ApiTargetsAndSources.serviceSource,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            null
+        );
+        
+        apiCommandMessage.generateMessageRawBytes();
+        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+            // No outputs...
+            
+            this.logResponse(request.path, request.method,
+                SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+                commandId, commandName,
+                sourceId, targetId,
+                ''
+            );
+            
+            response.sendStatus(200);
+        }).catch(reason => {
+            let errorCode: number = 400;
+            let errorDetail: string = `Error in stopRobotToRobotInfraredFollowing while sending API Command: ${reason}`;
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+        });
+    }
+    
+    public startRobotToRobotInfraredEvading(request: Request, response: Response) {
+        // DID: 0x18 | CID: 0x33 | TID(s): 2
+        
+        let commandId: number = 0x33;
+        let commandName: string = this.getCommandName(commandId);
+        
+        if (!request.params.targetId) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'targetId is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        if (!request.body) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'Payload is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        let dataRawBytes: Array<number> = parseStartRobotToRobotInfraredEvadingRequest(request.body);
+        
+        let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+        let sourceId: number = ApiTargetsAndSources.serviceSource;
+        
+        this.logRequest(request.path, request.method,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            sourceId, targetId,
+            JSON.stringify(request.body)
+        );
+        
+        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+            targetId, ApiTargetsAndSources.serviceSource,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            dataRawBytes
+        );
+        
+        apiCommandMessage.generateMessageRawBytes();
+        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+            // No outputs...
+            
+            this.logResponse(request.path, request.method,
+                SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+                commandId, commandName,
+                sourceId, targetId,
+                ''
+            );
+            
+            response.sendStatus(200);
+        }).catch(reason => {
+            let errorCode: number = 400;
+            let errorDetail: string = `Error in startRobotToRobotInfraredEvading while sending API Command: ${reason}`;
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+        });
+    }
+    
+    public stopRobotToRobotInfraredEvading(request: Request, response: Response) {
+        // DID: 0x18 | CID: 0x34 | TID(s): 2
+        
+        let commandId: number = 0x34;
+        let commandName: string = this.getCommandName(commandId);
+        
+        if (!request.params.targetId) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'targetId is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        // No inputs...
+        
+        let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+        let sourceId: number = ApiTargetsAndSources.serviceSource;
+        
+        this.logRequest(request.path, request.method,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            sourceId, targetId,
+            ''
+        );
+        
+        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+            targetId, ApiTargetsAndSources.serviceSource,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            null
+        );
+        
+        apiCommandMessage.generateMessageRawBytes();
+        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+            // No outputs...
+            
+            this.logResponse(request.path, request.method,
+                SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+                commandId, commandName,
+                sourceId, targetId,
+                ''
+            );
+            
+            response.sendStatus(200);
+        }).catch(reason => {
+            let errorCode: number = 400;
+            let errorDetail: string = `Error in stopRobotToRobotInfraredEvading while sending API Command: ${reason}`;
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+        });
+    }
+    
+    public enableColorDetectionNotify(request: Request, response: Response) {
+        // DID: 0x18 | CID: 0x35 | TID(s): 1
+        
+        let commandId: number = 0x35;
+        let commandName: string = this.getCommandName(commandId);
+        
+        if (!request.params.targetId) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'targetId is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        if (!request.body) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'Payload is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        let dataRawBytes: Array<number> = parseEnableColorDetectionNotifyRequest(request.body);
+        
+        let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+        let sourceId: number = ApiTargetsAndSources.serviceSource;
+        
+        this.logRequest(request.path, request.method,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            sourceId, targetId,
+            JSON.stringify(request.body)
+        );
+        
+        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+            targetId, ApiTargetsAndSources.serviceSource,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            dataRawBytes
+        );
+        
+        apiCommandMessage.generateMessageRawBytes();
+        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+            // No outputs...
+            
+            this.logResponse(request.path, request.method,
+                SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+                commandId, commandName,
+                sourceId, targetId,
+                ''
+            );
+            
+            response.sendStatus(200);
+        }).catch(reason => {
+            let errorCode: number = 400;
+            let errorDetail: string = `Error in enableColorDetectionNotify while sending API Command: ${reason}`;
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+        });
+    }
+    
+    public getCurrentDetectedColorReading(request: Request, response: Response) {
+        // DID: 0x18 | CID: 0x37 | TID(s): 1
+        
+        let commandId: number = 0x37;
+        let commandName: string = this.getCommandName(commandId);
+        
+        if (!request.params.targetId) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'targetId is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        // No inputs...
+        
+        let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+        let sourceId: number = ApiTargetsAndSources.serviceSource;
+        
+        this.logRequest(request.path, request.method,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            sourceId, targetId,
+            ''
+        );
+        
+        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+            targetId, ApiTargetsAndSources.serviceSource,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            null
+        );
+        
+        apiCommandMessage.generateMessageRawBytes();
+        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+            // No outputs...
+            
+            this.logResponse(request.path, request.method,
+                SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+                commandId, commandName,
+                sourceId, targetId,
+                ''
+            );
+            
+            response.sendStatus(200);
+        }).catch(reason => {
+            let errorCode: number = 400;
+            let errorDetail: string = `Error in getCurrentDetectedColorReading while sending API Command: ${reason}`;
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+        });
+    }
+    
+    public enableColorDetection(request: Request, response: Response) {
+        // DID: 0x18 | CID: 0x38 | TID(s): 1
+        
+        let commandId: number = 0x38;
+        let commandName: string = this.getCommandName(commandId);
+        
+        if (!request.params.targetId) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'targetId is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        if (!request.body) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'Payload is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        let dataRawBytes: Array<number> = parseEnableColorDetectionRequest(request.body);
+        
+        let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+        let sourceId: number = ApiTargetsAndSources.serviceSource;
+        
+        this.logRequest(request.path, request.method,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            sourceId, targetId,
+            JSON.stringify(request.body)
+        );
+        
+        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+            targetId, ApiTargetsAndSources.serviceSource,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            dataRawBytes
+        );
+        
+        apiCommandMessage.generateMessageRawBytes();
+        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+            // No outputs...
+            
+            this.logResponse(request.path, request.method,
+                SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+                commandId, commandName,
+                sourceId, targetId,
+                ''
+            );
+            
+            response.sendStatus(200);
+        }).catch(reason => {
+            let errorCode: number = 400;
+            let errorDetail: string = `Error in enableColorDetection while sending API Command: ${reason}`;
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+        });
+    }
+    
+    public configureStreamingService(request: Request, response: Response) {
+        // DID: 0x18 | CID: 0x39 | TID(s): 1, 2
+        
+        let commandId: number = 0x39;
+        let commandName: string = this.getCommandName(commandId);
+        
+        if (!request.params.targetId) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'targetId is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        if (!request.body) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'Payload is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        let dataRawBytes: Array<number> = parseConfigureStreamingServiceRequest(request.body);
+        
+        let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+        let sourceId: number = ApiTargetsAndSources.serviceSource;
+        
+        this.logRequest(request.path, request.method,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            sourceId, targetId,
+            JSON.stringify(request.body)
+        );
+        
+        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+            targetId, ApiTargetsAndSources.serviceSource,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            dataRawBytes
+        );
+        
+        apiCommandMessage.generateMessageRawBytes();
+        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+            // No outputs...
+            
+            this.logResponse(request.path, request.method,
+                SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+                commandId, commandName,
+                sourceId, targetId,
+                ''
+            );
+            
+            response.sendStatus(200);
+        }).catch(reason => {
+            let errorCode: number = 400;
+            let errorDetail: string = `Error in configureStreamingService while sending API Command: ${reason}`;
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+        });
+    }
+    
+    public startStreamingService(request: Request, response: Response) {
+        // DID: 0x18 | CID: 0x3A | TID(s): 1, 2
+        
+        let commandId: number = 0x3A;
+        let commandName: string = this.getCommandName(commandId);
+        
+        if (!request.params.targetId) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'targetId is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        if (!request.body) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'Payload is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        let dataRawBytes: Array<number> = parseStartStreamingServiceRequest(request.body);
+        
+        let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+        let sourceId: number = ApiTargetsAndSources.serviceSource;
+        
+        this.logRequest(request.path, request.method,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            sourceId, targetId,
+            JSON.stringify(request.body)
+        );
+        
+        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+            targetId, ApiTargetsAndSources.serviceSource,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            dataRawBytes
+        );
+        
+        apiCommandMessage.generateMessageRawBytes();
+        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+            // No outputs...
+            
+            this.logResponse(request.path, request.method,
+                SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+                commandId, commandName,
+                sourceId, targetId,
+                ''
+            );
+            
+            response.sendStatus(200);
+        }).catch(reason => {
+            let errorCode: number = 400;
+            let errorDetail: string = `Error in startStreamingService while sending API Command: ${reason}`;
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+        });
+    }
+    
+    public stopStreamingService(request: Request, response: Response) {
+        // DID: 0x18 | CID: 0x3B | TID(s): 1, 2
+        
+        let commandId: number = 0x3B;
+        let commandName: string = this.getCommandName(commandId);
+        
+        if (!request.params.targetId) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'targetId is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        // No inputs...
+        
+        let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+        let sourceId: number = ApiTargetsAndSources.serviceSource;
+        
+        this.logRequest(request.path, request.method,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            sourceId, targetId,
+            ''
+        );
+        
+        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+            targetId, ApiTargetsAndSources.serviceSource,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            null
+        );
+        
+        apiCommandMessage.generateMessageRawBytes();
+        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+            // No outputs...
+            
+            this.logResponse(request.path, request.method,
+                SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+                commandId, commandName,
+                sourceId, targetId,
+                ''
+            );
+            
+            response.sendStatus(200);
+        }).catch(reason => {
+            let errorCode: number = 400;
+            let errorDetail: string = `Error in stopStreamingService while sending API Command: ${reason}`;
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+        });
+    }
+    
+    public clearStreamingService(request: Request, response: Response) {
+        // DID: 0x18 | CID: 0x3C | TID(s): 1, 2
+        
+        let commandId: number = 0x3C;
+        let commandName: string = this.getCommandName(commandId);
+        
+        if (!request.params.targetId) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'targetId is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        // No inputs...
+        
+        let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+        let sourceId: number = ApiTargetsAndSources.serviceSource;
+        
+        this.logRequest(request.path, request.method,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            sourceId, targetId,
+            ''
+        );
+        
+        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+            targetId, ApiTargetsAndSources.serviceSource,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            null
+        );
+        
+        apiCommandMessage.generateMessageRawBytes();
+        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+            // No outputs...
+            
+            this.logResponse(request.path, request.method,
+                SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+                commandId, commandName,
+                sourceId, targetId,
+                ''
+            );
+            
+            response.sendStatus(200);
+        }).catch(reason => {
+            let errorCode: number = 400;
+            let errorDetail: string = `Error in clearStreamingService while sending API Command: ${reason}`;
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+        });
+    }
+    
+    public enableRobotInfraredMessageNotify(request: Request, response: Response) {
+        // DID: 0x18 | CID: 0x3E | TID(s): 2
+        
+        let commandId: number = 0x3E;
+        let commandName: string = this.getCommandName(commandId);
+        
+        if (!request.params.targetId) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'targetId is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        if (!request.body) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'Payload is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        let dataRawBytes: Array<number> = parseEnableRobotInfraredMessageNotifyRequest(request.body);
+        
+        let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+        let sourceId: number = ApiTargetsAndSources.serviceSource;
+        
+        this.logRequest(request.path, request.method,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            sourceId, targetId,
+            JSON.stringify(request.body)
+        );
+        
+        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+            targetId, ApiTargetsAndSources.serviceSource,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            dataRawBytes
+        );
+        
+        apiCommandMessage.generateMessageRawBytes();
+        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+            // No outputs...
+            
+            this.logResponse(request.path, request.method,
+                SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+                commandId, commandName,
+                sourceId, targetId,
+                ''
+            );
+            
+            response.sendStatus(200);
+        }).catch(reason => {
+            let errorCode: number = 400;
+            let errorDetail: string = `Error in enableRobotInfraredMessageNotify while sending API Command: ${reason}`;
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+        });
+    }
+    
+    public sendInfraredMessage(request: Request, response: Response) {
+        // DID: 0x18 | CID: 0x3F | TID(s): 2
+        
+        let commandId: number = 0x3F;
+        let commandName: string = this.getCommandName(commandId);
+        
+        if (!request.params.targetId) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'targetId is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        if (!request.body) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'Payload is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        let dataRawBytes: Array<number> = parseSendInfraredMessageRequest(request.body);
+        
+        let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+        let sourceId: number = ApiTargetsAndSources.serviceSource;
+        
+        this.logRequest(request.path, request.method,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            sourceId, targetId,
+            JSON.stringify(request.body)
+        );
+        
+        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+            targetId, ApiTargetsAndSources.serviceSource,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            dataRawBytes
+        );
+        
+        apiCommandMessage.generateMessageRawBytes();
+        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+            // No outputs...
+            
+            this.logResponse(request.path, request.method,
+                SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+                commandId, commandName,
+                sourceId, targetId,
+                ''
+            );
+            
+            response.sendStatus(200);
+        }).catch(reason => {
+            let errorCode: number = 400;
+            let errorDetail: string = `Error in sendInfraredMessage while sending API Command: ${reason}`;
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+        });
+    }
+    
+    public configureSensitivityBasedCollisionDetection(request: Request, response: Response) {
+        // DID: 0x18 | CID: 0x47 | TID(s): 2
+        
+        let commandId: number = 0x47;
+        let commandName: string = this.getCommandName(commandId);
+        
+        if (!request.params.targetId) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'targetId is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        if (!request.body) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'Payload is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        let dataRawBytes: Array<number> = parseConfigureSensitivityBasedCollisionDetectionRequest(request.body);
+        
+        let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+        let sourceId: number = ApiTargetsAndSources.serviceSource;
+        
+        this.logRequest(request.path, request.method,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            sourceId, targetId,
+            JSON.stringify(request.body)
+        );
+        
+        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+            targetId, ApiTargetsAndSources.serviceSource,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            dataRawBytes
+        );
+        
+        apiCommandMessage.generateMessageRawBytes();
+        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+            // No outputs...
+            
+            this.logResponse(request.path, request.method,
+                SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+                commandId, commandName,
+                sourceId, targetId,
+                ''
+            );
+            
+            response.sendStatus(200);
+        }).catch(reason => {
+            let errorCode: number = 400;
+            let errorDetail: string = `Error in configureSensitivityBasedCollisionDetection while sending API Command: ${reason}`;
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+        });
+    }
+    
+    public enableSensitivityBasedCollisionDetectionNotify(request: Request, response: Response) {
+        // DID: 0x18 | CID: 0x48 | TID(s): 2
+        
+        let commandId: number = 0x48;
+        let commandName: string = this.getCommandName(commandId);
+        
+        if (!request.params.targetId) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'targetId is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        if (!request.body) {
+            let errorCode: number = 400;
+            let errorDetail: string = 'Payload is required!';
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+            
+            return;
+        }
+        
+        let dataRawBytes: Array<number> = parseEnableSensitivityBasedCollisionDetectionNotifyRequest(request.body);
+        
+        let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
+        let sourceId: number = ApiTargetsAndSources.serviceSource;
+        
+        this.logRequest(request.path, request.method,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            sourceId, targetId,
+            JSON.stringify(request.body)
+        );
+        
+        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+            targetId, ApiTargetsAndSources.serviceSource,
+            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+            commandId, commandName,
+            dataRawBytes
+        );
+        
+        apiCommandMessage.generateMessageRawBytes();
+        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+            // No outputs...
+            
+            this.logResponse(request.path, request.method,
+                SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
+                commandId, commandName,
+                sourceId, targetId,
+                ''
+            );
+            
+            response.sendStatus(200);
+        }).catch(reason => {
+            let errorCode: number = 400;
+            let errorDetail: string = `Error in enableSensitivityBasedCollisionDetectionNotify while sending API Command: ${reason}`;
+            
+            this.routeError(request.path, request.method, errorCode, errorDetail);
+            
+            response.status(errorCode).json({'error': errorDetail});
+        });
+    }
+    
 }

@@ -17,6 +17,7 @@ import dateTimeUtilities = require('../utilities/date-time-utilities');
 import {IApiDal} from './api-dal-interface';
 import {IApiMessageLite} from '../models/api-message-lite';
 import * as path from 'path';
+import {buildSwaggerDoc} from "../utilities/merge-swagger-specs";
 
 let logger: ILogger = createLogger('app');
 
@@ -77,7 +78,8 @@ export class App {
         this.expressApp.use(express.static(path.join(process.cwd(), 'public')));
 
         // more options --> https://github.com/scottie1984/swagger-ui-express
-        this.expressApp.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+        // let swaggerDocument = mergeSwaggerSpecs();
+        this.expressApp.use('/api-docs', swaggerUi.serve, swaggerUi.setup(buildSwaggerDoc()));
 
         // explore using this
         // https://github.com/expressjs/errorhandler
