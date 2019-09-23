@@ -72,3 +72,24 @@ export function buildApiCommandMessageWithDefaultFlags(targetId: number, sourceI
 
     return apiMessage;
 }
+
+export function buildApiCommandMessageWithNoResponseDefaultFlags(targetId: number, sourceId: number,
+                                                                 deviceId: number, deviceName: string,
+                                                                 commandId: number, commandName: string,
+                                                                 dataRawBytes: Array<number> | null = null): IApiCommandMessage {
+
+    let flags: number = ApiFlags.defaultRequestWithNoResponseFlags;
+    let sequenceNumber: number = getNextSequenceNumber();  // TODO: own sequence number here?
+
+    let apiMessage: IApiCommandMessage = new ApiCommandMessage(
+        flags, sequenceNumber,
+        targetId, sourceId,
+        deviceId, deviceName,
+        commandId, commandName,
+        dataRawBytes
+    );
+
+    apiMessage.generateMessageRawBytes();
+
+    return apiMessage;
+}

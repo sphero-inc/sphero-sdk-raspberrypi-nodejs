@@ -1,6 +1,6 @@
 // internal imports
 import {IApiMessage, ApiBaseMessage} from './api-message';
-import {ApiFlags} from '../constants';
+import {ApiErrorCodes, ApiFlags} from '../constants';
 
 
 export interface IApiResponseMessage extends IApiMessage {
@@ -11,6 +11,7 @@ class ApiResponseMessage extends ApiBaseMessage implements IApiResponseMessage {
                 targetId: number, sourceId: number,
                 deviceId: number, deviceName: string,
                 commandId: number, commandName: string,
+                errorCode: number,
                 dataRawBytes: Array<number> | null = null) {
 
         super(
@@ -20,6 +21,10 @@ class ApiResponseMessage extends ApiBaseMessage implements IApiResponseMessage {
             commandId, commandName,
             dataRawBytes
         );
+
+        this._errorCode = errorCode;
+        this._hasError = errorCode != ApiErrorCodes.success;
+        this._errorMessage = ApiErrorCodes.getApiErrorMessageFromCode(errorCode);
     }
 }
 
@@ -27,6 +32,7 @@ export function buildApiResponseMessage(flags: number, sequenceNumber: number | 
                                         targetId: number, sourceId: number,
                                         deviceId: number, deviceName: string,
                                         commandId: number, commandName: string,
+                                        errorCode: number,
                                         dataRawBytes: Array<number> | null = null): IApiResponseMessage {
 
     if (sequenceNumber == null) {
@@ -38,6 +44,7 @@ export function buildApiResponseMessage(flags: number, sequenceNumber: number | 
         targetId, sourceId,
         deviceId, deviceName,
         commandId, commandName,
+        errorCode,
         dataRawBytes
     );
 
@@ -49,6 +56,7 @@ export function buildApiResponseMessage(flags: number, sequenceNumber: number | 
 export function buildApiResponseMessageWithDefaultFlags(targetId: number, sourceId: number,
                                                         deviceId: number, deviceName: string,
                                                         commandId: number, commandName: string,
+                                                        errorCode: number,
                                                         dataRawBytes: Array<number> | null = null): IApiResponseMessage {
 
     let flags: number = ApiFlags.defaultResponseFlags;
@@ -59,6 +67,7 @@ export function buildApiResponseMessageWithDefaultFlags(targetId: number, source
         targetId, sourceId,
         deviceId, deviceName,
         commandId, commandName,
+        errorCode,
         dataRawBytes
     );
 

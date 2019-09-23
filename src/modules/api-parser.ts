@@ -73,6 +73,7 @@ class ApiParser implements IApiParser {
             apiMessage.deviceId,
             apiMessage.commandId,
             apiMessage.sequenceNumber,
+            apiMessage.errorCode,
             apiMessage.dataRawBytes
         );
     }
@@ -122,7 +123,7 @@ class ApiParser implements IApiParser {
 
                     let isRequestingResponse: boolean = (this._activeDataBuffer[1] & (ApiFlags.requestsResponse)) == (ApiFlags.requestsResponse);
                     let isResponse: boolean = (this._activeDataBuffer[1] & (ApiFlags.isResponse)) == (ApiFlags.isResponse);
-                    
+
                     if (isRequestingResponse && isResponse) {
                         this.invokeApiProtocolErrorCallback(ApiProtocolErrorCodes.badFlags);
                         this.resetParserState();
@@ -193,8 +194,7 @@ class ApiParser implements IApiParser {
 
         let dataRawBytes: Array<number> = [];
 
-        let errorCode: number | null = null;
-        let errorMessage: string | null = null;
+        let errorCode: number = 0;
 
         try {
             // TODO: why check if less than 6?
@@ -227,8 +227,7 @@ class ApiParser implements IApiParser {
             sequenceNumber = bytes[index++];
 
             if ((flags & ApiFlags.isResponse) > 0x00) {
-                errorCode = bytes[index++];     // TODO: what to do with error code?
-                errorMessage = ApiErrorCodes.getApiErrorMessageFromCode(errorCode);
+                errorCode = bytes[index++];
             }
 
             for (let i: number = index; i < bytes.length - endingBytesToIgnore; i++) {
@@ -249,12 +248,8 @@ class ApiParser implements IApiParser {
 
         // TODO: where to get DID and CID names?
         let apiMessage: IApiMessage = isResponse
-            ? buildApiResponseMessage(flags, sequenceNumber, targetId, sourceId, did, '', cid, '', dataRawBytes)
+            ? buildApiResponseMessage(flags, sequenceNumber, targetId, sourceId, did, '', cid, '', errorCode, dataRawBytes)
             : buildApiCommandMessage(flags, sequenceNumber, targetId, sourceId, did, '', cid, '', dataRawBytes);
-
-        if (errorCode && errorMessage) {
-            apiMessage.associateError(errorCode, errorMessage);
-        }
 
         logger.debug(`Generated API message: ${apiMessage.prettyPrint()}`);
 
@@ -290,10 +285,11 @@ class ApiParser implements IApiParser {
             apiCommandMessage.deviceId,
             apiCommandMessage.commandId,
             apiCommandMessage.sequenceNumber,
+            null,
             responseDataRawBytes
         );
     }
-    private generateRawBytesForApiPacket(flags: number, targetId: number, sourceId: number, deviceId: number, commandId: number, sequenceNumber: number, dataRawBytes: Array<number>): Array<number> {
+    private generateRawBytesForApiPacket(flags: number, targetId: number, sourceId: number, deviceId: number, commandId: number, sequenceNumber: number, errorCode: number | null, dataRawBytes: Array<number>): Array<number> {
         logger.debug('Generating raw bytes for API packet');
         logger.debug(`Flags: ${ByteConversionUtilities.convertNumberToHexString(flags)}`);
         logger.debug(`TargetId: ${ByteConversionUtilities.convertNumberToHexString(targetId)}`);
@@ -301,6 +297,8 @@ class ApiParser implements IApiParser {
         logger.debug(`DeviceId: ${ByteConversionUtilities.convertNumberToHexString(deviceId)}`);
         logger.debug(`CommandId: ${ByteConversionUtilities.convertNumberToHexString(commandId)}`);
         logger.debug(`SequenceNumber: ${ByteConversionUtilities.convertNumberToHexString(sequenceNumber)}`);
+        if(errorCode != null)
+            logger.debug(`ErrorCode: ${ByteConversionUtilities.convertNumberToHexString(errorCode)}`);
         logger.debug(`DataRawBytes: ${ByteConversionUtilities.convertNumbersToHexCsvString(dataRawBytes)}`);
 
         let runningChecksum = 0;
@@ -330,9 +328,7 @@ class ApiParser implements IApiParser {
         this.encodeByteInBytes(rawBytesWithEscapes, sequenceNumber);
         runningChecksum += sequenceNumber;
 
-        if ((flags & ApiFlags.isResponse) > 0x00) {
-            // TODO: need to be able to set the error
-            let errorCode = ApiErrorCodes.success;
+        if (errorCode != null) {
             this.encodeByteInBytes(rawBytesWithEscapes, errorCode);
             runningChecksum += errorCode;
         }

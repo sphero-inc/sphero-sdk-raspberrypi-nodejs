@@ -12,7 +12,7 @@ import {Request, Response} from 'express';
 
 // internal imports
 import {DeviceRouterBase} from '../device-router-base';
-import {IApiCommandMessage, buildApiCommandMessageWithDefaultFlags} from '../../models/api-command-message';
+import {IApiCommandMessage, buildApiCommandMessageWithDefaultFlags, buildApiCommandMessageWithNoResponseDefaultFlags} from '../../models/api-command-message';
 import {IApiResponseMessage} from '../../models/api-response-message';
 import {IConfiguration} from '../../configuration';
 import {IApiDal} from '../../modules/api-dal-interface';
@@ -232,33 +232,48 @@ export class IoDeviceRouter extends DeviceRouterBase {
             JSON.stringify(request.body)
         );
         
-        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-            targetId, ApiTargetsAndSources.serviceSource,
-            IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
-            commandId, commandName,
-            dataRawBytes
-        );
-        
-        apiCommandMessage.generateMessageRawBytes();
-        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-            // No outputs...
-            
-            this.logResponse(request.path, request.method,
+        let isResponseRequested: boolean = request.body.isResponseRequested != undefined ? request.body.isResponseRequested : true;
+        if (isResponseRequested) {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
                 IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
                 commandId, commandName,
-                sourceId, targetId,
-                ''
+                dataRawBytes
             );
             
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+                // No outputs...
+                
+                this.logResponse(request.path, request.method,
+                    IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
+                    commandId, commandName,
+                    sourceId, targetId,
+                    ''
+                );
+                
+                response.sendStatus(200);
+            }).catch(reason => {
+                let errorCode: number = 400;
+                let errorDetail: string = `Error in setAllLeds while sending API Command: ${reason}`;
+                
+                this.routeError(request.path, request.method, errorCode, errorDetail);
+                
+                response.status(errorCode).json({'error': errorDetail});
+            });
+        } else {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithNoResponseDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
+                IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
+                commandId, commandName,
+                dataRawBytes
+            );
+            
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage);
             response.sendStatus(200);
-        }).catch(reason => {
-            let errorCode: number = 400;
-            let errorDetail: string = `Error in setAllLeds while sending API Command: ${reason}`;
-            
-            this.routeError(request.path, request.method, errorCode, errorDetail);
-            
-            response.status(errorCode).json({'error': errorDetail});
-        });
+        }
+        
     }
     
     public setCompressedFramePlayerOneColor(request: Request, response: Response) {
@@ -301,33 +316,48 @@ export class IoDeviceRouter extends DeviceRouterBase {
             JSON.stringify(request.body)
         );
         
-        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-            targetId, ApiTargetsAndSources.serviceSource,
-            IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
-            commandId, commandName,
-            dataRawBytes
-        );
-        
-        apiCommandMessage.generateMessageRawBytes();
-        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-            // No outputs...
-            
-            this.logResponse(request.path, request.method,
+        let isResponseRequested: boolean = request.body.isResponseRequested != undefined ? request.body.isResponseRequested : true;
+        if (isResponseRequested) {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
                 IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
                 commandId, commandName,
-                sourceId, targetId,
-                ''
+                dataRawBytes
             );
             
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+                // No outputs...
+                
+                this.logResponse(request.path, request.method,
+                    IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
+                    commandId, commandName,
+                    sourceId, targetId,
+                    ''
+                );
+                
+                response.sendStatus(200);
+            }).catch(reason => {
+                let errorCode: number = 400;
+                let errorDetail: string = `Error in setCompressedFramePlayerOneColor while sending API Command: ${reason}`;
+                
+                this.routeError(request.path, request.method, errorCode, errorDetail);
+                
+                response.status(errorCode).json({'error': errorDetail});
+            });
+        } else {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithNoResponseDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
+                IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
+                commandId, commandName,
+                dataRawBytes
+            );
+            
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage);
             response.sendStatus(200);
-        }).catch(reason => {
-            let errorCode: number = 400;
-            let errorDetail: string = `Error in setCompressedFramePlayerOneColor while sending API Command: ${reason}`;
-            
-            this.routeError(request.path, request.method, errorCode, errorDetail);
-            
-            response.status(errorCode).json({'error': errorDetail});
-        });
+        }
+        
     }
     
     public saveCompressedFramePlayerAnimation(request: Request, response: Response) {
@@ -370,33 +400,48 @@ export class IoDeviceRouter extends DeviceRouterBase {
             JSON.stringify(request.body)
         );
         
-        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-            targetId, ApiTargetsAndSources.serviceSource,
-            IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
-            commandId, commandName,
-            dataRawBytes
-        );
-        
-        apiCommandMessage.generateMessageRawBytes();
-        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-            // No outputs...
-            
-            this.logResponse(request.path, request.method,
+        let isResponseRequested: boolean = request.body.isResponseRequested != undefined ? request.body.isResponseRequested : true;
+        if (isResponseRequested) {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
                 IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
                 commandId, commandName,
-                sourceId, targetId,
-                ''
+                dataRawBytes
             );
             
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+                // No outputs...
+                
+                this.logResponse(request.path, request.method,
+                    IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
+                    commandId, commandName,
+                    sourceId, targetId,
+                    ''
+                );
+                
+                response.sendStatus(200);
+            }).catch(reason => {
+                let errorCode: number = 400;
+                let errorDetail: string = `Error in saveCompressedFramePlayerAnimation while sending API Command: ${reason}`;
+                
+                this.routeError(request.path, request.method, errorCode, errorDetail);
+                
+                response.status(errorCode).json({'error': errorDetail});
+            });
+        } else {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithNoResponseDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
+                IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
+                commandId, commandName,
+                dataRawBytes
+            );
+            
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage);
             response.sendStatus(200);
-        }).catch(reason => {
-            let errorCode: number = 400;
-            let errorDetail: string = `Error in saveCompressedFramePlayerAnimation while sending API Command: ${reason}`;
-            
-            this.routeError(request.path, request.method, errorCode, errorDetail);
-            
-            response.status(errorCode).json({'error': errorDetail});
-        });
+        }
+        
     }
     
     public playCompressedFramePlayerAnimation(request: Request, response: Response) {
@@ -439,33 +484,48 @@ export class IoDeviceRouter extends DeviceRouterBase {
             JSON.stringify(request.body)
         );
         
-        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-            targetId, ApiTargetsAndSources.serviceSource,
-            IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
-            commandId, commandName,
-            dataRawBytes
-        );
-        
-        apiCommandMessage.generateMessageRawBytes();
-        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-            // No outputs...
-            
-            this.logResponse(request.path, request.method,
+        let isResponseRequested: boolean = request.body.isResponseRequested != undefined ? request.body.isResponseRequested : true;
+        if (isResponseRequested) {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
                 IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
                 commandId, commandName,
-                sourceId, targetId,
-                ''
+                dataRawBytes
             );
             
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+                // No outputs...
+                
+                this.logResponse(request.path, request.method,
+                    IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
+                    commandId, commandName,
+                    sourceId, targetId,
+                    ''
+                );
+                
+                response.sendStatus(200);
+            }).catch(reason => {
+                let errorCode: number = 400;
+                let errorDetail: string = `Error in playCompressedFramePlayerAnimation while sending API Command: ${reason}`;
+                
+                this.routeError(request.path, request.method, errorCode, errorDetail);
+                
+                response.status(errorCode).json({'error': errorDetail});
+            });
+        } else {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithNoResponseDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
+                IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
+                commandId, commandName,
+                dataRawBytes
+            );
+            
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage);
             response.sendStatus(200);
-        }).catch(reason => {
-            let errorCode: number = 400;
-            let errorDetail: string = `Error in playCompressedFramePlayerAnimation while sending API Command: ${reason}`;
-            
-            this.routeError(request.path, request.method, errorCode, errorDetail);
-            
-            response.status(errorCode).json({'error': errorDetail});
-        });
+        }
+        
     }
     
     public playCompressedFramePlayerFrame(request: Request, response: Response) {
@@ -508,33 +568,48 @@ export class IoDeviceRouter extends DeviceRouterBase {
             JSON.stringify(request.body)
         );
         
-        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-            targetId, ApiTargetsAndSources.serviceSource,
-            IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
-            commandId, commandName,
-            dataRawBytes
-        );
-        
-        apiCommandMessage.generateMessageRawBytes();
-        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-            // No outputs...
-            
-            this.logResponse(request.path, request.method,
+        let isResponseRequested: boolean = request.body.isResponseRequested != undefined ? request.body.isResponseRequested : true;
+        if (isResponseRequested) {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
                 IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
                 commandId, commandName,
-                sourceId, targetId,
-                ''
+                dataRawBytes
             );
             
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+                // No outputs...
+                
+                this.logResponse(request.path, request.method,
+                    IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
+                    commandId, commandName,
+                    sourceId, targetId,
+                    ''
+                );
+                
+                response.sendStatus(200);
+            }).catch(reason => {
+                let errorCode: number = 400;
+                let errorDetail: string = `Error in playCompressedFramePlayerFrame while sending API Command: ${reason}`;
+                
+                this.routeError(request.path, request.method, errorCode, errorDetail);
+                
+                response.status(errorCode).json({'error': errorDetail});
+            });
+        } else {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithNoResponseDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
+                IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
+                commandId, commandName,
+                dataRawBytes
+            );
+            
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage);
             response.sendStatus(200);
-        }).catch(reason => {
-            let errorCode: number = 400;
-            let errorDetail: string = `Error in playCompressedFramePlayerFrame while sending API Command: ${reason}`;
-            
-            this.routeError(request.path, request.method, errorCode, errorDetail);
-            
-            response.status(errorCode).json({'error': errorDetail});
-        });
+        }
+        
     }
     
     public getCompressedFramePlayerListOfFrames(request: Request, response: Response) {
@@ -624,33 +699,48 @@ export class IoDeviceRouter extends DeviceRouterBase {
             ''
         );
         
-        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-            targetId, ApiTargetsAndSources.serviceSource,
-            IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
-            commandId, commandName,
-            null
-        );
-        
-        apiCommandMessage.generateMessageRawBytes();
-        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-            // No outputs...
-            
-            this.logResponse(request.path, request.method,
+        let isResponseRequested: boolean = request.body.isResponseRequested != undefined ? request.body.isResponseRequested : true;
+        if (isResponseRequested) {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
                 IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
                 commandId, commandName,
-                sourceId, targetId,
-                ''
+                null
             );
             
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+                // No outputs...
+                
+                this.logResponse(request.path, request.method,
+                    IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
+                    commandId, commandName,
+                    sourceId, targetId,
+                    ''
+                );
+                
+                response.sendStatus(200);
+            }).catch(reason => {
+                let errorCode: number = 400;
+                let errorDetail: string = `Error in deleteAllCompressedFramePlayerAnimationsAndFrames while sending API Command: ${reason}`;
+                
+                this.routeError(request.path, request.method, errorCode, errorDetail);
+                
+                response.status(errorCode).json({'error': errorDetail});
+            });
+        } else {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithNoResponseDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
+                IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
+                commandId, commandName,
+                null
+            );
+            
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage);
             response.sendStatus(200);
-        }).catch(reason => {
-            let errorCode: number = 400;
-            let errorDetail: string = `Error in deleteAllCompressedFramePlayerAnimationsAndFrames while sending API Command: ${reason}`;
-            
-            this.routeError(request.path, request.method, errorCode, errorDetail);
-            
-            response.status(errorCode).json({'error': errorDetail});
-        });
+        }
+        
     }
     
     public pauseCompressedFramePlayerAnimation(request: Request, response: Response) {
@@ -682,33 +772,48 @@ export class IoDeviceRouter extends DeviceRouterBase {
             ''
         );
         
-        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-            targetId, ApiTargetsAndSources.serviceSource,
-            IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
-            commandId, commandName,
-            null
-        );
-        
-        apiCommandMessage.generateMessageRawBytes();
-        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-            // No outputs...
-            
-            this.logResponse(request.path, request.method,
+        let isResponseRequested: boolean = request.body.isResponseRequested != undefined ? request.body.isResponseRequested : true;
+        if (isResponseRequested) {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
                 IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
                 commandId, commandName,
-                sourceId, targetId,
-                ''
+                null
             );
             
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+                // No outputs...
+                
+                this.logResponse(request.path, request.method,
+                    IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
+                    commandId, commandName,
+                    sourceId, targetId,
+                    ''
+                );
+                
+                response.sendStatus(200);
+            }).catch(reason => {
+                let errorCode: number = 400;
+                let errorDetail: string = `Error in pauseCompressedFramePlayerAnimation while sending API Command: ${reason}`;
+                
+                this.routeError(request.path, request.method, errorCode, errorDetail);
+                
+                response.status(errorCode).json({'error': errorDetail});
+            });
+        } else {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithNoResponseDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
+                IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
+                commandId, commandName,
+                null
+            );
+            
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage);
             response.sendStatus(200);
-        }).catch(reason => {
-            let errorCode: number = 400;
-            let errorDetail: string = `Error in pauseCompressedFramePlayerAnimation while sending API Command: ${reason}`;
-            
-            this.routeError(request.path, request.method, errorCode, errorDetail);
-            
-            response.status(errorCode).json({'error': errorDetail});
-        });
+        }
+        
     }
     
     public resumeCompressedFramePlayerAnimation(request: Request, response: Response) {
@@ -740,33 +845,48 @@ export class IoDeviceRouter extends DeviceRouterBase {
             ''
         );
         
-        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-            targetId, ApiTargetsAndSources.serviceSource,
-            IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
-            commandId, commandName,
-            null
-        );
-        
-        apiCommandMessage.generateMessageRawBytes();
-        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-            // No outputs...
-            
-            this.logResponse(request.path, request.method,
+        let isResponseRequested: boolean = request.body.isResponseRequested != undefined ? request.body.isResponseRequested : true;
+        if (isResponseRequested) {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
                 IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
                 commandId, commandName,
-                sourceId, targetId,
-                ''
+                null
             );
             
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+                // No outputs...
+                
+                this.logResponse(request.path, request.method,
+                    IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
+                    commandId, commandName,
+                    sourceId, targetId,
+                    ''
+                );
+                
+                response.sendStatus(200);
+            }).catch(reason => {
+                let errorCode: number = 400;
+                let errorDetail: string = `Error in resumeCompressedFramePlayerAnimation while sending API Command: ${reason}`;
+                
+                this.routeError(request.path, request.method, errorCode, errorDetail);
+                
+                response.status(errorCode).json({'error': errorDetail});
+            });
+        } else {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithNoResponseDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
+                IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
+                commandId, commandName,
+                null
+            );
+            
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage);
             response.sendStatus(200);
-        }).catch(reason => {
-            let errorCode: number = 400;
-            let errorDetail: string = `Error in resumeCompressedFramePlayerAnimation while sending API Command: ${reason}`;
-            
-            this.routeError(request.path, request.method, errorCode, errorDetail);
-            
-            response.status(errorCode).json({'error': errorDetail});
-        });
+        }
+        
     }
     
     public resetCompressedFramePlayerAnimation(request: Request, response: Response) {
@@ -798,33 +918,48 @@ export class IoDeviceRouter extends DeviceRouterBase {
             ''
         );
         
-        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-            targetId, ApiTargetsAndSources.serviceSource,
-            IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
-            commandId, commandName,
-            null
-        );
-        
-        apiCommandMessage.generateMessageRawBytes();
-        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-            // No outputs...
-            
-            this.logResponse(request.path, request.method,
+        let isResponseRequested: boolean = request.body.isResponseRequested != undefined ? request.body.isResponseRequested : true;
+        if (isResponseRequested) {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
                 IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
                 commandId, commandName,
-                sourceId, targetId,
-                ''
+                null
             );
             
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+                // No outputs...
+                
+                this.logResponse(request.path, request.method,
+                    IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
+                    commandId, commandName,
+                    sourceId, targetId,
+                    ''
+                );
+                
+                response.sendStatus(200);
+            }).catch(reason => {
+                let errorCode: number = 400;
+                let errorDetail: string = `Error in resetCompressedFramePlayerAnimation while sending API Command: ${reason}`;
+                
+                this.routeError(request.path, request.method, errorCode, errorDetail);
+                
+                response.status(errorCode).json({'error': errorDetail});
+            });
+        } else {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithNoResponseDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
+                IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
+                commandId, commandName,
+                null
+            );
+            
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage);
             response.sendStatus(200);
-        }).catch(reason => {
-            let errorCode: number = 400;
-            let errorDetail: string = `Error in resetCompressedFramePlayerAnimation while sending API Command: ${reason}`;
-            
-            this.routeError(request.path, request.method, errorCode, errorDetail);
-            
-            response.status(errorCode).json({'error': errorDetail});
-        });
+        }
+        
     }
     
     public assignCompressedFramePlayerFramesToAnimation(request: Request, response: Response) {
@@ -867,33 +1002,48 @@ export class IoDeviceRouter extends DeviceRouterBase {
             JSON.stringify(request.body)
         );
         
-        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-            targetId, ApiTargetsAndSources.serviceSource,
-            IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
-            commandId, commandName,
-            dataRawBytes
-        );
-        
-        apiCommandMessage.generateMessageRawBytes();
-        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-            // No outputs...
-            
-            this.logResponse(request.path, request.method,
+        let isResponseRequested: boolean = request.body.isResponseRequested != undefined ? request.body.isResponseRequested : true;
+        if (isResponseRequested) {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
                 IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
                 commandId, commandName,
-                sourceId, targetId,
-                ''
+                dataRawBytes
             );
             
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+                // No outputs...
+                
+                this.logResponse(request.path, request.method,
+                    IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
+                    commandId, commandName,
+                    sourceId, targetId,
+                    ''
+                );
+                
+                response.sendStatus(200);
+            }).catch(reason => {
+                let errorCode: number = 400;
+                let errorDetail: string = `Error in assignCompressedFramePlayerFramesToAnimation while sending API Command: ${reason}`;
+                
+                this.routeError(request.path, request.method, errorCode, errorDetail);
+                
+                response.status(errorCode).json({'error': errorDetail});
+            });
+        } else {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithNoResponseDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
+                IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
+                commandId, commandName,
+                dataRawBytes
+            );
+            
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage);
             response.sendStatus(200);
-        }).catch(reason => {
-            let errorCode: number = 400;
-            let errorDetail: string = `Error in assignCompressedFramePlayerFramesToAnimation while sending API Command: ${reason}`;
-            
-            this.routeError(request.path, request.method, errorCode, errorDetail);
-            
-            response.status(errorCode).json({'error': errorDetail});
-        });
+        }
+        
     }
     
     public saveCompressedFramePlayerAnimationWithoutFrames(request: Request, response: Response) {
@@ -1005,33 +1155,48 @@ export class IoDeviceRouter extends DeviceRouterBase {
             JSON.stringify(request.body)
         );
         
-        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-            targetId, ApiTargetsAndSources.serviceSource,
-            IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
-            commandId, commandName,
-            dataRawBytes
-        );
-        
-        apiCommandMessage.generateMessageRawBytes();
-        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-            // No outputs...
-            
-            this.logResponse(request.path, request.method,
+        let isResponseRequested: boolean = request.body.isResponseRequested != undefined ? request.body.isResponseRequested : true;
+        if (isResponseRequested) {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
                 IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
                 commandId, commandName,
-                sourceId, targetId,
-                ''
+                dataRawBytes
             );
             
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+                // No outputs...
+                
+                this.logResponse(request.path, request.method,
+                    IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
+                    commandId, commandName,
+                    sourceId, targetId,
+                    ''
+                );
+                
+                response.sendStatus(200);
+            }).catch(reason => {
+                let errorCode: number = 400;
+                let errorDetail: string = `Error in playCompressedFramePlayerAnimationWithLoopOption while sending API Command: ${reason}`;
+                
+                this.routeError(request.path, request.method, errorCode, errorDetail);
+                
+                response.status(errorCode).json({'error': errorDetail});
+            });
+        } else {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithNoResponseDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
+                IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
+                commandId, commandName,
+                dataRawBytes
+            );
+            
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage);
             response.sendStatus(200);
-        }).catch(reason => {
-            let errorCode: number = 400;
-            let errorDetail: string = `Error in playCompressedFramePlayerAnimationWithLoopOption while sending API Command: ${reason}`;
-            
-            this.routeError(request.path, request.method, errorCode, errorDetail);
-            
-            response.status(errorCode).json({'error': errorDetail});
-        });
+        }
+        
     }
     
     public getActiveColorPalette(request: Request, response: Response) {
@@ -1132,33 +1297,48 @@ export class IoDeviceRouter extends DeviceRouterBase {
             JSON.stringify(request.body)
         );
         
-        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-            targetId, ApiTargetsAndSources.serviceSource,
-            IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
-            commandId, commandName,
-            dataRawBytes
-        );
-        
-        apiCommandMessage.generateMessageRawBytes();
-        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-            // No outputs...
-            
-            this.logResponse(request.path, request.method,
+        let isResponseRequested: boolean = request.body.isResponseRequested != undefined ? request.body.isResponseRequested : true;
+        if (isResponseRequested) {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
                 IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
                 commandId, commandName,
-                sourceId, targetId,
-                ''
+                dataRawBytes
             );
             
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+                // No outputs...
+                
+                this.logResponse(request.path, request.method,
+                    IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
+                    commandId, commandName,
+                    sourceId, targetId,
+                    ''
+                );
+                
+                response.sendStatus(200);
+            }).catch(reason => {
+                let errorCode: number = 400;
+                let errorDetail: string = `Error in setActiveColorPalette while sending API Command: ${reason}`;
+                
+                this.routeError(request.path, request.method, errorCode, errorDetail);
+                
+                response.status(errorCode).json({'error': errorDetail});
+            });
+        } else {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithNoResponseDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
+                IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
+                commandId, commandName,
+                dataRawBytes
+            );
+            
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage);
             response.sendStatus(200);
-        }).catch(reason => {
-            let errorCode: number = 400;
-            let errorDetail: string = `Error in setActiveColorPalette while sending API Command: ${reason}`;
-            
-            this.routeError(request.path, request.method, errorCode, errorDetail);
-            
-            response.status(errorCode).json({'error': errorDetail});
-        });
+        }
+        
     }
     
     public getColorIdentificationReport(request: Request, response: Response) {
@@ -1270,33 +1450,48 @@ export class IoDeviceRouter extends DeviceRouterBase {
             JSON.stringify(request.body)
         );
         
-        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-            targetId, ApiTargetsAndSources.serviceSource,
-            IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
-            commandId, commandName,
-            dataRawBytes
-        );
-        
-        apiCommandMessage.generateMessageRawBytes();
-        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-            // No outputs...
-            
-            this.logResponse(request.path, request.method,
+        let isResponseRequested: boolean = request.body.isResponseRequested != undefined ? request.body.isResponseRequested : true;
+        if (isResponseRequested) {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
                 IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
                 commandId, commandName,
-                sourceId, targetId,
-                ''
+                dataRawBytes
             );
             
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+                // No outputs...
+                
+                this.logResponse(request.path, request.method,
+                    IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
+                    commandId, commandName,
+                    sourceId, targetId,
+                    ''
+                );
+                
+                response.sendStatus(200);
+            }).catch(reason => {
+                let errorCode: number = 400;
+                let errorDetail: string = `Error in loadColorPalette while sending API Command: ${reason}`;
+                
+                this.routeError(request.path, request.method, errorCode, errorDetail);
+                
+                response.status(errorCode).json({'error': errorDetail});
+            });
+        } else {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithNoResponseDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
+                IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
+                commandId, commandName,
+                dataRawBytes
+            );
+            
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage);
             response.sendStatus(200);
-        }).catch(reason => {
-            let errorCode: number = 400;
-            let errorDetail: string = `Error in loadColorPalette while sending API Command: ${reason}`;
-            
-            this.routeError(request.path, request.method, errorCode, errorDetail);
-            
-            response.status(errorCode).json({'error': errorDetail});
-        });
+        }
+        
     }
     
     public saveColorPalette(request: Request, response: Response) {
@@ -1339,33 +1534,48 @@ export class IoDeviceRouter extends DeviceRouterBase {
             JSON.stringify(request.body)
         );
         
-        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-            targetId, ApiTargetsAndSources.serviceSource,
-            IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
-            commandId, commandName,
-            dataRawBytes
-        );
-        
-        apiCommandMessage.generateMessageRawBytes();
-        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-            // No outputs...
-            
-            this.logResponse(request.path, request.method,
+        let isResponseRequested: boolean = request.body.isResponseRequested != undefined ? request.body.isResponseRequested : true;
+        if (isResponseRequested) {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
                 IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
                 commandId, commandName,
-                sourceId, targetId,
-                ''
+                dataRawBytes
             );
             
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+                // No outputs...
+                
+                this.logResponse(request.path, request.method,
+                    IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
+                    commandId, commandName,
+                    sourceId, targetId,
+                    ''
+                );
+                
+                response.sendStatus(200);
+            }).catch(reason => {
+                let errorCode: number = 400;
+                let errorDetail: string = `Error in saveColorPalette while sending API Command: ${reason}`;
+                
+                this.routeError(request.path, request.method, errorCode, errorDetail);
+                
+                response.status(errorCode).json({'error': errorDetail});
+            });
+        } else {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithNoResponseDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
+                IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
+                commandId, commandName,
+                dataRawBytes
+            );
+            
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage);
             response.sendStatus(200);
-        }).catch(reason => {
-            let errorCode: number = 400;
-            let errorDetail: string = `Error in saveColorPalette while sending API Command: ${reason}`;
-            
-            this.routeError(request.path, request.method, errorCode, errorDetail);
-            
-            response.status(errorCode).json({'error': errorDetail});
-        });
+        }
+        
     }
     
     public getCompressedFramePlayerFrameInfoType(request: Request, response: Response) {
@@ -1466,33 +1676,48 @@ export class IoDeviceRouter extends DeviceRouterBase {
             JSON.stringify(request.body)
         );
         
-        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-            targetId, ApiTargetsAndSources.serviceSource,
-            IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
-            commandId, commandName,
-            dataRawBytes
-        );
-        
-        apiCommandMessage.generateMessageRawBytes();
-        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-            // No outputs...
-            
-            this.logResponse(request.path, request.method,
+        let isResponseRequested: boolean = request.body.isResponseRequested != undefined ? request.body.isResponseRequested : true;
+        if (isResponseRequested) {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
                 IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
                 commandId, commandName,
-                sourceId, targetId,
-                ''
+                dataRawBytes
             );
             
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+                // No outputs...
+                
+                this.logResponse(request.path, request.method,
+                    IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
+                    commandId, commandName,
+                    sourceId, targetId,
+                    ''
+                );
+                
+                response.sendStatus(200);
+            }).catch(reason => {
+                let errorCode: number = 400;
+                let errorDetail: string = `Error in saveCompressedFramePlayer16BitFrame while sending API Command: ${reason}`;
+                
+                this.routeError(request.path, request.method, errorCode, errorDetail);
+                
+                response.status(errorCode).json({'error': errorDetail});
+            });
+        } else {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithNoResponseDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
+                IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
+                commandId, commandName,
+                dataRawBytes
+            );
+            
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage);
             response.sendStatus(200);
-        }).catch(reason => {
-            let errorCode: number = 400;
-            let errorDetail: string = `Error in saveCompressedFramePlayer16BitFrame while sending API Command: ${reason}`;
-            
-            this.routeError(request.path, request.method, errorCode, errorDetail);
-            
-            response.status(errorCode).json({'error': errorDetail});
-        });
+        }
+        
     }
     
     public releaseLedRequests(request: Request, response: Response) {
@@ -1524,32 +1749,47 @@ export class IoDeviceRouter extends DeviceRouterBase {
             ''
         );
         
-        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-            targetId, ApiTargetsAndSources.serviceSource,
-            IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
-            commandId, commandName,
-            null
-        );
-        
-        apiCommandMessage.generateMessageRawBytes();
-        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-            // No outputs...
-            
-            this.logResponse(request.path, request.method,
+        let isResponseRequested: boolean = request.body.isResponseRequested != undefined ? request.body.isResponseRequested : true;
+        if (isResponseRequested) {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
                 IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
                 commandId, commandName,
-                sourceId, targetId,
-                ''
+                null
             );
             
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+                // No outputs...
+                
+                this.logResponse(request.path, request.method,
+                    IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
+                    commandId, commandName,
+                    sourceId, targetId,
+                    ''
+                );
+                
+                response.sendStatus(200);
+            }).catch(reason => {
+                let errorCode: number = 400;
+                let errorDetail: string = `Error in releaseLedRequests while sending API Command: ${reason}`;
+                
+                this.routeError(request.path, request.method, errorCode, errorDetail);
+                
+                response.status(errorCode).json({'error': errorDetail});
+            });
+        } else {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithNoResponseDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
+                IoDeviceRouter._deviceId, IoDeviceRouter._deviceName,
+                commandId, commandName,
+                null
+            );
+            
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage);
             response.sendStatus(200);
-        }).catch(reason => {
-            let errorCode: number = 400;
-            let errorDetail: string = `Error in releaseLedRequests while sending API Command: ${reason}`;
-            
-            this.routeError(request.path, request.method, errorCode, errorDetail);
-            
-            response.status(errorCode).json({'error': errorDetail});
-        });
+        }
+        
     }
 }

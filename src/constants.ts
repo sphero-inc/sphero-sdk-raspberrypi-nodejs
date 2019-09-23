@@ -104,7 +104,7 @@ export class ApiFlags {
     public static readonly extendedFlags: number = 1 << 7;
 
     public static readonly defaultRequestWithResponseFlags: number = ((ApiFlags.requestsResponse) | (ApiFlags.resetInactivityTimeout) | (ApiFlags.packetHasTargetId) | (ApiFlags.packetHasSourceId));
-    public static readonly defaultRequestWithNoResponseFlags: number = ((ApiFlags.requestOnlyErrorResponse) | (ApiFlags.resetInactivityTimeout) | (ApiFlags.packetHasTargetId) | (ApiFlags.packetHasSourceId));
+    public static readonly defaultRequestWithNoResponseFlags: number = ((ApiFlags.resetInactivityTimeout) | (ApiFlags.packetHasTargetId) | (ApiFlags.packetHasSourceId));
     public static readonly defaultResponseFlags: number = ((ApiFlags.isResponse) | (ApiFlags.packetHasTargetId) | (ApiFlags.packetHasSourceId));
 }
 

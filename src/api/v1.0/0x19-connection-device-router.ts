@@ -12,7 +12,7 @@ import {Request, Response} from 'express';
 
 // internal imports
 import {DeviceRouterBase} from '../device-router-base';
-import {IApiCommandMessage, buildApiCommandMessageWithDefaultFlags} from '../../models/api-command-message';
+import {IApiCommandMessage, buildApiCommandMessageWithDefaultFlags, buildApiCommandMessageWithNoResponseDefaultFlags} from '../../models/api-command-message';
 import {IApiResponseMessage} from '../../models/api-response-message';
 import {IConfiguration} from '../../configuration';
 import {IApiDal} from '../../modules/api-dal-interface';
@@ -98,33 +98,48 @@ export class ConnectionDeviceRouter extends DeviceRouterBase {
             JSON.stringify(request.body)
         );
         
-        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-            targetId, ApiTargetsAndSources.serviceSource,
-            ConnectionDeviceRouter._deviceId, ConnectionDeviceRouter._deviceName,
-            commandId, commandName,
-            dataRawBytes
-        );
-        
-        apiCommandMessage.generateMessageRawBytes();
-        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-            // No outputs...
-            
-            this.logResponse(request.path, request.method,
+        let isResponseRequested: boolean = request.body.isResponseRequested != undefined ? request.body.isResponseRequested : true;
+        if (isResponseRequested) {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
                 ConnectionDeviceRouter._deviceId, ConnectionDeviceRouter._deviceName,
                 commandId, commandName,
-                sourceId, targetId,
-                ''
+                dataRawBytes
             );
             
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+                // No outputs...
+                
+                this.logResponse(request.path, request.method,
+                    ConnectionDeviceRouter._deviceId, ConnectionDeviceRouter._deviceName,
+                    commandId, commandName,
+                    sourceId, targetId,
+                    ''
+                );
+                
+                response.sendStatus(200);
+            }).catch(reason => {
+                let errorCode: number = 400;
+                let errorDetail: string = `Error in setBluetoothDeviceName while sending API Command: ${reason}`;
+                
+                this.routeError(request.path, request.method, errorCode, errorDetail);
+                
+                response.status(errorCode).json({'error': errorDetail});
+            });
+        } else {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithNoResponseDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
+                ConnectionDeviceRouter._deviceId, ConnectionDeviceRouter._deviceName,
+                commandId, commandName,
+                dataRawBytes
+            );
+            
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage);
             response.sendStatus(200);
-        }).catch(reason => {
-            let errorCode: number = 400;
-            let errorDetail: string = `Error in setBluetoothDeviceName while sending API Command: ${reason}`;
-            
-            this.routeError(request.path, request.method, errorCode, errorDetail);
-            
-            response.status(errorCode).json({'error': errorDetail});
-        });
+        }
+        
     }
     
     public getBluetoothDeviceName(request: Request, response: Response) {
