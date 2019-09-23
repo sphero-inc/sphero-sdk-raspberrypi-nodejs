@@ -43,6 +43,21 @@
           "in": "path", 
           "type": "integer", 
           "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": false, 
+          "name": "body", 
+          "in": "body"
         }
       ]
     }, 
@@ -82,6 +97,69 @@
         }, 
         "tags": [
           "Connection"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }
+    }, 
+    "/sensor/getMotorThermalProtectionStatus/{targetId}": {
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }
+      ], 
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK", 
+            "schema": {
+              "required": [
+                "leftMotorTemperature", 
+                "leftMotorStatus", 
+                "rightMotorTemperature", 
+                "rightMotorStatus"
+              ], 
+              "type": "object", 
+              "properties": {
+                "leftMotorTemperature": {
+                  "type": "number", 
+                  "format": "float"
+                }, 
+                "rightMotorTemperature": {
+                  "type": "number", 
+                  "format": "float"
+                }, 
+                "rightMotorStatus": {
+                  "type": "integer", 
+                  "format": "int32"
+                }, 
+                "leftMotorStatus": {
+                  "type": "integer", 
+                  "format": "int32"
+                }
+              }
+            }
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Sensor"
         ], 
         "produces": [
           "application/json"
@@ -134,6 +212,10 @@
             ], 
             "type": "object", 
             "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
               "isEnabled": {
                 "type": "boolean"
               }
@@ -178,6 +260,21 @@
           "in": "path", 
           "type": "integer", 
           "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": false, 
+          "name": "body", 
+          "in": "body"
         }
       ]
     }, 
@@ -334,6 +431,10 @@
             ], 
             "type": "object", 
             "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
               "isEnabled": {
                 "type": "boolean"
               }
@@ -389,6 +490,10 @@
             ], 
             "type": "object", 
             "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
               "leftMode": {
                 "type": "integer", 
                 "format": "int32"
@@ -624,6 +729,10 @@
             ], 
             "type": "object", 
             "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
               "period": {
                 "type": "integer", 
                 "format": "int32"
@@ -724,6 +833,10 @@
             ], 
             "type": "object", 
             "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
               "paletteIndex": {
                 "type": "integer", 
                 "format": "int32"
@@ -784,6 +897,57 @@
         "description": ""
       }
     }, 
+    "/io/getActiveColorPalette/{targetId}": {
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }
+      ], 
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK", 
+            "schema": {
+              "required": [
+                "rgbIndexBytes"
+              ], 
+              "type": "object", 
+              "properties": {
+                "rgbIndexBytes": {
+                  "items": {
+                    "type": "integer", 
+                    "format": "int32"
+                  }, 
+                  "type": "array"
+                }
+              }
+            }
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Io"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }
+    }, 
     "/io/saveCompressedFramePlayerAnimation/{targetId}": {
       "put": {
         "responses": {
@@ -831,6 +995,10 @@
             ], 
             "type": "object", 
             "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
               "paletteRgbValues": {
                 "items": {
                   "type": "integer", 
@@ -845,7 +1013,7 @@
               "isFadeEnabled": {
                 "type": "boolean"
               }, 
-              "speedFps": {
+              "frameCount": {
                 "type": "integer", 
                 "format": "int32"
               }, 
@@ -860,7 +1028,7 @@
                 }, 
                 "type": "array"
               }, 
-              "frameCount": {
+              "speedFps": {
                 "type": "integer", 
                 "format": "int32"
               }
@@ -915,6 +1083,10 @@
             ], 
             "type": "object", 
             "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
               "flags": {
                 "type": "integer", 
                 "format": "int32"
@@ -1131,6 +1303,10 @@
             ], 
             "type": "object", 
             "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
               "isEnabled": {
                 "type": "boolean"
               }, 
@@ -1192,6 +1368,10 @@
             ], 
             "type": "object", 
             "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
               "nearCode": {
                 "type": "integer", 
                 "format": "int32"
@@ -1241,6 +1421,21 @@
           "in": "path", 
           "type": "integer", 
           "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": false, 
+          "name": "body", 
+          "in": "body"
         }
       ]
     }, 
@@ -1285,6 +1480,10 @@
             ], 
             "type": "object", 
             "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
               "secondsUntilDeepSleep": {
                 "type": "integer", 
                 "format": "int32"
@@ -1330,6 +1529,21 @@
           "in": "path", 
           "type": "integer", 
           "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": false, 
+          "name": "body", 
+          "in": "body"
         }
       ]
     }, 
@@ -1660,6 +1874,10 @@
             ], 
             "type": "object", 
             "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
               "animationIndex": {
                 "type": "integer", 
                 "format": "int32"
@@ -1715,6 +1933,10 @@
             ], 
             "type": "object", 
             "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
               "animationIndex": {
                 "type": "integer", 
                 "format": "int32"
@@ -1771,6 +1993,21 @@
           "in": "path", 
           "type": "integer", 
           "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": false, 
+          "name": "body", 
+          "in": "body"
         }
       ]
     }, 
@@ -1880,6 +2117,10 @@
             ], 
             "type": "object", 
             "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
               "index": {
                 "type": "integer", 
                 "format": "int32"
@@ -2078,6 +2319,10 @@
             ], 
             "type": "object", 
             "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
               "sensitivity": {
                 "type": "integer", 
                 "format": "int32"
@@ -2166,6 +2411,62 @@
         ], 
         "description": ""
       }
+    }, 
+    "/drive/enableMotorStallNotify/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Drive"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [
+              "isEnabled"
+            ], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
+              "isEnabled": {
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": true, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
     }, 
     "/power/getCurrentSenseAmplifierCurrent/{targetId}": {
       "parameters": [
@@ -2265,6 +2566,21 @@
           "in": "path", 
           "type": "integer", 
           "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": false, 
+          "name": "body", 
+          "in": "body"
         }
       ]
     }, 
@@ -2392,6 +2708,10 @@
             ], 
             "type": "object", 
             "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
               "isEnabled": {
                 "type": "boolean"
               }
@@ -2436,6 +2756,21 @@
           "in": "path", 
           "type": "integer", 
           "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": false, 
+          "name": "body", 
+          "in": "body"
         }
       ]
     }, 
@@ -2484,11 +2819,19 @@
             ], 
             "type": "object", 
             "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
               "infraredCode": {
                 "type": "integer", 
                 "format": "int32"
               }, 
               "leftStrength": {
+                "type": "integer", 
+                "format": "int32"
+              }, 
+              "rearStrength": {
                 "type": "integer", 
                 "format": "int32"
               }, 
@@ -2499,8 +2842,33 @@
               "rightStrength": {
                 "type": "integer", 
                 "format": "int32"
-              }, 
-              "rearStrength": {
+              }
+            }
+          }, 
+          "required": true, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/sensor/getMotorTemperature/{targetId}": {
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [
+              "motorIndex"
+            ], 
+            "type": "object", 
+            "properties": {
+              "motorIndex": {
                 "type": "integer", 
                 "format": "int32"
               }
@@ -2510,7 +2878,48 @@
           "name": "body", 
           "in": "body"
         }
-      ]
+      ], 
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK", 
+            "schema": {
+              "required": [
+                "windingCoilTemperature", 
+                "caseTemperature"
+              ], 
+              "type": "object", 
+              "properties": {
+                "windingCoilTemperature": {
+                  "type": "number", 
+                  "format": "float"
+                }, 
+                "caseTemperature": {
+                  "type": "number", 
+                  "format": "float"
+                }
+              }
+            }
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Sensor"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }
     }, 
     "/io/playCompressedFramePlayerFrame/{targetId}": {
       "put": {
@@ -2553,6 +2962,10 @@
             ], 
             "type": "object", 
             "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
               "frameIndex": {
                 "type": "integer", 
                 "format": "int32"
@@ -2607,6 +3020,10 @@
             ], 
             "type": "object", 
             "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
               "nearCode": {
                 "type": "integer", 
                 "format": "int32"
@@ -2711,6 +3128,10 @@
             ], 
             "type": "object", 
             "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
               "rgbIndexBytes": {
                 "items": {
                   "type": "integer", 
@@ -2726,7 +3147,7 @@
         }
       ]
     }, 
-    "/io/playCompressedFramePlayerAnimationWithLoopOption/{targetId}": {
+    "/sensor/enableMotorCurrentNotify/{targetId}": {
       "put": {
         "responses": {
           "200": {
@@ -2740,7 +3161,7 @@
           }
         }, 
         "tags": [
-          "Io"
+          "Sensor"
         ], 
         "produces": [
           "application/json"
@@ -2763,16 +3184,15 @@
         {
           "schema": {
             "required": [
-              "animationIndex", 
-              "isLooping"
+              "isEnabled"
             ], 
             "type": "object", 
             "properties": {
-              "animationIndex": {
-                "type": "integer", 
-                "format": "int32"
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
               }, 
-              "isLooping": {
+              "isEnabled": {
                 "type": "boolean"
               }
             }
@@ -2816,6 +3236,21 @@
           "in": "path", 
           "type": "integer", 
           "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": false, 
+          "name": "body", 
+          "in": "body"
         }
       ]
     }, 
@@ -2919,6 +3354,10 @@
             ], 
             "type": "object", 
             "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
               "token": {
                 "type": "integer", 
                 "format": "int32"
@@ -2971,6 +3410,21 @@
           "in": "path", 
           "type": "integer", 
           "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": false, 
+          "name": "body", 
+          "in": "body"
         }
       ]
     }, 
@@ -3007,6 +3461,21 @@
           "in": "path", 
           "type": "integer", 
           "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": false, 
+          "name": "body", 
+          "in": "body"
         }
       ]
     }, 
@@ -3052,6 +3521,10 @@
             ], 
             "type": "object", 
             "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
               "nearCode": {
                 "type": "integer", 
                 "format": "int32"
@@ -3109,6 +3582,10 @@
             ], 
             "type": "object", 
             "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
               "isEnabled": {
                 "type": "boolean"
               }
@@ -3153,6 +3630,21 @@
           "in": "path", 
           "type": "integer", 
           "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": false, 
+          "name": "body", 
+          "in": "body"
         }
       ]
     }, 
@@ -3189,6 +3681,88 @@
           "in": "path", 
           "type": "integer", 
           "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": false, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/io/setCompressedFramePlayerOneColor/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Io"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [
+              "red", 
+              "green", 
+              "blue"
+            ], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
+              "blue": {
+                "type": "integer", 
+                "format": "int32"
+              }, 
+              "green": {
+                "type": "integer", 
+                "format": "int32"
+              }, 
+              "red": {
+                "type": "integer", 
+                "format": "int32"
+              }
+            }
+          }, 
+          "required": true, 
+          "name": "body", 
+          "in": "body"
         }
       ]
     }, 
@@ -3225,6 +3799,21 @@
           "in": "path", 
           "type": "integer", 
           "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": false, 
+          "name": "body", 
+          "in": "body"
         }
       ]
     }, 
@@ -3269,6 +3858,10 @@
             ], 
             "type": "object", 
             "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
               "flags": {
                 "type": "integer", 
                 "format": "int32"
@@ -3314,6 +3907,21 @@
           "in": "path", 
           "type": "integer", 
           "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": false, 
+          "name": "body", 
+          "in": "body"
         }
       ]
     }, 
@@ -3358,6 +3966,10 @@
             ], 
             "type": "object", 
             "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
               "paletteIndex": {
                 "type": "integer", 
                 "format": "int32"
@@ -3403,6 +4015,21 @@
           "in": "path", 
           "type": "integer", 
           "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": false, 
+          "name": "body", 
+          "in": "body"
         }
       ]
     }, 
@@ -3439,6 +4066,77 @@
           "in": "path", 
           "type": "integer", 
           "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": false, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/sensor/enableMotorThermalProtectionStatusNotify/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Sensor"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [
+              "isEnabled"
+            ], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
+              "isEnabled": {
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": true, 
+          "name": "body", 
+          "in": "body"
         }
       ]
     }, 
@@ -3483,6 +4181,10 @@
             ], 
             "type": "object", 
             "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
               "isEnabled": {
                 "type": "boolean"
               }
@@ -3535,6 +4237,10 @@
             ], 
             "type": "object", 
             "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
               "name": {
                 "type": "string"
               }
@@ -3591,9 +4297,9 @@
             ], 
             "type": "object", 
             "properties": {
-              "frameIndex": {
-                "type": "integer", 
-                "format": "int32"
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
               }, 
               "colorIndexBit2": {
                 "type": "integer", 
@@ -3608,6 +4314,10 @@
                 "format": "int32"
               }, 
               "colorIndexBit1": {
+                "type": "integer", 
+                "format": "int32"
+              }, 
+              "frameIndex": {
                 "type": "integer", 
                 "format": "int32"
               }
@@ -3777,6 +4487,10 @@
             ], 
             "type": "object", 
             "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
               "ledBrightnessValues": {
                 "items": {
                   "type": "integer", 
@@ -3837,6 +4551,10 @@
             ], 
             "type": "object", 
             "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
               "isEnabled": {
                 "type": "boolean"
               }
@@ -3911,43 +4629,7 @@
         "description": ""
       }
     }, 
-    "/io/releaseLedRequests/{targetId}": {
-      "put": {
-        "responses": {
-          "200": {
-            "description": "OK"
-          }, 
-          "404": {
-            "description": "Resource not found"
-          }, 
-          "400": {
-            "description": "Bad request"
-          }
-        }, 
-        "tags": [
-          "Io"
-        ], 
-        "produces": [
-          "application/json"
-        ], 
-        "summary": "", 
-        "consumes": [
-          "application/json"
-        ], 
-        "description": ""
-      }, 
-      "parameters": [
-        {
-          "name": "targetId", 
-          "format": "int32", 
-          "required": true, 
-          "in": "path", 
-          "type": "integer", 
-          "description": ""
-        }
-      ]
-    }, 
-    "/io/setCompressedFramePlayerOneColor/{targetId}": {
+    "/io/playCompressedFramePlayerAnimationWithLoopOption/{targetId}": {
       "put": {
         "responses": {
           "200": {
@@ -3984,23 +4666,21 @@
         {
           "schema": {
             "required": [
-              "red", 
-              "green", 
-              "blue"
+              "animationIndex", 
+              "isLooping"
             ], 
             "type": "object", 
             "properties": {
-              "blue": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
+              "animationIndex": {
                 "type": "integer", 
                 "format": "int32"
               }, 
-              "green": {
-                "type": "integer", 
-                "format": "int32"
-              }, 
-              "red": {
-                "type": "integer", 
-                "format": "int32"
+              "isLooping": {
+                "type": "boolean"
               }
             }
           }, 
@@ -4010,7 +4690,114 @@
         }
       ]
     }, 
-    "/io/getActiveColorPalette/{targetId}": {
+    "/io/releaseLedRequests/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Io"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": false, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/drive/enableMotorFaultNotify/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Drive"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [
+              "isEnabled"
+            ], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
+              "isEnabled": {
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": true, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/drive/getMotorFaultState/{targetId}": {
       "parameters": [
         {
           "name": "targetId", 
@@ -4027,16 +4814,12 @@
             "description": "OK", 
             "schema": {
               "required": [
-                "rgbIndexBytes"
+                "isFault"
               ], 
               "type": "object", 
               "properties": {
-                "rgbIndexBytes": {
-                  "items": {
-                    "type": "integer", 
-                    "format": "int32"
-                  }, 
-                  "type": "array"
+                "isFault": {
+                  "type": "boolean"
                 }
               }
             }
@@ -4049,7 +4832,7 @@
           }
         }, 
         "tags": [
-          "Io"
+          "Drive"
         ], 
         "produces": [
           "application/json"

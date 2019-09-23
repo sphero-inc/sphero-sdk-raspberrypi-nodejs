@@ -12,7 +12,7 @@ import {Request, Response} from 'express';
 
 // internal imports
 import {DeviceRouterBase} from '../device-router-base';
-import {IApiCommandMessage, buildApiCommandMessageWithDefaultFlags} from '../../models/api-command-message';
+import {IApiCommandMessage, buildApiCommandMessageWithDefaultFlags, buildApiCommandMessageWithNoResponseDefaultFlags} from '../../models/api-command-message';
 import {IApiResponseMessage} from '../../models/api-response-message';
 import {IConfiguration} from '../../configuration';
 import {IApiDal} from '../../modules/api-dal-interface';
@@ -910,33 +910,48 @@ export class SystemInfoDeviceRouter extends DeviceRouterBase {
             JSON.stringify(request.body)
         );
         
-        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-            targetId, ApiTargetsAndSources.serviceSource,
-            SystemInfoDeviceRouter._deviceId, SystemInfoDeviceRouter._deviceName,
-            commandId, commandName,
-            dataRawBytes
-        );
-        
-        apiCommandMessage.generateMessageRawBytes();
-        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-            // No outputs...
-            
-            this.logResponse(request.path, request.method,
+        let isResponseRequested: boolean = request.body.isResponseRequested != undefined ? request.body.isResponseRequested : true;
+        if (isResponseRequested) {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
                 SystemInfoDeviceRouter._deviceId, SystemInfoDeviceRouter._deviceName,
                 commandId, commandName,
-                sourceId, targetId,
-                ''
+                dataRawBytes
             );
             
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+                // No outputs...
+                
+                this.logResponse(request.path, request.method,
+                    SystemInfoDeviceRouter._deviceId, SystemInfoDeviceRouter._deviceName,
+                    commandId, commandName,
+                    sourceId, targetId,
+                    ''
+                );
+                
+                response.sendStatus(200);
+            }).catch(reason => {
+                let errorCode: number = 400;
+                let errorDetail: string = `Error in enableSosMessageNotify while sending API Command: ${reason}`;
+                
+                this.routeError(request.path, request.method, errorCode, errorDetail);
+                
+                response.status(errorCode).json({'error': errorDetail});
+            });
+        } else {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithNoResponseDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
+                SystemInfoDeviceRouter._deviceId, SystemInfoDeviceRouter._deviceName,
+                commandId, commandName,
+                dataRawBytes
+            );
+            
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage);
             response.sendStatus(200);
-        }).catch(reason => {
-            let errorCode: number = 400;
-            let errorDetail: string = `Error in enableSosMessageNotify while sending API Command: ${reason}`;
-            
-            this.routeError(request.path, request.method, errorCode, errorDetail);
-            
-            response.status(errorCode).json({'error': errorDetail});
-        });
+        }
+        
     }
     
     public getSosMessage(request: Request, response: Response) {
@@ -1026,32 +1041,47 @@ export class SystemInfoDeviceRouter extends DeviceRouterBase {
             ''
         );
         
-        let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-            targetId, ApiTargetsAndSources.serviceSource,
-            SystemInfoDeviceRouter._deviceId, SystemInfoDeviceRouter._deviceName,
-            commandId, commandName,
-            null
-        );
-        
-        apiCommandMessage.generateMessageRawBytes();
-        this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-            // No outputs...
-            
-            this.logResponse(request.path, request.method,
+        let isResponseRequested: boolean = request.body.isResponseRequested != undefined ? request.body.isResponseRequested : true;
+        if (isResponseRequested) {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
                 SystemInfoDeviceRouter._deviceId, SystemInfoDeviceRouter._deviceName,
                 commandId, commandName,
-                sourceId, targetId,
-                ''
+                null
             );
             
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
+                // No outputs...
+                
+                this.logResponse(request.path, request.method,
+                    SystemInfoDeviceRouter._deviceId, SystemInfoDeviceRouter._deviceName,
+                    commandId, commandName,
+                    sourceId, targetId,
+                    ''
+                );
+                
+                response.sendStatus(200);
+            }).catch(reason => {
+                let errorCode: number = 400;
+                let errorDetail: string = `Error in clearSosMessage while sending API Command: ${reason}`;
+                
+                this.routeError(request.path, request.method, errorCode, errorDetail);
+                
+                response.status(errorCode).json({'error': errorDetail});
+            });
+        } else {
+            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithNoResponseDefaultFlags(
+                targetId, ApiTargetsAndSources.serviceSource,
+                SystemInfoDeviceRouter._deviceId, SystemInfoDeviceRouter._deviceName,
+                commandId, commandName,
+                null
+            );
+            
+            apiCommandMessage.generateMessageRawBytes();
+            this._apiDal.sendApiCommandMessage(apiCommandMessage);
             response.sendStatus(200);
-        }).catch(reason => {
-            let errorCode: number = 400;
-            let errorDetail: string = `Error in clearSosMessage while sending API Command: ${reason}`;
-            
-            this.routeError(request.path, request.method, errorCode, errorDetail);
-            
-            response.status(errorCode).json({'error': errorDetail});
-        });
+        }
+        
     }
 }

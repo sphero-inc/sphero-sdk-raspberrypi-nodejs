@@ -3,8 +3,8 @@
 // Device ID (DID):         0x18
 // Device Name:             sensor
 // Device Description:      
-// Command Count:           30
+// Command Count:           36
 // Source File:             0x18-sensors.json
-// Timestamp:               09/18/2019 @ 22:59:20.719464 (UTC)
+// Timestamp:               09/21/2019 @ 23:29:07.406386 (UTC)
 // ************************************************************
 

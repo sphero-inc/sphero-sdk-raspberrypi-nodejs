@@ -31,8 +31,6 @@ export interface IApiMessage extends IPrettyPrint {
     readonly hasError: boolean;
 
     generateMessageRawBytes(): void;
-
-    associateError(errorCode: number, errorMessage: string): void;
 }
 
 export abstract class ApiBaseMessage implements IApiMessage {
@@ -144,12 +142,6 @@ export abstract class ApiBaseMessage implements IApiMessage {
     // TODO: rename to serialize
     public generateMessageRawBytes(): void {
         this._messageRawBytes = ApiParserFactory.getApiParser().generateRawBytesForApiMessage(this);
-    }
-
-    public associateError(errorCode: number, errorMessage: string): void {
-        this._errorCode = errorCode;
-        this._errorMessage = errorMessage;
-        this._hasError = true;
     }
 
     public prettyPrint(): string {

@@ -10,7 +10,7 @@ import {ApiParserFactory, IApiParser} from './api-parser';
 import {IApiMessage} from '../models/api-message';
 import {DeferredPromise} from '../models/deferred-promise';
 import {ByteConversionUtilities} from '../utilities/byte-conversion-utilities';
-import {ApiProtocolErrorCodes} from '../constants';
+import {ApiFlags, ApiProtocolErrorCodes} from '../constants';
 import {ApiMessageLite, IApiMessageLite} from '../models/api-message-lite';
 import {ICommandParserHandler} from './command-parser-factory';
 
@@ -43,14 +43,20 @@ class ApiDalUart extends ApiDalBase {
             logger.debug(`Data bytes: ${ByteConversionUtilities.convertNumbersToHexCsvString(apiMessage.dataRawBytes)}`);
 
             // Check if message is command from robot (e.g. an async)
-            if(apiMessage.isCommand && !apiMessage.isResponse){
-                let commandParserHandler: ICommandParserHandler | null = this.getCommandParserHandler(apiMessage.sourceId, apiMessage.deviceId, apiMessage.commandId);
-                if (!commandParserHandler) {
-                    logger.warning('Unable to retrieve command parser for given command.');
-                    return;
+            if(apiMessage.isCommand && !apiMessage.isResponse) {
+                let parsedData: object | null;
+                if (apiMessage.dataRawBytes.length > 0) {
+                    let commandParserHandler: ICommandParserHandler | null = this.getCommandParserHandler(apiMessage.sourceId, apiMessage.deviceId, apiMessage.commandId);
+                    if (!commandParserHandler) {
+                        logger.warning('Unable to retrieve command parser for given command.');
+                        return;
+                    }
+
+                    parsedData = commandParserHandler(apiMessage.dataRawBytes);
+                } else{
+                    parsedData = null;
                 }
 
-                let parsedData: object = commandParserHandler(apiMessage.dataRawBytes);
                 let apiMessageLite: IApiMessageLite = new ApiMessageLite(
                     apiMessage.deviceId,
                     apiMessage.deviceName,
@@ -72,10 +78,19 @@ class ApiDalUart extends ApiDalBase {
 
             let responsePromise: DeferredPromise<IApiResponseMessage> | undefined = this._apiCommandPendingResponseMap.get(mapKey);
             if (responsePromise) {
-                logger.debug('Promise resolved.');
+                if (apiMessage.hasError) {
+                    let errorDetail: string = `Response has error code ${apiMessage.errorCode} (${apiMessage.errorMessage}).`;
+                    
+                    logger.error(errorDetail);
+
+                    responsePromise.reject(errorDetail);
+                } else {
+                    logger.debug('Promise resolved.');
+
+                    responsePromise.resolve(apiMessage);
+                }
 
                 this._apiCommandPendingResponseMap.delete(mapKey);
-                responsePromise.resolve(apiMessage);
 
                 return;
             }
@@ -134,21 +149,29 @@ class ApiDalUart extends ApiDalBase {
         logger.debug(`Attempting to send API Command Message: ${apiCommandMessage.prettyPrint()}`);
 
         let responsePromise: DeferredPromise<IApiResponseMessage> = new DeferredPromise<IApiResponseMessage>();
-        let mapKey: string = this.getApiMessageMapKey(apiCommandMessage);
 
-        this._apiCommandPendingResponseMap.set(mapKey, responsePromise);
-        logger.warning(`Key size: ${this._apiCommandPendingResponseMap.size}`);
+        if (apiCommandMessage.isRequestingResponse) {
+            let mapKey: string = this.getApiMessageMapKey(apiCommandMessage);
 
-        // TODO: do we need buffer the bytes in case we need to drain?
-        logger.debug(`Bytes being sent: ${ByteConversionUtilities.convertNumbersToHexCsvString(apiCommandMessage.messageRawBytes)}`);
+            this._apiCommandPendingResponseMap.set(mapKey, responsePromise);
 
-        let isWaitingForDrain: boolean = this._serialPort.write(apiCommandMessage.messageRawBytes, 'utf8', ((error, bytesWritten) => {
+            logger.warning(`Key size: ${this._apiCommandPendingResponseMap.size}`);
+        } else {
+            responsePromise.resolve();
+        }
+
+        this.writeBytesToPort(apiCommandMessage.messageRawBytes);
+        return responsePromise.promise;
+    }
+
+    private writeBytesToPort(bytes: Array<number>): boolean {
+        logger.debug(`Bytes being sent: ${ByteConversionUtilities.convertNumbersToHexCsvString(bytes)}`);
+
+        let isWaitingForDrain: boolean = this._serialPort.write(bytes, 'utf8', ((error, bytesWritten) => {
             // TODO: do something with this - log?
         }));
 
-        // TODO: do we need to drain manually?
-
-        return responsePromise.promise;
+        return isWaitingForDrain;
     }
 
     private getApiMessageMapKey(apiMessage: IApiMessage): string {
