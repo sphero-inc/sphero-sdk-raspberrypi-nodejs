@@ -3,7 +3,7 @@ import {buildApiCommandMessageWithDefaultFlags, IApiCommandMessage} from './api-
 import {getCommandParserFactory, ICommandParserHandler} from '../modules/command-parser-factory';
 import {parseStartStreamingServiceRequest} from '../api/v1.0/command-parsers/0x18-sensor/0x3A-start-streaming-service-command-parser';
 import {ByteConversionUtilities} from '../utilities/byte-conversion-utilities'
-import {SensorControl} from '../modules/sensor-control';
+import {SensorControl} from '../modules/controls/v1.0/sensor-control';
 import {IStreamingSlotData, IStreamingSlot} from './streaming-slot';
 
 /**

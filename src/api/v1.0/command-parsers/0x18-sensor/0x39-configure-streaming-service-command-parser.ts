@@ -13,14 +13,8 @@ export function parseConfigureStreamingServiceRequest(requestBody: any): Array<n
     // Index: 1 | Name: 'configuration' | Type: 'uint8_t' | Size: 15
     for (let i: number = 0; i < requestBody.configuration.length && i < 15; i++) {
         let configuration: number = requestBody.configuration[i];
-        if (i % 2 == 0) {
-            let configurationBytes: Array<number> = ByteConversionUtilities.int16ToByteArray(configuration);
-            dataRawBytes = dataRawBytes.concat(configurationBytes);
-        } else {
-            let configurationBytes: Array<number> = ByteConversionUtilities.int8ToByteArray(configuration);
-            dataRawBytes = dataRawBytes.concat(configurationBytes);
-        }
-
+        let configurationBytes: Array<number> = ByteConversionUtilities.int8ToByteArray(configuration);
+        dataRawBytes = dataRawBytes.concat(configurationBytes);
     }
     
     return dataRawBytes;

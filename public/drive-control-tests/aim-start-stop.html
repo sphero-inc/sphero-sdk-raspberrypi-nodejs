@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Aim Start and Stop</title>
+</head>
+<body>
+
+<h1>Drive Control</h1>
+<script>
+
+    let baseURL = `http://` + location.hostname + `:` + location.port + '/api/v1.0/driveControl';
+
+    setTimeout(() => {
+        url = baseURL + `/aimStart`;
+
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'accept': 'application/json',
+
+            },
+        }).then(response => response.text().then((text) => console.log('/aimStart response text: ' + text)));
+    }, 500);
+
+    setTimeout(() => {
+        url = baseURL + `/aimStop`;
+
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'accept': 'application/json',
+
+            },
+        }).then(response => response.text().then((text) => console.log('/aimStop response text: ' + text)));
+    }, 1000);
+
+</script>
+</body>
+</html>

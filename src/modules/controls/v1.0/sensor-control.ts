@@ -1,10 +1,11 @@
-import {ApiTargetsAndSources} from '../constants';
-import {IApiDal} from './api-dal-interface';
-import {ByteConversionUtilities} from '../utilities/byte-conversion-utilities'
-import {IStreamingProvider, StreamingProvider} from '../models/streaming-provider'
-import {IStreamingSlot, StreamingSlot} from '../models/streaming-slot';
-import {IStreamingService, StreamingService} from '../models/streaming-service';
-import {IStreamingServiceAttribute, StreamingServiceAttribute} from '../models/streaming-service-attribute';
+// internal imports
+import {ApiTargetsAndSources} from '../../../constants';
+import {IApiDal} from '../../api-dal-interface';
+import {ByteConversionUtilities} from '../../../utilities/byte-conversion-utilities'
+import {IStreamingProvider, StreamingProvider} from '../../../models/streaming-provider'
+import {IStreamingSlot, StreamingSlot} from '../../../models/streaming-slot';
+import {IStreamingService, StreamingService} from '../../../models/streaming-service';
+import {IStreamingServiceAttribute, StreamingServiceAttribute} from '../../../models/streaming-service-attribute';
 
 
 export class SensorControl {

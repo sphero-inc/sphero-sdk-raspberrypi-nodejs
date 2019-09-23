@@ -5,7 +5,8 @@ import {Request, Response} from 'express';
 import {RouterBase} from '../router-base';
 import {IConfiguration} from '../../configuration';
 import {IApiDal} from '../../modules/api-dal-interface';
-import {SensorControl} from '../../modules/sensor-control';
+import {SensorControl} from '../../modules/controls/v1.0/sensor-control';
+
 
 export class SensorStreamingControlRouter extends RouterBase {
     private static readonly _routerName: string = 'SensorStreamingControl';
