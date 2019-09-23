@@ -15,7 +15,7 @@ import dateTimeUtilities = require('../utilities/date-time-utilities');
 import {IApiDal} from './api-dal-interface';
 import {IApiMessageLite} from '../models/api-message-lite';
 import * as path from 'path';
-import {buildSwaggerDoc} from "../utilities/merge-swagger-specs";
+import {buildSwaggerDoc} from '../utilities/merge-swagger-specs';
 
 let logger: ILogger = createLogger('app');
 

@@ -1,10 +1,14 @@
+// external imports
+import Timer = NodeJS.Timer;
+
+// internal imports
 import {IApiCommandMessage, buildApiCommandMessageWithDefaultFlags} from '../../../models/api-command-message';
 import {IApiDal} from '../../api-dal-interface';
 import {ApiTargetsAndSources} from '../../../constants';
 import {parseDriveWithHeadingRequest} from '../../../api/v1.0/command-parsers/0x16-drive/0x07-drive-with-heading-command-parser';
 import {LedControl, LedGroups, Colors} from './led-control';
-import Timer = NodeJS.Timer;
-import {MathUtilities} from "../../../utilities/math-utilities";
+import {MathUtilities} from '../../../utilities/math-utilities';
+
 
 export class DriveControl {
     private static readonly _targetId: number = 0x02;

@@ -1,3 +1,4 @@
+// internal imports
 import mainDocumentSwaggerJSON = require('../api/v1.0/swagger.json');
 import ledControlSwaggerJSON = require('../api/control-routers/led-control-swagger.json');
 import driveControlSwaggerJSON = require('../api/control-routers/drive-control-swagger.json');

@@ -7,6 +7,7 @@ import {IConfiguration} from '../../configuration';
 import {IApiDal} from '../../modules/api-dal-interface';
 import {InfraredControl} from '../../modules/controls/v1.0/infrared-control';
 
+
 export class InfraredControlRouter extends RouterBase {
     private static readonly _routerName: string = 'InfraredControl';
 

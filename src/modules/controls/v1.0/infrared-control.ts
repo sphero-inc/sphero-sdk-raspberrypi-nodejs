@@ -1,3 +1,4 @@
+// internal imports
 import {IApiCommandMessage, buildApiCommandMessageWithDefaultFlags} from '../../../models/api-command-message';
 import {IApiDal} from '../../api-dal-interface';
 import {ApiTargetsAndSources} from '../../../constants';
@@ -5,6 +6,7 @@ import {parseStartRobotToRobotInfraredBroadcastingRequest} from '../../../api/v1
 import {parseStartRobotToRobotInfraredFollowingRequest} from '../../../api/v1.0/command-parsers/0x18-sensor/0x28-start-robot-to-robot-infrared-following-command-parser';
 import {parseEnableRobotInfraredMessageNotifyRequest} from '../../../api/v1.0/command-parsers/0x18-sensor/0x3E-enable-robot-infrared-message-notify-command-parser';
 import {parseSendInfraredMessageRequest} from '../../../api/v1.0/command-parsers/0x18-sensor/0x3F-send-infrared-message-command-parser';
+
 
 export class InfraredControl {
     private static readonly _targetId: number = 0x02;
