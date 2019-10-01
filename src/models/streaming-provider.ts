@@ -195,7 +195,7 @@ export class StreamingProvider implements IStreamingProvider {
     }
 
     private _buildStreamingServiceDataCommandParser(): ICommandParserHandler {
-        return (dataRawBytes: Array<number>): IStreamingServiceDataNotifyResponse => {
+        return (dataRawBytes: Array<number>): IStreamingSlotData => {
             let tokenBytes: Array<number> = ByteConversionUtilities.getInt8Bytes(dataRawBytes, 0);
 
             let tokenData: number[] = ByteConversionUtilities.byteToNibbles(ByteConversionUtilities.byteArrayToInt8(tokenBytes));
@@ -206,16 +206,8 @@ export class StreamingProvider implements IStreamingProvider {
             if (streamingSlot == undefined)
                 throw new Error(`unable to parse streaming data with token ID ${tokenId}`);
 
-            return {
-                sensorData: streamingSlot.parseStreamingSlotDataToObject(dataRawBytes.slice(1))
-            };
+            return streamingSlot.parseStreamingSlotDataToObject(dataRawBytes.slice(1))
+
         }
     }
-
-
-}
-
-
-interface IStreamingServiceDataNotifyResponse {
-    readonly sensorData: IStreamingSlotData;
 }
