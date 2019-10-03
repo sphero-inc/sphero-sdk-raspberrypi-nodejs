@@ -4876,6 +4876,5 @@
     }
   ], 
   "basePath": "/api/v1.0", 
-  "host": "localhost:2010", 
   "swagger": "2.0"
 }

@@ -7,6 +7,8 @@ export interface IApiMessageLite {
     readonly commandId: number;
     readonly commandName: string;
 
+    readonly sourceId: number;
+
     readonly data: object | null;
 }
 
@@ -31,6 +33,11 @@ export class ApiMessageLite implements IApiMessageLite {
         return this._commandName;
     }
 
+    protected _sourceId: number = 0x00;
+    public get sourceId(): number {
+        return this._sourceId
+    }
+
     protected _data: object | null = null;
     public get data(): object | null {
         return this._data;
@@ -38,13 +45,15 @@ export class ApiMessageLite implements IApiMessageLite {
 
     constructor(deviceId: number, deviceName: string,
                 commandId: number, commandName: string,
-                data: object | null ) {
+                sourceId: number, data: object | null ) {
 
         this._deviceId = deviceId;
         this._deviceName = deviceName;
 
         this._commandId = commandId;
         this._commandName = commandName;
+
+        this._sourceId = sourceId;
 
         this._data = data;
     }
