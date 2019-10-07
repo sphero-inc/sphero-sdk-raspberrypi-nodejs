@@ -37,7 +37,7 @@ export class SensorControl {
         let quaternionY: IStreamingServiceAttribute = new StreamingServiceAttribute('Y', -1.0, 1.0);
         let quaternionZ: IStreamingServiceAttribute = new StreamingServiceAttribute('Z', -1.0, 1.0);
         let quaternion: IStreamingService = new StreamingService(0x00, 'Quaternion',
-            [quaternionW, quaternionX, quaternionY, quaternionZ], this._sixteenBitEnum);
+            [quaternionW, quaternionX, quaternionY, quaternionZ], this._thirtyTwoBitEnum);
 
         let attitudePitch: IStreamingServiceAttribute = new StreamingServiceAttribute('Pitch', -180.0, 180.0);
         let attitudeRoll: IStreamingServiceAttribute = new StreamingServiceAttribute('Roll', -90.0, 90.0);
@@ -64,22 +64,24 @@ export class SensorControl {
         let gyroscope: IStreamingService = new StreamingService(0x04, 'Gyroscope', [gyroscopeX, gyroscopeY, gyroscopeZ],
             this._sixteenBitEnum);
 
-        let locatorX: IStreamingServiceAttribute = new StreamingServiceAttribute('X', ByteConversionUtilities.int32MinValue, ByteConversionUtilities.int32MaxValue);
-        let locatorY: IStreamingServiceAttribute = new StreamingServiceAttribute('Y', ByteConversionUtilities.int32MinValue, ByteConversionUtilities.int32MaxValue);
-        let locator: IStreamingService = new StreamingService(0x06, 'Locator', [locatorX, locatorY], this._sixteenBitEnum);
+        let locatorX: IStreamingServiceAttribute = new StreamingServiceAttribute('X', -16000, 16000);
+        let locatorY: IStreamingServiceAttribute = new StreamingServiceAttribute('Y', -16000, 16000);
+        let locator: IStreamingService = new StreamingService(0x06, 'Locator', [locatorX, locatorY], this._thirtyTwoBitEnum);
 
-        let velocityX: IStreamingServiceAttribute = new StreamingServiceAttribute('X', ByteConversionUtilities.int32MinValue, ByteConversionUtilities.int32MaxValue);
-        let velocityY: IStreamingServiceAttribute = new StreamingServiceAttribute('Y', ByteConversionUtilities.int32MinValue, ByteConversionUtilities.int32MaxValue);
-        let velocity: IStreamingService = new StreamingService(0x07, 'Velocity', [velocityX, velocityY], this._sixteenBitEnum);
+        let velocityX: IStreamingServiceAttribute = new StreamingServiceAttribute('X', -5.0, 5.0);
+        let velocityY: IStreamingServiceAttribute = new StreamingServiceAttribute('Y', -5.0, 5.0);
+        let velocity: IStreamingService = new StreamingService(0x07, 'Velocity', [velocityX, velocityY], this._thirtyTwoBitEnum);
 
-        let speedMPS: IStreamingServiceAttribute = new StreamingServiceAttribute('MPS', 0, 2.0068307);
-        let speed: IStreamingService = new StreamingService(0x08, 'Speed', [speedMPS], this._sixteenBitEnum);
+        let speedMPS: IStreamingServiceAttribute = new StreamingServiceAttribute('MPS', 0, 5.0);
+        let speed: IStreamingService = new StreamingService(0x08, 'Speed', [speedMPS], this._thirtyTwoBitEnum);
 
-        let coreTimeUpper: IStreamingServiceAttribute = new StreamingServiceAttribute('Time (upper)', 0, ByteConversionUtilities.uint32MaxValue);
-        let coreTimeLower: IStreamingServiceAttribute = new StreamingServiceAttribute('Time (lower)', 0, ByteConversionUtilities.uint32MaxValue);
-        let coreTime: IStreamingService = new StreamingService(0x09, 'CoreTime', [coreTimeUpper, coreTimeLower], this._thirtyTwoBitEnum);
+        let coreTimeLowerTime: IStreamingServiceAttribute = new StreamingServiceAttribute('Time', 0, ByteConversionUtilities.uint32MaxValue);
+        let coreTimeLower: IStreamingService = new StreamingService(0x05, 'CoreTimeLower', [coreTimeLowerTime], this._thirtyTwoBitEnum);
 
-        let ambientLightLight: IStreamingServiceAttribute = new StreamingServiceAttribute('Light', 0, 12000.0);
+        let coreTimeUpperTime: IStreamingServiceAttribute = new StreamingServiceAttribute('Time', 0, ByteConversionUtilities.uint32MaxValue);
+        let coreTimeUpper: IStreamingService = new StreamingService(0x09, 'CoreTimeUpper', [coreTimeUpperTime], this._thirtyTwoBitEnum);
+
+        let ambientLightLight: IStreamingServiceAttribute = new StreamingServiceAttribute('Light', 0, 120000.0);
         let ambientLight: IStreamingService = new StreamingService(0x0A, 'AmbientLight', [ambientLightLight], this._sixteenBitEnum);
 
         this._supportedStreamingServices.set(quaternion.name,     quaternion);
@@ -90,11 +92,12 @@ export class SensorControl {
         this._supportedStreamingServices.set(locator.name,        locator);
         this._supportedStreamingServices.set(velocity.name,       velocity);
         this._supportedStreamingServices.set(speed.name,          speed);
-        this._supportedStreamingServices.set(coreTime.name,       coreTime);
+        this._supportedStreamingServices.set(coreTimeLower.name,  coreTimeLower);
+        this._supportedStreamingServices.set(coreTimeUpper.name,  coreTimeUpper);
         this._supportedStreamingServices.set(ambientLight.name,   ambientLight);
 
         let slotNordic1: IStreamingSlot  = new StreamingSlot(1, [colorDetection]);
-        let slotNordic2: IStreamingSlot  = new StreamingSlot(2, [coreTime]);
+        let slotNordic2: IStreamingSlot  = new StreamingSlot(2, [coreTimeLower, coreTimeUpper]);
         let slotNordic3: IStreamingSlot  = new StreamingSlot(3, [ambientLight]);
 
         let slotST1: IStreamingSlot  = new StreamingSlot(1, [quaternion, attitude, accelerometer, gyroscope]);
@@ -105,6 +108,7 @@ export class SensorControl {
 
         this._streamingProviders.push(nordicStreamingProvider);
         this._streamingProviders.push(stStreamingProvider);
+
 
         this._isCurrentlyStreaming = false;
     }

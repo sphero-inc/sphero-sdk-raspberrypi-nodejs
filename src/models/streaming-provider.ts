@@ -5,6 +5,7 @@ import {parseStartStreamingServiceRequest} from '../api/v1.0/command-parsers/0x1
 import {ByteConversionUtilities} from '../utilities/byte-conversion-utilities'
 import {SensorControl} from '../modules/controls/v1.0/sensor-control';
 import {IStreamingSlotData, IStreamingSlot} from './streaming-slot';
+import {parseStreamingServiceDataNotifyResponse} from '../api/v1.0/command-parsers/0x18-sensor/0x3D-streaming-service-data-notify-command-parser';
 
 /**
  * This class handles sensor streaming for a given provider (Nordic, ST). It is responsible for configuring, starting,
@@ -48,6 +49,8 @@ export class StreamingProvider implements IStreamingProvider {
         return this._processorId;
     }
 
+    private readonly _streamingDataCommandParser: ICommandParserHandler = this._buildStreamingServiceDataCommandParser();
+
     public get hasEnabledStreamingServices(): boolean {
         for(let streamingSlot of this._streamingSlots) {
             if (streamingSlot.hasEnabledStreamingServices)
@@ -69,10 +72,6 @@ export class StreamingProvider implements IStreamingProvider {
             this._streamingSlotByToken.set(streamingSlot.tokenId, streamingSlot);
         }
 
-        let commandParserFactory = getCommandParserFactory();
-        commandParserFactory.addParser(this._processorId, SensorControl.sensorDeviceId,
-            StreamingProvider._sensorDataCommandId, this._buildStreamingServiceDataCommandParser());
-
         this._apiDal = apiDal;
     }
 
@@ -85,6 +84,11 @@ export class StreamingProvider implements IStreamingProvider {
         }
         this._streamingInterval = streamingInterval;
         this._configureStreamingForEnabledSlots();
+
+        let commandParserFactory = getCommandParserFactory();
+        commandParserFactory.addParser(this._processorId, SensorControl.sensorDeviceId,
+            StreamingProvider._sensorDataCommandId, this._streamingDataCommandParser);
+
         this._sendStartStreamingCommandToProcessor();
         this._isStreaming = true;
     }
@@ -94,6 +98,11 @@ export class StreamingProvider implements IStreamingProvider {
             throw new Error('cannot stop streaming because provider is not currently streaming');
         }
         this._sendStopStreamingCommandToProcessor();
+
+        let commandParserFactory = getCommandParserFactory();
+        commandParserFactory.addParser(this._processorId, SensorControl.sensorDeviceId,
+            StreamingProvider._sensorDataCommandId, parseStreamingServiceDataNotifyResponse);
+
         this._sendClearStreamingCommandToProcessor();
         this._disableStreamingForEnabledSlots();
         this._isStreaming = false;
