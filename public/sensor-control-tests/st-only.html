@@ -9,8 +9,8 @@
 <script>
     const socket = new WebSocket(`ws://` + location.hostname + `:` + location.port + '/stream');
     socket.onopen = () => {
-        console.log("connected");
-        socket.send("hello server!");
+        console.log('connected');
+        socket.send('hello server!');
     };
     socket.onmessage = (e) => {
         console.log(e.data);
@@ -33,12 +33,12 @@
 
     setTimeout(() => {
         /* Start sensors streaming */
-        let sensors = ["ColorDetection","CoreTime","AmbientLight"];
+        let sensors = ['ColorDetection', 'CoreTimeUpper', 'CoreTimeLower', 'AmbientLight'];
         console.log(`Sensors to stream: ${sensors}`);
         url = baseURL + `/startSensorStreaming`;
         let jsonBody = {
-            "interval": 500,
-            "sensors": sensors
+            'interval': 500,
+            'sensors': sensors
         };
 
         fetch(url, {
