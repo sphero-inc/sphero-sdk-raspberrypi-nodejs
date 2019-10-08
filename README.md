@@ -10,12 +10,8 @@
 * [ws](https://github.com/websockets/ws) (MIT)
 
 ## Included Dev Packages
-* [chai](https://github.com/chaijs/chai) (MIT)
-* [jest](https://github.com/facebook/jest) (MIT)
-* [mocha](https://github.com/mochajs/mocha) (MIT)
-* [rewire](https://github.com/jhnns/rewire) (MIT)
-* [sinon](https://github.com/sinonjs/sinon) (BSD)
-* [ts](https://github.com/andywer/ts) (MIT)
+* [nodemon](https://github.com/remy/nodemon) (MIT)
 * [typescript](https://github.com/Microsoft/TypeScript) (Apache-2.0)
+* [ts-node](https://github.com/TypeStrong/ts-node) (MIT)
 
 TODO: add design and how-to run info
