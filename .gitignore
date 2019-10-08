@@ -1,5 +1,6 @@
 # Specific files
 package-lock.json
+*.DS_Store
 
 # Specific file types
 *.d.ts
