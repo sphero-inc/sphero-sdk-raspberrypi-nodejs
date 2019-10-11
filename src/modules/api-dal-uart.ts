@@ -81,7 +81,7 @@ class ApiDalUart extends ApiDalBase {
             if (responsePromise) {
                 if (apiMessage.hasError) {
                     let errorDetail: string = `Response has error code ${apiMessage.errorCode} (${apiMessage.errorMessage}).`;
-                    
+
                     logger.error(errorDetail);
 
                     responsePromise.reject(errorDetail);
@@ -96,7 +96,7 @@ class ApiDalUart extends ApiDalBase {
                 return;
             }
 
-            logger.warning(`Key size: ${this._apiCommandPendingResponseMap.size}`);
+            logger.debug(`Key size: ${this._apiCommandPendingResponseMap.size}`);
             logger.warning('NO promise found!');
         };
 
@@ -156,7 +156,7 @@ class ApiDalUart extends ApiDalBase {
 
             this._apiCommandPendingResponseMap.set(mapKey, responsePromise);
 
-            logger.warning(`Key size: ${this._apiCommandPendingResponseMap.size}`);
+            logger.debug(`Key size: ${this._apiCommandPendingResponseMap.size}`);
         } else {
             responsePromise.resolve();
         }
