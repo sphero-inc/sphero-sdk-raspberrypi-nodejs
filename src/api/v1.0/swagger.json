@@ -1,0 +1,3325 @@
+{
+  "info": {
+    "version": "1.0", 
+    "contact": {
+      "url": "http://sdk.sphero.com/", 
+      "name": "Sphero Software Engineering Support", 
+      "email": "sphero-software-engineering-support@sphero.com"
+    }, 
+    "description": "", 
+    "title": "Sphero SDK API"
+  }, 
+  "paths": {
+    "/sensor/clearStreamingService/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Sensor"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": false, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/sensor/getMotorThermalProtectionStatus/{targetId}": {
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }
+      ], 
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK", 
+            "schema": {
+              "required": [
+                "leftMotorTemperature", 
+                "leftMotorStatus", 
+                "rightMotorTemperature", 
+                "rightMotorStatus"
+              ], 
+              "type": "object", 
+              "properties": {
+                "leftMotorTemperature": {
+                  "type": "number", 
+                  "format": "float"
+                }, 
+                "rightMotorTemperature": {
+                  "type": "number", 
+                  "format": "float"
+                }, 
+                "rightMotorStatus": {
+                  "type": "integer", 
+                  "format": "int32"
+                }, 
+                "leftMotorStatus": {
+                  "type": "integer", 
+                  "format": "int32"
+                }
+              }
+            }
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Sensor"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }
+    }, 
+    "/sensor/resetLocatorXAndY/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Sensor"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": false, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/sensor/stopStreamingService/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Sensor"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": false, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/drive/rawMotors/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Drive"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [
+              "leftMode", 
+              "leftSpeed", 
+              "rightMode", 
+              "rightSpeed"
+            ], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
+              "leftMode": {
+                "type": "integer", 
+                "format": "int32"
+              }, 
+              "rightMode": {
+                "type": "integer", 
+                "format": "int32"
+              }, 
+              "leftSpeed": {
+                "type": "integer", 
+                "format": "int32"
+              }, 
+              "rightSpeed": {
+                "type": "integer", 
+                "format": "int32"
+              }
+            }
+          }, 
+          "required": true, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/apiAndShell/echo/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK", 
+            "schema": {
+              "required": [
+                "data"
+              ], 
+              "type": "object", 
+              "properties": {
+                "data": {
+                  "items": {
+                    "type": "integer", 
+                    "format": "int32"
+                  }, 
+                  "type": "array"
+                }
+              }
+            }
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "ApiAndShell"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [
+              "data"
+            ], 
+            "type": "object", 
+            "properties": {
+              "data": {
+                "items": {
+                  "type": "integer", 
+                  "format": "int32"
+                }, 
+                "type": "array"
+              }
+            }
+          }, 
+          "required": true, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/sensor/getCurrentDetectedColorReading/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Sensor"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": false, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/sensor/getMotorTemperature/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK", 
+            "schema": {
+              "required": [
+                "windingCoilTemperature", 
+                "caseTemperature"
+              ], 
+              "type": "object", 
+              "properties": {
+                "windingCoilTemperature": {
+                  "type": "number", 
+                  "format": "float"
+                }, 
+                "caseTemperature": {
+                  "type": "number", 
+                  "format": "float"
+                }
+              }
+            }
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Sensor"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [
+              "motorIndex"
+            ], 
+            "type": "object", 
+            "properties": {
+              "motorIndex": {
+                "type": "integer", 
+                "format": "int32"
+              }
+            }
+          }, 
+          "required": true, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/systemInfo/getProcessorName/{targetId}": {
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }
+      ], 
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK", 
+            "schema": {
+              "required": [
+                "name"
+              ], 
+              "type": "object", 
+              "properties": {
+                "name": {
+                  "type": "string"
+                }
+              }
+            }
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "SystemInfo"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }
+    }, 
+    "/io/loadColorPalette/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Io"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [
+              "paletteIndex"
+            ], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
+              "paletteIndex": {
+                "type": "integer", 
+                "format": "int32"
+              }
+            }
+          }, 
+          "required": true, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/power/getBatteryPercentage/{targetId}": {
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }
+      ], 
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK", 
+            "schema": {
+              "required": [
+                "percentage"
+              ], 
+              "type": "object", 
+              "properties": {
+                "percentage": {
+                  "type": "integer", 
+                  "format": "int32"
+                }
+              }
+            }
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Power"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }
+    }, 
+    "/drive/driveWithHeading/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Drive"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [
+              "speed", 
+              "heading", 
+              "flags"
+            ], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
+              "flags": {
+                "type": "integer", 
+                "format": "int32"
+              }, 
+              "speed": {
+                "type": "integer", 
+                "format": "int32"
+              }, 
+              "heading": {
+                "type": "integer", 
+                "format": "int32"
+              }
+            }
+          }, 
+          "required": true, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/systemInfo/getCoreUpTimeInMilliseconds/{targetId}": {
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }
+      ], 
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK", 
+            "schema": {
+              "required": [
+                "upTime"
+              ], 
+              "type": "object", 
+              "properties": {
+                "upTime": {
+                  "type": "integer", 
+                  "format": "int64"
+                }
+              }
+            }
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "SystemInfo"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }
+    }, 
+    "/systemInfo/getSku/{targetId}": {
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }
+      ], 
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK", 
+            "schema": {
+              "required": [
+                "sku"
+              ], 
+              "type": "object", 
+              "properties": {
+                "sku": {
+                  "type": "string"
+                }
+              }
+            }
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "SystemInfo"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }
+    }, 
+    "/io/getColorIdentificationReport/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK", 
+            "schema": {
+              "required": [
+                "indexConfidenceByte"
+              ], 
+              "type": "object", 
+              "properties": {
+                "indexConfidenceByte": {
+                  "items": {
+                    "type": "integer", 
+                    "format": "int32"
+                  }, 
+                  "type": "array"
+                }
+              }
+            }
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Io"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [
+              "red", 
+              "green", 
+              "blue", 
+              "confidenceThreshold"
+            ], 
+            "type": "object", 
+            "properties": {
+              "blue": {
+                "type": "integer", 
+                "format": "int32"
+              }, 
+              "confidenceThreshold": {
+                "type": "integer", 
+                "format": "int32"
+              }, 
+              "green": {
+                "type": "integer", 
+                "format": "int32"
+              }, 
+              "red": {
+                "type": "integer", 
+                "format": "int32"
+              }
+            }
+          }, 
+          "required": true, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/power/getBatteryVoltageStateThresholds/{targetId}": {
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }
+      ], 
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK", 
+            "schema": {
+              "required": [
+                "criticalThreshold", 
+                "lowThreshold", 
+                "hysteresis"
+              ], 
+              "type": "object", 
+              "properties": {
+                "lowThreshold": {
+                  "type": "number", 
+                  "format": "float"
+                }, 
+                "criticalThreshold": {
+                  "type": "number", 
+                  "format": "float"
+                }, 
+                "hysteresis": {
+                  "type": "number", 
+                  "format": "float"
+                }
+              }
+            }
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Power"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }
+    }, 
+    "/sensor/enableColorDetectionNotify/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Sensor"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [
+              "isEnabled", 
+              "interval", 
+              "minimumConfidenceThreshold"
+            ], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
+              "isEnabled": {
+                "type": "boolean"
+              }, 
+              "interval": {
+                "type": "integer", 
+                "format": "int32"
+              }, 
+              "minimumConfidenceThreshold": {
+                "type": "integer", 
+                "format": "int32"
+              }
+            }
+          }, 
+          "required": true, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/sensor/startRobotToRobotInfraredFollowing/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Sensor"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [
+              "farCode", 
+              "nearCode"
+            ], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
+              "nearCode": {
+                "type": "integer", 
+                "format": "int32"
+              }, 
+              "farCode": {
+                "type": "integer", 
+                "format": "int32"
+              }
+            }
+          }, 
+          "required": true, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/power/wake/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Power"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": false, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/systemInfo/getBoardRevision/{targetId}": {
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }
+      ], 
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK", 
+            "schema": {
+              "required": [
+                "revision"
+              ], 
+              "type": "object", 
+              "properties": {
+                "revision": {
+                  "type": "integer", 
+                  "format": "int32"
+                }
+              }
+            }
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "SystemInfo"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }
+    }, 
+    "/connection/getBluetoothAdvertisingName/{targetId}": {
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }
+      ], 
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK", 
+            "schema": {
+              "required": [
+                "name"
+              ], 
+              "type": "object", 
+              "properties": {
+                "name": {
+                  "type": "string"
+                }
+              }
+            }
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Connection"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }
+    }, 
+    "/systemInfo/getStatsId/{targetId}": {
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }
+      ], 
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK", 
+            "schema": {
+              "required": [
+                "statsId"
+              ], 
+              "type": "object", 
+              "properties": {
+                "statsId": {
+                  "type": "integer", 
+                  "format": "int32"
+                }
+              }
+            }
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "SystemInfo"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }
+    }, 
+    "/power/getBatteryVoltageState/{targetId}": {
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }
+      ], 
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK", 
+            "schema": {
+              "required": [
+                "state"
+              ], 
+              "type": "object", 
+              "properties": {
+                "state": {
+                  "type": "integer", 
+                  "format": "int32"
+                }
+              }
+            }
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Power"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }
+    }, 
+    "/io/setActiveColorPalette/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Io"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [
+              "rgbIndexBytes"
+            ], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
+              "rgbIndexBytes": {
+                "items": {
+                  "type": "integer", 
+                  "format": "int32"
+                }, 
+                "type": "array"
+              }
+            }
+          }, 
+          "required": true, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/drive/resetYaw/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Drive"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": false, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/power/getBatteryVoltageInVolts/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK", 
+            "schema": {
+              "required": [
+                "voltage"
+              ], 
+              "type": "object", 
+              "properties": {
+                "voltage": {
+                  "type": "number", 
+                  "format": "float"
+                }
+              }
+            }
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Power"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [
+              "readingType"
+            ], 
+            "type": "object", 
+            "properties": {
+              "readingType": {
+                "type": "integer", 
+                "format": "int32"
+              }
+            }
+          }, 
+          "required": true, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/drive/setStabilization/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Drive"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [
+              "index"
+            ], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
+              "index": {
+                "type": "integer", 
+                "format": "int32"
+              }
+            }
+          }, 
+          "required": true, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/sensor/getBotToBotInfraredReadings/{targetId}": {
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }
+      ], 
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK", 
+            "schema": {
+              "required": [
+                "sensorData"
+              ], 
+              "type": "object", 
+              "properties": {
+                "sensorData": {
+                  "type": "integer", 
+                  "format": "int32"
+                }
+              }
+            }
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Sensor"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }
+    }, 
+    "/sensor/getAmbientLightSensorValue/{targetId}": {
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }
+      ], 
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK", 
+            "schema": {
+              "required": [
+                "ambientLightValue"
+              ], 
+              "type": "object", 
+              "properties": {
+                "ambientLightValue": {
+                  "type": "number", 
+                  "format": "float"
+                }
+              }
+            }
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Sensor"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }
+    }, 
+    "/drive/enableMotorStallNotify/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Drive"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [
+              "isEnabled"
+            ], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
+              "isEnabled": {
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": true, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/power/getCurrentSenseAmplifierCurrent/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK", 
+            "schema": {
+              "required": [
+                "amplifierCurrent"
+              ], 
+              "type": "object", 
+              "properties": {
+                "amplifierCurrent": {
+                  "type": "number", 
+                  "format": "float"
+                }
+              }
+            }
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Power"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [
+              "amplifierId"
+            ], 
+            "type": "object", 
+            "properties": {
+              "amplifierId": {
+                "type": "integer", 
+                "format": "int32"
+              }
+            }
+          }, 
+          "required": true, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/sensor/enableGyroMaxNotify/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Sensor"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [
+              "isEnabled"
+            ], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
+              "isEnabled": {
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": true, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/power/enableBatteryVoltageStateChangeNotify/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Power"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [
+              "isEnabled"
+            ], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
+              "isEnabled": {
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": true, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/sensor/sendInfraredMessage/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Sensor"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [
+              "infraredCode", 
+              "frontStrength", 
+              "leftStrength", 
+              "rightStrength", 
+              "rearStrength"
+            ], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
+              "infraredCode": {
+                "type": "integer", 
+                "format": "int32"
+              }, 
+              "leftStrength": {
+                "type": "integer", 
+                "format": "int32"
+              }, 
+              "rearStrength": {
+                "type": "integer", 
+                "format": "int32"
+              }, 
+              "frontStrength": {
+                "type": "integer", 
+                "format": "int32"
+              }, 
+              "rightStrength": {
+                "type": "integer", 
+                "format": "int32"
+              }
+            }
+          }, 
+          "required": true, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/sensor/startRobotToRobotInfraredBroadcasting/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Sensor"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [
+              "farCode", 
+              "nearCode"
+            ], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
+              "nearCode": {
+                "type": "integer", 
+                "format": "int32"
+              }, 
+              "farCode": {
+                "type": "integer", 
+                "format": "int32"
+              }
+            }
+          }, 
+          "required": true, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/systemInfo/getMacAddress/{targetId}": {
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }
+      ], 
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK", 
+            "schema": {
+              "required": [
+                "macAddress"
+              ], 
+              "type": "object", 
+              "properties": {
+                "macAddress": {
+                  "type": "string"
+                }
+              }
+            }
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "SystemInfo"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }
+    }, 
+    "/sensor/enableMotorCurrentNotify/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Sensor"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [
+              "isEnabled"
+            ], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
+              "isEnabled": {
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": true, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/sensor/stopRobotToRobotInfraredFollowing/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Sensor"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": false, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/sensor/startStreamingService/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Sensor"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [
+              "period"
+            ], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
+              "period": {
+                "type": "integer", 
+                "format": "int32"
+              }
+            }
+          }, 
+          "required": true, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/sensor/configureStreamingService/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Sensor"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [
+              "token", 
+              "configuration"
+            ], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
+              "token": {
+                "type": "integer", 
+                "format": "int32"
+              }, 
+              "configuration": {
+                "items": {
+                  "type": "integer", 
+                  "format": "int32"
+                }, 
+                "type": "array"
+              }
+            }
+          }, 
+          "required": true, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/sensor/stopRobotToRobotInfraredBroadcasting/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Sensor"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": false, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/sensor/startRobotToRobotInfraredEvading/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Sensor"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [
+              "farCode", 
+              "nearCode"
+            ], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
+              "nearCode": {
+                "type": "integer", 
+                "format": "int32"
+              }, 
+              "farCode": {
+                "type": "integer", 
+                "format": "int32"
+              }
+            }
+          }, 
+          "required": true, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/sensor/enableColorDetection/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Sensor"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [
+              "isEnabled"
+            ], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
+              "isEnabled": {
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": true, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/io/getActiveColorPalette/{targetId}": {
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }
+      ], 
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK", 
+            "schema": {
+              "required": [
+                "rgbIndexBytes"
+              ], 
+              "type": "object", 
+              "properties": {
+                "rgbIndexBytes": {
+                  "items": {
+                    "type": "integer", 
+                    "format": "int32"
+                  }, 
+                  "type": "array"
+                }
+              }
+            }
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Io"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }
+    }, 
+    "/sensor/magnetometerCalibrateToNorth/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Sensor"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": false, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/sensor/setLocatorFlags/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Sensor"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [
+              "flags"
+            ], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
+              "flags": {
+                "type": "integer", 
+                "format": "int32"
+              }
+            }
+          }, 
+          "required": true, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/sensor/stopRobotToRobotInfraredEvading/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Sensor"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": false, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/io/saveColorPalette/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Io"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [
+              "paletteIndex"
+            ], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
+              "paletteIndex": {
+                "type": "integer", 
+                "format": "int32"
+              }
+            }
+          }, 
+          "required": true, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/sensor/enableMotorThermalProtectionStatusNotify/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Sensor"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [
+              "isEnabled"
+            ], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
+              "isEnabled": {
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": true, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/sensor/enableRobotInfraredMessageNotify/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Sensor"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [
+              "isEnabled"
+            ], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
+              "isEnabled": {
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": true, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/systemInfo/getMainApplicationVersion/{targetId}": {
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }
+      ], 
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK", 
+            "schema": {
+              "required": [
+                "major", 
+                "minor", 
+                "revision"
+              ], 
+              "type": "object", 
+              "properties": {
+                "major": {
+                  "type": "integer", 
+                  "format": "int32"
+                }, 
+                "minor": {
+                  "type": "integer", 
+                  "format": "int32"
+                }, 
+                "revision": {
+                  "type": "integer", 
+                  "format": "int32"
+                }
+              }
+            }
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "SystemInfo"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }
+    }, 
+    "/systemInfo/getBootloaderVersion/{targetId}": {
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }
+      ], 
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK", 
+            "schema": {
+              "required": [
+                "major", 
+                "minor", 
+                "revision"
+              ], 
+              "type": "object", 
+              "properties": {
+                "major": {
+                  "type": "integer", 
+                  "format": "int32"
+                }, 
+                "minor": {
+                  "type": "integer", 
+                  "format": "int32"
+                }, 
+                "revision": {
+                  "type": "integer", 
+                  "format": "int32"
+                }
+              }
+            }
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "SystemInfo"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }
+    }, 
+    "/io/setAllLeds/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Io"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [
+              "ledGroup", 
+              "ledBrightnessValues"
+            ], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
+              "ledBrightnessValues": {
+                "items": {
+                  "type": "integer", 
+                  "format": "int32"
+                }, 
+                "type": "array"
+              }, 
+              "ledGroup": {
+                "type": "integer", 
+                "format": "int32"
+              }
+            }
+          }, 
+          "required": true, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/power/sleep/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Power"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": false, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/sensor/getRgbcSensorValues/{targetId}": {
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }
+      ], 
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK", 
+            "schema": {
+              "required": [
+                "redChannelValue", 
+                "greenChannelValue", 
+                "blueChannelValue", 
+                "clearChannelValue"
+              ], 
+              "type": "object", 
+              "properties": {
+                "greenChannelValue": {
+                  "type": "integer", 
+                  "format": "int32"
+                }, 
+                "redChannelValue": {
+                  "type": "integer", 
+                  "format": "int32"
+                }, 
+                "blueChannelValue": {
+                  "type": "integer", 
+                  "format": "int32"
+                }, 
+                "clearChannelValue": {
+                  "type": "integer", 
+                  "format": "int32"
+                }
+              }
+            }
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Sensor"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }
+    }, 
+    "/io/releaseLedRequests/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Io"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": false, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/drive/enableMotorFaultNotify/{targetId}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Drive"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }, 
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }, 
+        {
+          "schema": {
+            "required": [
+              "isEnabled"
+            ], 
+            "type": "object", 
+            "properties": {
+              "isResponseRequested": {
+                "default": "true", 
+                "type": "boolean"
+              }, 
+              "isEnabled": {
+                "type": "boolean"
+              }
+            }
+          }, 
+          "required": true, 
+          "name": "body", 
+          "in": "body"
+        }
+      ]
+    }, 
+    "/drive/getMotorFaultState/{targetId}": {
+      "parameters": [
+        {
+          "name": "targetId", 
+          "format": "int32", 
+          "required": true, 
+          "in": "path", 
+          "type": "integer", 
+          "description": ""
+        }
+      ], 
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK", 
+            "schema": {
+              "required": [
+                "isFault"
+              ], 
+              "type": "object", 
+              "properties": {
+                "isFault": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }, 
+          "404": {
+            "description": "Resource not found"
+          }, 
+          "400": {
+            "description": "Bad request"
+          }
+        }, 
+        "tags": [
+          "Drive"
+        ], 
+        "produces": [
+          "application/json"
+        ], 
+        "summary": "", 
+        "consumes": [
+          "application/json"
+        ], 
+        "description": ""
+      }
+    }
+  }, 
+  "basePath": "/api/v1.0", 
+  "swagger": "2.0", 
+  "tags": [
+    {
+      "name": "ApiAndShell", 
+      "description": ""
+    }, 
+    {
+      "name": "SystemInfo", 
+      "description": ""
+    }, 
+    {
+      "name": "Power", 
+      "description": ""
+    }, 
+    {
+      "name": "Drive", 
+      "description": ""
+    }, 
+    {
+      "name": "Sensor", 
+      "description": ""
+    }, 
+    {
+      "name": "Connection", 
+      "description": ""
+    }, 
+    {
+      "name": "Io", 
+      "description": ""
+    }
+  ]
+}
