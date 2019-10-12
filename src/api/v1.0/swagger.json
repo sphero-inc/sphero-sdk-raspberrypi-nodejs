@@ -1491,63 +1491,6 @@
         }
       ]
     }, 
-    "/drive/setStabilization/{targetId}": {
-      "put": {
-        "responses": {
-          "200": {
-            "description": "OK"
-          }, 
-          "404": {
-            "description": "Resource not found"
-          }, 
-          "400": {
-            "description": "Bad request"
-          }
-        }, 
-        "tags": [
-          "Drive"
-        ], 
-        "produces": [
-          "application/json"
-        ], 
-        "summary": "", 
-        "consumes": [
-          "application/json"
-        ], 
-        "description": ""
-      }, 
-      "parameters": [
-        {
-          "name": "targetId", 
-          "format": "int32", 
-          "required": true, 
-          "in": "path", 
-          "type": "integer", 
-          "description": ""
-        }, 
-        {
-          "schema": {
-            "required": [
-              "index"
-            ], 
-            "type": "object", 
-            "properties": {
-              "isResponseRequested": {
-                "default": "true", 
-                "type": "boolean"
-              }, 
-              "index": {
-                "type": "integer", 
-                "format": "int32"
-              }
-            }
-          }, 
-          "required": true, 
-          "name": "body", 
-          "in": "body"
-        }
-      ]
-    }, 
     "/sensor/getBotToBotInfraredReadings/{targetId}": {
       "parameters": [
         {
@@ -2063,62 +2006,6 @@
         "description": ""
       }
     }, 
-    "/sensor/enableMotorCurrentNotify/{targetId}": {
-      "put": {
-        "responses": {
-          "200": {
-            "description": "OK"
-          }, 
-          "404": {
-            "description": "Resource not found"
-          }, 
-          "400": {
-            "description": "Bad request"
-          }
-        }, 
-        "tags": [
-          "Sensor"
-        ], 
-        "produces": [
-          "application/json"
-        ], 
-        "summary": "", 
-        "consumes": [
-          "application/json"
-        ], 
-        "description": ""
-      }, 
-      "parameters": [
-        {
-          "name": "targetId", 
-          "format": "int32", 
-          "required": true, 
-          "in": "path", 
-          "type": "integer", 
-          "description": ""
-        }, 
-        {
-          "schema": {
-            "required": [
-              "isEnabled"
-            ], 
-            "type": "object", 
-            "properties": {
-              "isResponseRequested": {
-                "default": "true", 
-                "type": "boolean"
-              }, 
-              "isEnabled": {
-                "type": "boolean"
-              }
-            }
-          }, 
-          "required": true, 
-          "name": "body", 
-          "in": "body"
-        }
-      ]
-    }, 
     "/sensor/stopRobotToRobotInfraredFollowing/{targetId}": {
       "put": {
         "responses": {
@@ -2511,57 +2398,6 @@
         ], 
         "description": ""
       }
-    }, 
-    "/sensor/magnetometerCalibrateToNorth/{targetId}": {
-      "put": {
-        "responses": {
-          "200": {
-            "description": "OK"
-          }, 
-          "404": {
-            "description": "Resource not found"
-          }, 
-          "400": {
-            "description": "Bad request"
-          }
-        }, 
-        "tags": [
-          "Sensor"
-        ], 
-        "produces": [
-          "application/json"
-        ], 
-        "summary": "", 
-        "consumes": [
-          "application/json"
-        ], 
-        "description": ""
-      }, 
-      "parameters": [
-        {
-          "name": "targetId", 
-          "format": "int32", 
-          "required": true, 
-          "in": "path", 
-          "type": "integer", 
-          "description": ""
-        }, 
-        {
-          "schema": {
-            "required": [], 
-            "type": "object", 
-            "properties": {
-              "isResponseRequested": {
-                "default": "true", 
-                "type": "boolean"
-              }
-            }
-          }, 
-          "required": false, 
-          "name": "body", 
-          "in": "body"
-        }
-      ]
     }, 
     "/sensor/setLocatorFlags/{targetId}": {
       "put": {

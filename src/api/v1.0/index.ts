@@ -21,11 +21,9 @@ import {SystemInfoDeviceRouter} from './0x11-system-info-device-router';
 import {parseMotorStallNotifyResponse} from './command-parsers/0x16-drive/0x26-motor-stall-notify-command-parser';
 import {parseMotorFaultNotifyResponse} from './command-parsers/0x16-drive/0x28-motor-fault-notify-command-parser';
 import {parseGyroMaxNotifyResponse} from './command-parsers/0x18-sensor/0x10-gyro-max-notify-command-parser';
-import {parseMagnetometerNorthYawNotifyResponse} from './command-parsers/0x18-sensor/0x26-magnetometer-north-yaw-notify-command-parser';
 import {parseRobotToRobotInfraredMessageReceivedNotifyResponse} from './command-parsers/0x18-sensor/0x2C-robot-to-robot-infrared-message-received-notify-command-parser';
 import {parseColorDetectionNotifyResponse} from './command-parsers/0x18-sensor/0x36-color-detection-notify-command-parser';
 import {parseStreamingServiceDataNotifyResponse} from './command-parsers/0x18-sensor/0x3D-streaming-service-data-notify-command-parser';
-import {parseMotorCurrentNotifyResponse} from './command-parsers/0x18-sensor/0x40-motor-current-notify-command-parser';
 import {parseMotorThermalProtectionStatusNotifyResponse} from './command-parsers/0x18-sensor/0x4D-motor-thermal-protection-status-notify-command-parser';
 import {parseBatteryVoltageStateChangeNotifyResponse} from './command-parsers/0x13-power/0x1C-battery-voltage-state-change-notify-command-parser';
 
@@ -55,12 +53,10 @@ export function registerCommandParserFactory(app: Application, apiDal: IApiDal, 
     commandParserFactory.addParser(2, 0x16, 0x26, parseMotorStallNotifyResponse);
     commandParserFactory.addParser(2, 0x16, 0x28, parseMotorFaultNotifyResponse);
     commandParserFactory.addParser(2, 0x18, 0x10, parseGyroMaxNotifyResponse);
-    commandParserFactory.addParser(2, 0x18, 0x26, parseMagnetometerNorthYawNotifyResponse);
     commandParserFactory.addParser(2, 0x18, 0x2C, parseRobotToRobotInfraredMessageReceivedNotifyResponse);
     commandParserFactory.addParser(1, 0x18, 0x36, parseColorDetectionNotifyResponse);
     commandParserFactory.addParser(1, 0x18, 0x3D, parseStreamingServiceDataNotifyResponse);
     commandParserFactory.addParser(2, 0x18, 0x3D, parseStreamingServiceDataNotifyResponse);
-    commandParserFactory.addParser(2, 0x18, 0x40, parseMotorCurrentNotifyResponse);
     commandParserFactory.addParser(2, 0x18, 0x4D, parseMotorThermalProtectionStatusNotifyResponse);
     commandParserFactory.addParser(1, 0x13, 0x1C, parseBatteryVoltageStateChangeNotifyResponse);
     

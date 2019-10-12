@@ -3,7 +3,7 @@
 // Device ID (DID):         0x18
 // Device Name:             sensor
 // Device Description:      
-// Command Count:           33
+// Command Count:           29
 // Source File:             0x18-sensors.json
 // ************************************************************
 
@@ -66,9 +66,6 @@ import {
     parseSendInfraredMessageRequest
 } from './command-parsers/0x18-sensor/0x3F-send-infrared-message-command-parser'
 import {
-    parseEnableMotorCurrentNotifyRequest
-} from './command-parsers/0x18-sensor/0x41-enable-motor-current-notify-command-parser'
-import {
     parseGetMotorTemperatureRequest,
     parseGetMotorTemperatureResponse,
     IGetMotorTemperatureResponse
@@ -115,11 +112,6 @@ export class SensorDeviceRouter extends DeviceRouterBase {
             .get((request: Request, response: Response) =>
                 this.getRgbcSensorValues(request, response));
         this.registerCommand(0x23, 'GetRgbcSensorValues');
-        
-        this.router.route('/sensor/magnetometerCalibrateToNorth/:targetId')
-            .put((request: Request, response: Response) =>
-                this.magnetometerCalibrateToNorth(request, response));
-        this.registerCommand(0x25, 'MagnetometerCalibrateToNorth');
         
         this.router.route('/sensor/startRobotToRobotInfraredBroadcasting/:targetId')
             .put((request: Request, response: Response) =>
@@ -200,11 +192,6 @@ export class SensorDeviceRouter extends DeviceRouterBase {
             .put((request: Request, response: Response) =>
                 this.sendInfraredMessage(request, response));
         this.registerCommand(0x3F, 'SendInfraredMessage');
-        
-        this.router.route('/sensor/enableMotorCurrentNotify/:targetId')
-            .put((request: Request, response: Response) =>
-                this.enableMotorCurrentNotify(request, response));
-        this.registerCommand(0x41, 'EnableMotorCurrentNotify');
         
         this.router.route('/sensor/getMotorTemperature/:targetId')
             .put((request: Request, response: Response) =>
@@ -578,79 +565,6 @@ export class SensorDeviceRouter extends DeviceRouterBase {
             
             response.status(errorCode).json({'error': errorDetail});
         });
-    }
-    
-    public magnetometerCalibrateToNorth(request: Request, response: Response) {
-        // DID: 0x18 | CID: 0x25 | TID(s): 2
-        
-        let commandId: number = 0x25;
-        let commandName: string = this.getCommandName(commandId);
-        
-        if (!request.params.targetId) {
-            let errorCode: number = 400;
-            let errorDetail: string = 'targetId is required!';
-            
-            this.routeError(request.path, request.method, errorCode, errorDetail);
-            
-            response.status(errorCode).json({'error': errorDetail});
-            
-            return;
-        }
-        
-        // No inputs...
-        
-        let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
-        let sourceId: number = ApiTargetsAndSources.serviceSource;
-        
-        this.logRequest(request.path, request.method,
-            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-            commandId, commandName,
-            sourceId, targetId,
-            ''
-        );
-        
-        let isResponseRequested: boolean = request.body.isResponseRequested != undefined ? request.body.isResponseRequested : true;
-        if (isResponseRequested) {
-            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-                targetId, ApiTargetsAndSources.serviceSource,
-                SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-                commandId, commandName,
-                null
-            );
-            
-            apiCommandMessage.generateMessageRawBytes();
-            this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-                // No outputs...
-                
-                this.logResponse(request.path, request.method,
-                    SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-                    commandId, commandName,
-                    sourceId, targetId,
-                    ''
-                );
-                
-                response.sendStatus(200);
-            }).catch(reason => {
-                let errorCode: number = 400;
-                let errorDetail: string = `Error in magnetometerCalibrateToNorth while sending API Command: ${reason}`;
-                
-                this.routeError(request.path, request.method, errorCode, errorDetail);
-                
-                response.status(errorCode).json({'error': errorDetail});
-            });
-        } else {
-            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithNoResponseDefaultFlags(
-                targetId, ApiTargetsAndSources.serviceSource,
-                SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-                commandId, commandName,
-                null
-            );
-            
-            apiCommandMessage.generateMessageRawBytes();
-            this._apiDal.sendApiCommandMessage(apiCommandMessage);
-            response.sendStatus(200);
-        }
-        
     }
     
     public startRobotToRobotInfraredBroadcasting(request: Request, response: Response) {
@@ -1885,90 +1799,6 @@ export class SensorDeviceRouter extends DeviceRouterBase {
             }).catch(reason => {
                 let errorCode: number = 400;
                 let errorDetail: string = `Error in sendInfraredMessage while sending API Command: ${reason}`;
-                
-                this.routeError(request.path, request.method, errorCode, errorDetail);
-                
-                response.status(errorCode).json({'error': errorDetail});
-            });
-        } else {
-            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithNoResponseDefaultFlags(
-                targetId, ApiTargetsAndSources.serviceSource,
-                SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-                commandId, commandName,
-                dataRawBytes
-            );
-            
-            apiCommandMessage.generateMessageRawBytes();
-            this._apiDal.sendApiCommandMessage(apiCommandMessage);
-            response.sendStatus(200);
-        }
-        
-    }
-    
-    public enableMotorCurrentNotify(request: Request, response: Response) {
-        // DID: 0x18 | CID: 0x41 | TID(s): 2
-        
-        let commandId: number = 0x41;
-        let commandName: string = this.getCommandName(commandId);
-        
-        if (!request.params.targetId) {
-            let errorCode: number = 400;
-            let errorDetail: string = 'targetId is required!';
-            
-            this.routeError(request.path, request.method, errorCode, errorDetail);
-            
-            response.status(errorCode).json({'error': errorDetail});
-            
-            return;
-        }
-        
-        if (!request.body) {
-            let errorCode: number = 400;
-            let errorDetail: string = 'Payload is required!';
-            
-            this.routeError(request.path, request.method, errorCode, errorDetail);
-            
-            response.status(errorCode).json({'error': errorDetail});
-            
-            return;
-        }
-        
-        let dataRawBytes: Array<number> = parseEnableMotorCurrentNotifyRequest(request.body);
-        
-        let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
-        let sourceId: number = ApiTargetsAndSources.serviceSource;
-        
-        this.logRequest(request.path, request.method,
-            SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-            commandId, commandName,
-            sourceId, targetId,
-            JSON.stringify(request.body)
-        );
-        
-        let isResponseRequested: boolean = request.body.isResponseRequested != undefined ? request.body.isResponseRequested : true;
-        if (isResponseRequested) {
-            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-                targetId, ApiTargetsAndSources.serviceSource,
-                SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-                commandId, commandName,
-                dataRawBytes
-            );
-            
-            apiCommandMessage.generateMessageRawBytes();
-            this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-                // No outputs...
-                
-                this.logResponse(request.path, request.method,
-                    SensorDeviceRouter._deviceId, SensorDeviceRouter._deviceName,
-                    commandId, commandName,
-                    sourceId, targetId,
-                    ''
-                );
-                
-                response.sendStatus(200);
-            }).catch(reason => {
-                let errorCode: number = 400;
-                let errorDetail: string = `Error in enableMotorCurrentNotify while sending API Command: ${reason}`;
                 
                 this.routeError(request.path, request.method, errorCode, errorDetail);
                 
