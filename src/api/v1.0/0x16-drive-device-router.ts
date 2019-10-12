@@ -3,7 +3,7 @@
 // Device ID (DID):         0x16
 // Device Name:             drive
 // Device Description:      
-// Command Count:           9
+// Command Count:           8
 // Source File:             0x16-driving.json
 // ************************************************************
 
@@ -26,9 +26,6 @@ import {
 import {
     parseDriveWithHeadingRequest
 } from './command-parsers/0x16-drive/0x07-drive-with-heading-command-parser'
-import {
-    parseSetStabilizationRequest
-} from './command-parsers/0x16-drive/0x0C-set-stabilization-command-parser'
 import {
     parseEnableMotorStallNotifyRequest
 } from './command-parsers/0x16-drive/0x25-enable-motor-stall-notify-command-parser'
@@ -64,11 +61,6 @@ export class DriveDeviceRouter extends DeviceRouterBase {
             .put((request: Request, response: Response) =>
                 this.driveWithHeading(request, response));
         this.registerCommand(0x07, 'DriveWithHeading');
-        
-        this.router.route('/drive/setStabilization/:targetId')
-            .put((request: Request, response: Response) =>
-                this.setStabilization(request, response));
-        this.registerCommand(0x0C, 'SetStabilization');
         
         this.router.route('/drive/enableMotorStallNotify/:targetId')
             .put((request: Request, response: Response) =>
@@ -307,90 +299,6 @@ export class DriveDeviceRouter extends DeviceRouterBase {
             }).catch(reason => {
                 let errorCode: number = 400;
                 let errorDetail: string = `Error in driveWithHeading while sending API Command: ${reason}`;
-                
-                this.routeError(request.path, request.method, errorCode, errorDetail);
-                
-                response.status(errorCode).json({'error': errorDetail});
-            });
-        } else {
-            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithNoResponseDefaultFlags(
-                targetId, ApiTargetsAndSources.serviceSource,
-                DriveDeviceRouter._deviceId, DriveDeviceRouter._deviceName,
-                commandId, commandName,
-                dataRawBytes
-            );
-            
-            apiCommandMessage.generateMessageRawBytes();
-            this._apiDal.sendApiCommandMessage(apiCommandMessage);
-            response.sendStatus(200);
-        }
-        
-    }
-    
-    public setStabilization(request: Request, response: Response) {
-        // DID: 0x16 | CID: 0x0C | TID(s): 2
-        
-        let commandId: number = 0x0C;
-        let commandName: string = this.getCommandName(commandId);
-        
-        if (!request.params.targetId) {
-            let errorCode: number = 400;
-            let errorDetail: string = 'targetId is required!';
-            
-            this.routeError(request.path, request.method, errorCode, errorDetail);
-            
-            response.status(errorCode).json({'error': errorDetail});
-            
-            return;
-        }
-        
-        if (!request.body) {
-            let errorCode: number = 400;
-            let errorDetail: string = 'Payload is required!';
-            
-            this.routeError(request.path, request.method, errorCode, errorDetail);
-            
-            response.status(errorCode).json({'error': errorDetail});
-            
-            return;
-        }
-        
-        let dataRawBytes: Array<number> = parseSetStabilizationRequest(request.body);
-        
-        let targetId: number = ByteConversionUtilities.nibblesToByte([1, parseInt(request.params.targetId)].reverse());
-        let sourceId: number = ApiTargetsAndSources.serviceSource;
-        
-        this.logRequest(request.path, request.method,
-            DriveDeviceRouter._deviceId, DriveDeviceRouter._deviceName,
-            commandId, commandName,
-            sourceId, targetId,
-            JSON.stringify(request.body)
-        );
-        
-        let isResponseRequested: boolean = request.body.isResponseRequested != undefined ? request.body.isResponseRequested : true;
-        if (isResponseRequested) {
-            let apiCommandMessage: IApiCommandMessage = buildApiCommandMessageWithDefaultFlags(
-                targetId, ApiTargetsAndSources.serviceSource,
-                DriveDeviceRouter._deviceId, DriveDeviceRouter._deviceName,
-                commandId, commandName,
-                dataRawBytes
-            );
-            
-            apiCommandMessage.generateMessageRawBytes();
-            this._apiDal.sendApiCommandMessage(apiCommandMessage).then(apiResponseMessage => {
-                // No outputs...
-                
-                this.logResponse(request.path, request.method,
-                    DriveDeviceRouter._deviceId, DriveDeviceRouter._deviceName,
-                    commandId, commandName,
-                    sourceId, targetId,
-                    ''
-                );
-                
-                response.sendStatus(200);
-            }).catch(reason => {
-                let errorCode: number = 400;
-                let errorDetail: string = `Error in setStabilization while sending API Command: ${reason}`;
                 
                 this.routeError(request.path, request.method, errorCode, errorDetail);
                 
