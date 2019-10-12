@@ -16,6 +16,7 @@ import {IApiDal} from './api-dal-interface';
 import {IApiMessageLite} from '../models/api-message-lite';
 import * as path from 'path';
 import {buildSwaggerDoc} from '../utilities/merge-swagger-specs';
+import {FirmwareVersionChecker} from './check-firmware-version';
 
 let logger: ILogger = createLogger('app');
 
@@ -49,6 +50,9 @@ export class App {
         this.initializeMiddleware();
         this.initializeRoutes();
         this.finalizeInitialization();
+
+        let firmwareChecker: FirmwareVersionChecker = new FirmwareVersionChecker(this._apiDal);
+        firmwareChecker.checkVersions();
 
         this._isInitialized = true;
 
