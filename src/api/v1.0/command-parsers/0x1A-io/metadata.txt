@@ -1,0 +1,10 @@
+// ************************************************************
+// The contents in this directory were automatically generated!
+// Device ID (DID):         0x1A
+// Device Name:             io
+// Device Description:      
+// Command Count:           7
+// Source File:             0x1A-user_io.json
+// Timestamp:               10/12/2019 @ 01:57:06.918489 (UTC)
+// ************************************************************
+

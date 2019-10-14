@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>>Led Controller Test</title>
+</head>
+<body>
+
+<h1>Led Controller Test</h1>
+<script>
+
+    let baseURL = `http://` + location.hostname + `:` + location.port + '/api/v1.0/ledControl';
+
+    let url = baseURL + `/getAvailableLedGroups`;
+
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            'accept': 'application/json',
+        },
+    }).then(response => response.text().then((text) => console.log('/getAvailableLedGroups response text: ' + text)));
+
+   url = baseURL + `/getAvailableColors`;
+
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            'accept': 'application/json',
+        },
+    }).then(response => response.text().then((text) => console.log('/getAvailableColors response text: ' + text)));
+
+
+    url = baseURL + `/turnLedsOff`;
+
+    fetch(url, {
+        method: 'PUT',
+        headers: {
+            'accept': 'application/json',
+        },
+    }).then(response => response.text().then((text) => console.log('/turnLedsOff response text: ' + text)));
+
+
+    setTimeout(() => {
+        url = baseURL + `/setLedRgb`;
+
+        let jsonBody = {
+            'ledGroup': 'headlightLeft',
+            'red': 0,
+            'green': 255,
+            'blue': 0
+        };
+
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/json'
+
+            },
+            body: JSON.stringify(jsonBody)
+
+        }).then(response => response.text().then((text) => console.log('/setLedRgb response text: ' + text)));
+    }, 1500);
+
+
+    setTimeout(() => {
+        url = baseURL + `/setLedColor`;
+
+        let jsonBody = {
+            'ledGroup': 'headlightRight',
+            'color': 'blue'
+        };
+
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/json'
+
+            },
+            body: JSON.stringify(jsonBody)
+
+        }).then(response => response.text().then((text) => console.log('/setLedColor response text: ' + text)));
+    }, 2000);
+
+
+    setTimeout(() => {
+        url = baseURL + `/setAllLedsRgb`;
+
+        let jsonBody = {
+            'red': 255,
+            'green': 0,
+            'blue': 0
+        };
+
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/json'
+
+            },
+            body: JSON.stringify(jsonBody)
+
+        }).then(response => response.text().then((text) => console.log('/setAllLedsRgb response text: ' + text)));
+    }, 2500);
+
+
+    setTimeout(() => {
+        url = baseURL + `/setAllLedsColor`;
+
+        let jsonBody = {
+            'color': 'blue',
+        };
+
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/json'
+
+            },
+            body: JSON.stringify(jsonBody)
+
+        }).then(response => response.text().then((text) => console.log('/setAllLedsColor response text: ' + text)));
+    }, 3000);
+
+
+    setTimeout(() => {
+        url = baseURL + `/setMultipleLedsRgb`;
+
+        let jsonBody = {
+            'ledGroups': ['headlightRight', 'headlightLeft'],
+            'red': 0,
+            'green': 255,
+            'blue': 0
+        };
+
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/json'
+
+            },
+            body: JSON.stringify(jsonBody)
+
+        }).then(response => response.text().then((text) => console.log('/setMultipleLedsRgb response text: ' + text)));
+    }, 3500);
+
+
+    setTimeout(() => {
+        url = baseURL + `/setMultipleLedsColor`;
+
+        let jsonBody = {
+            'ledGroups': ['headlightRight', 'headlightLeft'],
+            'color': 'blue',
+        };
+
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/json'
+
+            },
+            body: JSON.stringify(jsonBody)
+
+        }).then(response => response.text().then((text) => console.log('/setMultipleLedsColor response text: ' + text)));
+    }, 4000);
+
+
+
+</script>
+</body>
+</html>

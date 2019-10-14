@@ -1,0 +1,10 @@
+// ************************************************************
+// The contents in this directory were automatically generated!
+// Device ID (DID):         0x11
+// Device Name:             system_info
+// Device Description:      
+// Command Count:           8
+// Source File:             0x11-system_info.json
+// Timestamp:               10/12/2019 @ 01:57:06.918904 (UTC)
+// ************************************************************
+

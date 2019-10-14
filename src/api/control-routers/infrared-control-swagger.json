@@ -1,0 +1,253 @@
+{
+  "paths": {
+    "/infraredControl/startInfraredBroadcasting": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": [
+          "InfraredControl"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "",
+        "consumes": [
+          "application/json"
+        ],
+        "description": ""
+      },
+      "parameters": [
+        {
+          "schema": {
+            "required": [
+              "farCode",
+              "nearCode"
+            ],
+            "type": "object",
+            "properties": {
+              "farCode": {
+                "type": "integer"
+              },
+              "nearCode": {
+                "type": "integer"
+              }
+            }
+          },
+          "required": true,
+          "name": "body",
+          "in": "body"
+        }
+      ]
+    },
+    "/infraredControl/stopInfraredBroadcasting": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": [
+          "InfraredControl"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "",
+        "consumes": [
+          "application/json"
+        ],
+        "description": ""
+      }
+    },
+    "/infraredControl/startInfraredFollowing": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": [
+          "InfraredControl"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "",
+        "consumes": [
+          "application/json"
+        ],
+        "description": ""
+      },
+      "parameters": [
+        {
+          "schema": {
+            "required": [
+              "farCode",
+              "nearCode"
+            ],
+            "type": "object",
+            "properties": {
+              "farCode": {
+                "type": "integer"
+              },
+              "nearCode": {
+                "type": "integer"
+              }
+            }
+          },
+          "required": true,
+          "name": "body",
+          "in": "body"
+        }
+      ]
+    },
+    "/infraredControl/stopInfraredFollowing": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": [
+          "InfraredControl"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "",
+        "consumes": [
+          "application/json"
+        ],
+        "description": ""
+      }
+    },
+    "/infraredControl/sendInfraredMessages": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": [
+          "InfraredControl"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "",
+        "consumes": [
+          "application/json"
+        ],
+        "description": ""
+      },
+      "parameters": [
+        {
+          "schema": {
+            "required": [
+              "messages",
+              "strength"
+            ],
+            "type": "object",
+            "properties": {
+              "messages": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
+              },
+              "strength": {
+                "type": "integer"
+              }
+            }
+          },
+          "required": true,
+          "name": "body",
+          "in": "body"
+        }
+      ]
+    },
+    "/infraredControl/enableRobotInfraredMessageNotify": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": [
+          "InfraredControl"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "",
+        "consumes": [
+          "application/json"
+        ],
+        "description": ""
+      },
+      "parameters": [
+        {
+          "schema": {
+            "required": [
+              "isEnabled"
+            ],
+            "type": "object",
+            "properties": {
+              "isEnabled": {
+                "type": "boolean"
+              }
+            }
+          },
+          "required": true,
+          "name": "body",
+          "in": "body"
+        }
+      ]
+    }
+  },
+  "tags": [
+    {
+      "name": "InfraredControl",
+      "description": ""
+    }
+  ]
+}

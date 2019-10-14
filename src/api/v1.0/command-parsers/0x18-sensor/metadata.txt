@@ -1,0 +1,10 @@
+// ************************************************************
+// The contents in this directory were automatically generated!
+// Device ID (DID):         0x18
+// Device Name:             sensor
+// Device Description:      
+// Command Count:           29
+// Source File:             0x18-sensors.json
+// Timestamp:               10/12/2019 @ 01:57:06.918664 (UTC)
+// ************************************************************
+

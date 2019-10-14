@@ -1,0 +1,416 @@
+{
+  "paths": {
+    "/ledControl/getAvailableLedGroups": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "required": [
+                "ledGroups"
+              ],
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": [
+          "ledControl"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "",
+        "consumes": [
+          "application/json"
+        ],
+        "description": ""
+      },
+    },
+    "/ledControl/getAvailableColors": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "required": [
+                "colors"
+              ],
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": [
+          "ledControl"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "",
+        "consumes": [
+          "application/json"
+        ],
+        "description": ""
+      }
+    },
+    "/ledControl/turnLedsOff": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": [
+          "ledControl"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "",
+        "consumes": [
+          "application/json"
+        ],
+        "description": ""
+      },
+    },
+    "/ledControl/setLedRgb": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": [
+          "ledControl"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "",
+        "consumes": [
+          "application/json"
+        ],
+        "description": ""
+      },
+      "parameters": [
+        {
+          "schema": {
+            "required": [
+              "ledGroup",
+              "red",
+              "green",
+              "blue"
+            ],
+            "type": "object",
+            "properties": {
+              "ledGroup": {
+                "type": "string"
+              },
+              "red": {
+                "type": "integer"
+              },
+              "green": {
+                "type": "integer"
+              },
+              "blue": {
+                "type": "integer"
+              }
+            }
+          },
+          "required": true,
+          "name": "body",
+          "in": "body"
+        }
+      ]
+    },
+    "/ledControl/setLedColor": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": [
+          "ledControl"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "",
+        "consumes": [
+          "application/json"
+        ],
+        "description": ""
+      },
+      "parameters": [
+        {
+          "schema": {
+            "required": [
+              "ledGroup",
+              "color"
+            ],
+            "type": "object",
+            "properties": {
+              "ledGroup": {
+                "type": "string"
+              },
+              "color": {
+                "type": "string"
+              }
+            }
+          },
+          "required": true,
+          "name": "body",
+          "in": "body"
+        }
+      ]
+    },
+    "/ledControl/setMultipleLedRgb": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": [
+          "ledControl"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "",
+        "consumes": [
+          "application/json"
+        ],
+        "description": ""
+      },
+      "parameters": [
+        {
+          "schema": {
+            "required": [
+              "ledGroups",
+              "red",
+              "green",
+              "blue"
+            ],
+            "type": "object",
+            "properties": {
+              "ledGroups": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "red": {
+                "type": "integer"
+              },
+              "green": {
+                "type": "integer"
+              },
+              "blue": {
+                "type": "integer"
+              }
+            }
+          },
+          "required": true,
+          "name": "body",
+          "in": "body"
+        }
+      ]
+    },
+    "/ledControl/setMultipleLedColor": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": [
+          "ledControl"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "",
+        "consumes": [
+          "application/json"
+        ],
+        "description": ""
+      },
+      "parameters": [
+        {
+          "schema": {
+            "required": [
+              "ledGroups",
+              "color"
+            ],
+            "type": "object",
+            "properties": {
+              "ledGroups": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "color": {
+                "type": "string"
+              }
+            }
+          },
+          "required": true,
+          "name": "body",
+          "in": "body"
+        }
+      ]
+    },
+    "/ledControl/setAllLedRgb": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": [
+          "ledControl"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "",
+        "consumes": [
+          "application/json"
+        ],
+        "description": ""
+      },
+      "parameters": [
+        {
+          "schema": {
+            "required": [
+              "red",
+              "green",
+              "blue"
+            ],
+            "type": "object",
+            "properties": {
+              "red": {
+                "type": "integer"
+              },
+              "green": {
+                "type": "integer"
+              },
+              "blue": {
+                "type": "integer"
+              }
+            }
+          },
+          "required": true,
+          "name": "body",
+          "in": "body"
+        }
+      ]
+    },
+    "/ledControl/setAllLedColor": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": [
+          "ledControl"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "",
+        "consumes": [
+          "application/json"
+        ],
+        "description": ""
+      },
+      "parameters": [
+        {
+          "schema": {
+            "required": [
+              "color"
+            ],
+            "type": "object",
+            "properties": {
+              "color": {
+                "type": "string"
+              }
+            }
+          },
+          "required": true,
+          "name": "body",
+          "in": "body"
+        }
+      ]
+    }
+  },
+  "tags": [
+    {
+      "name": "ledControl",
+      "description": ""
+    }
+  ]
+}
