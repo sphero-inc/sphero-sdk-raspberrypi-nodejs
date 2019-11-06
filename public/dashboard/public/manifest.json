@@ -1,0 +1,25 @@
+{
+	"short_name": "SDK",
+	"name": "Sphero Public SDK",
+	"icons": [
+		{
+			"src": "favicon.png",
+			"sizes": "64x64 32x32 24x24 16x16",
+			"type": "image/x-icon"
+		},
+		{
+			"src": "RVR-Logo-Black.png",
+			"type": "image/png",
+			"sizes": "1498×634"
+		},
+		{
+			"src": "RVR-logo-WhiteTransparent.png",
+			"type": "image/png",
+			"sizes": "1498×634"
+		}
+	],
+	"start_url": ".",
+	"display": "standalone",
+	"theme_color": "#000000",
+	"background_color": "aliceblue"
+}
