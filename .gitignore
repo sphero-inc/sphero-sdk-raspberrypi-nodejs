@@ -1,6 +1,5 @@
 # Specific files
 package-lock.json
-yarn.lock
 *.DS_Store
 
 # Specific file types
@@ -16,5 +15,3 @@ dist
 
 #misc
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
