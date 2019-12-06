@@ -1,0 +1,9 @@
+.gitignore
+.idea
+node_modules
+tests
+documentation
+.npmignore
+test.js
+tsconfig.json
+dist
