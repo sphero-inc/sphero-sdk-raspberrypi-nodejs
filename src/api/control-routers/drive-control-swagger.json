@@ -24,7 +24,7 @@
           "application/json"
         ],
         "description": ""
-      },
+      }
     },
     "/driveControl/driveBackwardSeconds": {
       "put": {
@@ -265,7 +265,7 @@
               },
               "heading": {
                 "type": "integer"
-              },
+              }
             }
           },
           "required": true,
@@ -309,7 +309,7 @@
             "properties": {
               "heading": {
                 "type": "integer"
-              },
+              }
             }
           },
           "required": true,

@@ -33,7 +33,7 @@
           "application/json"
         ],
         "description": ""
-      },
+      }
     },
     "/ledControl/getAvailableColors": {
       "get": {
@@ -94,7 +94,7 @@
           "application/json"
         ],
         "description": ""
-      },
+      }
     },
     "/ledControl/setLedRgb": {
       "put": {
@@ -310,7 +310,7 @@
         }
       ]
     },
-    "/ledControl/setAllLedRgb": {
+    "/ledControl/setAllLedsRgb": {
       "put": {
         "responses": {
           "200": {
@@ -362,7 +362,7 @@
         }
       ]
     },
-    "/ledControl/setAllLedColor": {
+    "/ledControl/setAllLedsColor": {
       "put": {
         "responses": {
           "200": {

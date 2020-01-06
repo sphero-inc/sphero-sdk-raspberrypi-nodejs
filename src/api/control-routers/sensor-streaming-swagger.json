@@ -33,9 +33,9 @@
           "application/json"
         ],
         "description": ""
-      },
+      }
     },
-    "/sensorControl/startStreaming": {
+    "/sensorControl/startSensorStreaming": {
       "put": {
         "responses": {
           "200": {
