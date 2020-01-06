@@ -200,7 +200,7 @@
         }
       ]
     },
-    "/ledControl/setMultipleLedRgb": {
+    "/ledControl/setMultipleLedsRgb": {
       "put": {
         "responses": {
           "200": {
@@ -259,7 +259,7 @@
         }
       ]
     },
-    "/ledControl/setMultipleLedColor": {
+    "/ledControl/setMultipleLedsColor": {
       "put": {
         "responses": {
           "200": {
