@@ -13,7 +13,7 @@ import {buildUartApiDal} from './modules/api-dal-uart';
 let logger: ILogger = createLogger('server');
 
 // TODO: need to inject dal type into here...
-let apiDal: IApiDal = buildUartApiDal('/dev/ttyS0', 115200);
+let apiDal: IApiDal = buildUartApiDal(process.env.SERIAL_PORT_PATH || '/dev/ttyS0', 115200);
 
 
 logger.debug('Server is starting');
